@@ -9,15 +9,15 @@ export function ContactSection() {
         <div className="absolute top-16 left-1/4 w-48 h-48 bg-gray-700/20 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '5s' }}></div>
         <div className="absolute bottom-16 right-1/4 w-64 h-64 bg-gray-600/20 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '7s', animationDelay: '1s' }}></div>
       </div>
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-20">
         <div className="text-center mb-12">
           <h2 className="text-5xl font-bold text-white mb-6">Have Questions?</h2>
-          <p className="text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
             We're here to help you make the biggest impact possible. Get in touch with our team.
           </p>
         </div>
         
-        <div className="relative max-w-2xl mx-auto bg-gray-800/95 backdrop-blur-sm rounded-3xl shadow-xl border border-gray-700 p-8">
+        <div className="relative max-w-3xl mx-auto bg-gray-800/95 backdrop-blur-sm rounded-3xl shadow-xl border border-gray-700 p-8">
           <form className="space-y-6 group">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>

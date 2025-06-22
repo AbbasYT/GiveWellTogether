@@ -23,8 +23,8 @@ export function HomePage() {
         
         {/* Hero Content */}
         <div className="relative z-10 flex items-center min-h-screen">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="max-w-3xl">
+          <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
+            <div className="max-w-4xl">
               <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
                 ONE
                 <br />
@@ -60,8 +60,8 @@ export function HomePage() {
 
       {/* Impact Stats */}
       <section className="py-24 bg-gradient-to-br from-gray-900 to-slate-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
+        <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-20">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center max-w-6xl mx-auto">
             <div>
               <div className="bg-gray-800 rounded-3xl p-8 shadow-lg border border-gray-700 hover:shadow-xl transition-all duration-300">
                 <div className="text-5xl font-bold bg-gradient-to-r from-blue-400 to-blue-500 bg-clip-text text-transparent mb-3">$2.4M+</div>
@@ -95,15 +95,15 @@ export function HomePage() {
           <div className="absolute bottom-20 right-10 w-96 h-96 bg-gray-600/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-gray-800/15 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '4s' }}></div>
         </div>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-20">
           <div className="text-center mb-16">
             <h2 className="text-5xl font-bold text-white mb-6">How It Works</h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
               Simple, transparent, and impactful. Your subscription creates lasting change.
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch max-w-7xl mx-auto">
             <div className="text-center h-full">
               <div className="bg-gray-800/80 backdrop-blur-sm rounded-3xl p-8 hover:shadow-xl hover:scale-105 transition-all duration-500 border border-gray-700/50 h-full flex flex-col group">
                 <div className="w-20 h-20 bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:shadow-xl group-hover:scale-110 transition-all duration-300">
@@ -150,15 +150,15 @@ export function HomePage() {
           <div className="absolute top-10 right-20 w-64 h-64 bg-gray-700/25 rounded-full blur-3xl animate-bounce" style={{ animationDuration: '6s' }}></div>
           <div className="absolute bottom-10 left-20 w-80 h-80 bg-gray-600/20 rounded-full blur-3xl animate-bounce" style={{ animationDuration: '8s', animationDelay: '1s' }}></div>
         </div>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-20">
           <div className="text-center mb-16">
             <h2 className="text-5xl font-bold text-white mb-6">What Our Community Says</h2>
-            <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
               Real stories from people making a difference through our platform
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-8xl mx-auto">
             <div className="bg-gray-800/90 backdrop-blur-sm p-8 rounded-3xl shadow-lg border border-gray-700/50 hover:shadow-2xl hover:scale-105 transition-all duration-500 group">
               <div className="flex items-center mb-4">
                 {[...Array(5)].map((_, i) => (
@@ -246,8 +246,8 @@ export function HomePage() {
           <div className="absolute top-20 left-10 w-40 h-40 bg-blue-500/10 rounded-full blur-2xl animate-pulse"></div>
           <div className="absolute bottom-20 right-10 w-60 h-60 bg-purple-500/10 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '3s' }}></div>
         </div>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-20">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-7xl mx-auto">
             <div>
               <h3 className="text-2xl font-bold mb-4 text-white">GiveWellTogether</h3>
               <p className="text-gray-300 leading-relaxed">

@@ -9,15 +9,15 @@ export function FAQSection() {
         <div className="absolute top-32 right-16 w-56 h-56 bg-gray-700/30 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '4s' }}></div>
         <div className="absolute bottom-32 left-16 w-72 h-72 bg-gray-600/25 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '6s', animationDelay: '2s' }}></div>
       </div>
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-20">
         <div className="text-center mb-16">
           <h2 className="text-5xl font-bold text-white mb-6">Frequently Asked Questions</h2>
-          <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
             Everything you need to know about making an impact through our platform
           </p>
         </div>
         
-        <div className="relative space-y-4">
+        <div className="relative space-y-4 max-w-5xl mx-auto">
           <FAQItem
             question="How is my money distributed?"
             answer="Your monthly subscription is divided equally among all verified partner organizations. We update the distribution monthly as new organizations join our platform."
