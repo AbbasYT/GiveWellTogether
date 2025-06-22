@@ -9,10 +9,10 @@ export interface Product {
 
 export const products: Product[] = [
   {
-    id: 'prod_example',
-    priceId: 'prod_SXuFEqD893uju3', // Replace this with your actual Stripe Price ID
+    id: 'prod_SXuaPUklAwbREq',
+    priceId: 'price_1RcolnRnYW51Zw7fMaZfU3R4',
     name: 'Give Well Together',
-    description: 'One Subscription. Countless Lives Changed.',
+    description: 'One Payment. Countless Lives Changed',
     mode: 'subscription',
     price: 15.00,
   },
