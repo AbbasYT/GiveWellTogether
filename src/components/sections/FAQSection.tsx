@@ -17,56 +17,61 @@ export function FAQSection() {
           </p>
         </div>
         
-        <div className="relative space-y-4 max-w-5xl mx-auto">
-          <FAQItem
-            question="How is my money distributed?"
-            answer="Your monthly subscription is divided equally among all verified partner organizations. We update the distribution monthly as new organizations join our platform."
-          />
+        {/* Two-column layout for larger screens */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-7xl mx-auto">
+          <div className="space-y-4">
+            <FAQItem
+              question="How is my money distributed?"
+              answer="Your monthly subscription is divided equally among all verified partner organizations. We update the distribution monthly as new organizations join our platform."
+            />
+            
+            <FAQItem
+              question="How do you verify organizations?"
+              answer="All organizations go through a rigorous verification process including financial audits, impact assessments, and ongoing monitoring to ensure your donations create real change."
+            />
+            
+            <FAQItem
+              question="What types of organizations do you support?"
+              answer="We support a diverse range of verified organizations including education initiatives, healthcare programs, environmental conservation, disaster relief, poverty alleviation, and human rights advocacy groups worldwide."
+            />
+            
+            <FAQItem
+              question="Can I choose which organizations to support?"
+              answer="Currently, contributions are distributed equally among all verified partners to maximize collective impact. However, we're exploring options for donor preferences in future updates."
+            />
+            
+            <FAQItem
+              question="Are my donations tax-deductible?"
+              answer="Yes, all donations through our platform are tax-deductible. You'll receive annual tax documentation and can download receipts from your dashboard at any time."
+            />
+          </div>
           
-          <FAQItem
-            question="Can I cancel anytime?"
-            answer="Yes, you can cancel your subscription at any time from your dashboard. There are no cancellation fees or penalties."
-          />
-          
-          <FAQItem
-            question="How do you verify organizations?"
-            answer="All organizations go through a rigorous verification process including financial audits, impact assessments, and ongoing monitoring to ensure your donations create real change."
-          />
-          
-          <FAQItem
-            question="What about privacy and data security?"
-            answer="We take your privacy seriously. Your personal information is encrypted and never shared with third parties. You control what information is visible in impact reports."
-          />
-          
-          <FAQItem
-            question="What types of organizations do you support?"
-            answer="We support a diverse range of verified organizations including education initiatives, healthcare programs, environmental conservation, disaster relief, poverty alleviation, and human rights advocacy groups worldwide."
-          />
-          
-          <FAQItem
-            question="How often will I receive impact reports?"
-            answer="You'll receive detailed impact reports monthly showing exactly how your contribution was distributed and the specific outcomes achieved by each organization."
-          />
-          
-          <FAQItem
-            question="Can I choose which organizations to support?"
-            answer="Currently, contributions are distributed equally among all verified partners to maximize collective impact. However, we're exploring options for donor preferences in future updates."
-          />
-          
-          <FAQItem
-            question="What happens if an organization loses verification?"
-            answer="If an organization fails to maintain our standards, they're immediately removed from the platform and future distributions are redistributed among remaining verified partners."
-          />
-          
-          <FAQItem
-            question="Are my donations tax-deductible?"
-            answer="Yes, all donations through our platform are tax-deductible. You'll receive annual tax documentation and can download receipts from your dashboard at any time."
-          />
-          
-          <FAQItem
-            question="What's the minimum subscription amount?"
-            answer="Our minimum subscription starts at $15 per month, making it accessible for anyone who wants to make a meaningful impact regardless of their budget."
-          />
+          <div className="space-y-4">
+            <FAQItem
+              question="Can I cancel anytime?"
+              answer="Yes, you can cancel your subscription at any time from your dashboard. There are no cancellation fees or penalties."
+            />
+            
+            <FAQItem
+              question="What about privacy and data security?"
+              answer="We take your privacy seriously. Your personal information is encrypted and never shared with third parties. You control what information is visible in impact reports."
+            />
+            
+            <FAQItem
+              question="How often will I receive impact reports?"
+              answer="You'll receive detailed impact reports monthly showing exactly how your contribution was distributed and the specific outcomes achieved by each organization."
+            />
+            
+            <FAQItem
+              question="What happens if an organization loses verification?"
+              answer="If an organization fails to maintain our standards, they're immediately removed from the platform and future distributions are redistributed among remaining verified partners."
+            />
+            
+            <FAQItem
+              question="What's the minimum subscription amount?"
+              answer="Our minimum subscription starts at $15 per month, making it accessible for anyone who wants to make a meaningful impact regardless of their budget."
+            />
+          </div>
         </div>
       </div>
     </section>
