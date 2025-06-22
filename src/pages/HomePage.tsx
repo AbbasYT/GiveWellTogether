@@ -36,7 +36,7 @@ export function HomePage() {
               </h1>
               
               <p className="text-lg sm:text-xl md:text-2xl text-white/90 mb-8 leading-relaxed">
-                Join thousands of donors making a real difference. Your monthly contribution 
+                Join hundreds of donors making a real difference. Your monthly contribution 
                 is transparently distributed to verified organizations changing lives worldwide.
               </p>
               
@@ -64,19 +64,19 @@ export function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center max-w-6xl mx-auto">
             <div>
               <div className="bg-gray-800 rounded-3xl p-8 shadow-lg border border-gray-700 hover:shadow-xl transition-all duration-300">
-                <div className="text-5xl font-bold bg-gradient-to-r from-blue-400 to-blue-500 bg-clip-text text-transparent mb-3">$2.4M+</div>
+                <div className="text-5xl font-bold bg-gradient-to-r from-blue-400 to-blue-500 bg-clip-text text-transparent mb-3">$200k+</div>
                 <div className="text-gray-300 font-medium">Total Donated</div>
               </div>
             </div>
             <div>
               <div className="bg-gray-800 rounded-3xl p-8 shadow-lg border border-gray-700 hover:shadow-xl transition-all duration-300">
-                <div className="text-5xl font-bold bg-gradient-to-r from-blue-400 to-blue-500 bg-clip-text text-transparent mb-3">15,000+</div>
+                <div className="text-5xl font-bold bg-gradient-to-r from-blue-400 to-blue-500 bg-clip-text text-transparent mb-3">150+</div>
                 <div className="text-gray-300 font-medium">Lives Impacted</div>
               </div>
             </div>
             <div>
               <div className="bg-gray-800 rounded-3xl p-8 shadow-lg border border-gray-700 hover:shadow-xl transition-all duration-300">
-                <div className="text-5xl font-bold bg-gradient-to-r from-blue-400 to-blue-500 bg-clip-text text-transparent mb-3">127</div>
+                <div className="text-5xl font-bold bg-gradient-to-r from-blue-400 to-blue-500 bg-clip-text text-transparent mb-3">12</div>
                 <div className="text-gray-300 font-medium">Partner Organizations</div>
               </div>
             </div>
