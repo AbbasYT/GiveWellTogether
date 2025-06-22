@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronDown, ChevronRight } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 
 interface FAQItemProps {
   question: string;
@@ -16,11 +16,11 @@ export function FAQItem({ question, answer }: FAQItemProps) {
         className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors"
       >
         <h3 className="text-lg font-semibold text-gray-900">{question}</h3>
-        {isOpen ? (
-          <ChevronDown className="h-5 w-5 text-gray-500" />
-        ) : (
-          <ChevronRight className="h-5 w-5 text-gray-500" />
-        )}
+        <ChevronRight 
+          className={`h-5 w-5 text-gray-500 transition-transform duration-200 ${
+            isOpen ? 'rotate-90' : ''
+          }`} 
+        />
       </button>
       {isOpen && (
         <div className="px-6 pb-4">
