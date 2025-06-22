@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useAuth } from './hooks/useAuth';
 import { HomePage } from './pages/HomePage';
+import { AboutPage } from './pages/AboutPage';
 
 function App() {
   const { loading } = useAuth();
@@ -18,8 +19,8 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/about" element={<AboutPage />} />
         {/* Placeholder routes for future pages */}
-        <Route path="/about" element={<div>About Us - Coming Soon</div>} />
         <Route path="/join" element={<div>Join Us - Coming Soon</div>} />
         <Route path="/organizations" element={<div>Organizations - Coming Soon</div>} />
         <Route path="/pricing" element={<div>Pricing - Coming Soon</div>} />
