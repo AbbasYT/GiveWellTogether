@@ -3,18 +3,20 @@ import { Button } from '../ui/Button';
 
 export function ContactSection() {
   return (
-    <section className="py-20 bg-white">
+    <section className="py-24 bg-gradient-to-b from-gray-50/50 to-white">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-4xl font-bold text-gray-900 mb-4">Have Questions?</h2>
-        <p className="text-xl text-gray-600 mb-8">
-          We're here to help you make the biggest impact possible.
-        </p>
+        <div className="text-center mb-12">
+          <h2 className="text-5xl font-bold text-gray-900 mb-6">Have Questions?</h2>
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+            We're here to help you make the biggest impact possible. Get in touch with our team.
+          </p>
+        </div>
         
-        <div className="max-w-2xl mx-auto">
+        <div className="max-w-2xl mx-auto bg-white rounded-3xl shadow-xl border border-gray-100 p-8">
           <form className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="firstName" className="block text-sm font-bold text-gray-700 mb-3">
                   First Name
                 </label>
                 <input
@@ -22,11 +24,11 @@ export function ContactSection() {
                   id="firstName"
                   name="firstName"
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-4 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-gray-50/50 hover:bg-white"
                 />
               </div>
               <div>
-                <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="lastName" className="block text-sm font-bold text-gray-700 mb-3">
                   Last Name
                 </label>
                 <input
@@ -34,13 +36,13 @@ export function ContactSection() {
                   id="lastName"
                   name="lastName"
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-4 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-gray-50/50 hover:bg-white"
                 />
               </div>
             </div>
             
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="email" className="block text-sm font-bold text-gray-700 mb-3">
                 Email Address
               </label>
               <input
@@ -48,19 +50,19 @@ export function ContactSection() {
                 id="email"
                 name="email"
                 required
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-4 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-gray-50/50 hover:bg-white"
               />
             </div>
             
             <div>
-              <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="subject" className="block text-sm font-bold text-gray-700 mb-3">
                 Subject
               </label>
               <select
                 id="subject"
                 name="subject"
                 required
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-4 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-gray-50/50 hover:bg-white"
               >
                 <option value="">Select a topic</option>
                 <option value="general">General Inquiry</option>
@@ -72,7 +74,7 @@ export function ContactSection() {
             </div>
             
             <div>
-              <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="message" className="block text-sm font-bold text-gray-700 mb-3">
                 Message
               </label>
               <textarea
@@ -81,7 +83,7 @@ export function ContactSection() {
                 rows={6}
                 required
                 placeholder="Tell us how we can help you..."
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                className="w-full px-4 py-4 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none transition-all duration-200 bg-gray-50/50 hover:bg-white"
               ></textarea>
             </div>
             
@@ -89,7 +91,7 @@ export function ContactSection() {
               <Button 
                 type="submit" 
                 size="lg" 
-                className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4"
+                className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-10 py-4 rounded-2xl font-bold shadow-lg hover:shadow-xl transition-all duration-300"
               >
                 Send Message
               </Button>

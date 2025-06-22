@@ -3,13 +3,16 @@ import { FAQItem } from '../ui/FAQ';
 
 export function FAQSection() {
   return (
-    <section className="py-20 bg-gray-50">
+    <section className="py-24 bg-gradient-to-b from-white to-gray-50/50">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">Frequently Asked Questions</h2>
+          <h2 className="text-5xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            Everything you need to know about making an impact through our platform
+          </p>
         </div>
         
-        <div className="space-y-8">
+        <div className="space-y-4">
           <FAQItem
             question="How is my money distributed?"
             answer="Your monthly subscription is divided equally among all verified partner organizations. We update the distribution monthly as new organizations join our platform."
