@@ -25,7 +25,12 @@ export function LoginForm({ onToggleMode }: LoginFormProps) {
         password,
       });
 
-      if (error) throw error;
+      if (error) {
+        if (error.message.includes('email_not_confirmed')) {
+          throw new Error('Please check your email to confirm your account before logging in.');
+        }
+        throw error;
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
@@ -49,6 +54,7 @@ export function LoginForm({ onToggleMode }: LoginFormProps) {
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
           required
         />
         

@@ -79,6 +79,7 @@ export function SignupForm({ onToggleMode }: SignupFormProps) {
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
           required
         />
         
@@ -87,6 +88,7 @@ export function SignupForm({ onToggleMode }: SignupFormProps) {
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          minLength={6}
           required
         />
 
@@ -95,6 +97,7 @@ export function SignupForm({ onToggleMode }: SignupFormProps) {
           type="password"
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
+          minLength={6}
           required
         />
 
