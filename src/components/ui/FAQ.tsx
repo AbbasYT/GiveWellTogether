@@ -9,11 +9,17 @@ interface FAQItemProps {
 export function FAQItem({ question, answer }: FAQItemProps) {
   const [isOpen, setIsOpen] = useState(false);
 
+  const handleClick = () => {
+    console.log('FAQ item clicked, current state:', isOpen); // Debug log
+    setIsOpen(!isOpen);
+  };
+
   return (
     <div className="bg-gray-800 rounded-2xl border border-gray-700 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300">
       <button
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={handleClick}
         className="w-full px-8 py-6 text-left flex items-center justify-between hover:bg-gray-700/50 transition-colors"
+        type="button"
       >
         <h3 className="text-lg font-bold text-white pr-4">{question}</h3>
         <ChevronDown 
@@ -23,7 +29,7 @@ export function FAQItem({ question, answer }: FAQItemProps) {
         />
       </button>
       {isOpen && (
-        <div className="px-8 pb-6">
+        <div className="px-8 pb-6 animate-in slide-in-from-top-2 duration-300">
           <p className="text-gray-300 leading-relaxed">{answer}</p>
         </div>
       )}
