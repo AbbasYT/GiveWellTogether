@@ -2,7 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Header } from '../components/layout/Header';
 import { Button } from '../components/ui/Button';
-import { FAQItem } from '../components/ui/FAQ';
+import { FAQSection } from '../components/sections/FAQSection';
+import { ContactSection } from '../components/sections/ContactSection';
 import { ArrowRight, Heart, Users, Shield, Star } from 'lucide-react';
 
 export function HomePage() {
@@ -201,163 +202,9 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* FAQ Section */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Frequently Asked Questions</h2>
-          </div>
-          
-          <div className="space-y-8">
-            <FAQItem
-              question="How is my money distributed?"
-              answer="Your monthly subscription is divided equally among all verified partner organizations. We update the distribution monthly as new organizations join our platform."
-            />
-            
-            <FAQItem
-              question="Can I cancel anytime?"
-              answer="Yes, you can cancel your subscription at any time from your dashboard. There are no cancellation fees or penalties."
-            />
-            
-            <FAQItem
-              question="How do you verify organizations?"
-              answer="All organizations go through a rigorous verification process including financial audits, impact assessments, and ongoing monitoring to ensure your donations create real change."
-            />
-            
-            <FAQItem
-              question="What about privacy and data security?"
-              answer="We take your privacy seriously. Your personal information is encrypted and never shared with third parties. You control what information is visible in impact reports."
-            />
-            
-            <FAQItem
-              question="What types of organizations do you support?"
-              answer="We support a diverse range of verified organizations including education initiatives, healthcare programs, environmental conservation, disaster relief, poverty alleviation, and human rights advocacy groups worldwide."
-            />
-            
-            <FAQItem
-              question="How often will I receive impact reports?"
-              answer="You'll receive detailed impact reports monthly showing exactly how your contribution was distributed and the specific outcomes achieved by each organization."
-            />
-            
-            <FAQItem
-              question="Can I choose which organizations to support?"
-              answer="Currently, contributions are distributed equally among all verified partners to maximize collective impact. However, we're exploring options for donor preferences in future updates."
-            />
-            
-            <FAQItem
-              question="What happens if an organization loses verification?"
-              answer="If an organization fails to maintain our standards, they're immediately removed from the platform and future distributions are redistributed among remaining verified partners."
-            />
-            
-            <FAQItem
-              question="Are my donations tax-deductible?"
-              answer="Yes, all donations through our platform are tax-deductible. You'll receive annual tax documentation and can download receipts from your dashboard at any time."
-            />
-            
-            <FAQItem
-              question="What's the minimum subscription amount?"
-              answer="Our minimum subscription starts at $15 per month, making it accessible for anyone who wants to make a meaningful impact regardless of their budget."
-            />
-          </div>
-        </div>
-      </section>
 
-      {/* Contact Section */}
-      <section className="py-20 bg-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">Have Questions?</h2>
-          <p className="text-xl text-gray-600 mb-8">
-            We're here to help you make the biggest impact possible.
-          </p>
-          
-          <div className="max-w-2xl mx-auto">
-            <form className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-2">
-                    First Name
-                  </label>
-                  <input
-                    type="text"
-                    id="firstName"
-                    name="firstName"
-                    required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-2">
-                    Last Name
-                  </label>
-                  <input
-                    type="text"
-                    id="lastName"
-                    name="lastName"
-                    required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
-              </div>
-              
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                  Email Address
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-              </div>
-              
-              <div>
-                <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-2">
-                  Subject
-                </label>
-                <select
-                  id="subject"
-                  name="subject"
-                  required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                >
-                  <option value="">Select a topic</option>
-                  <option value="general">General Inquiry</option>
-                  <option value="subscription">Subscription Questions</option>
-                  <option value="organizations">Organization Verification</option>
-                  <option value="technical">Technical Support</option>
-                  <option value="partnership">Partnership Opportunities</option>
-                </select>
-              </div>
-              
-              <div>
-                <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
-                  Message
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  rows={6}
-                  required
-                  placeholder="Tell us how we can help you..."
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-                ></textarea>
-              </div>
-              
-              <div className="text-center">
-                <Button 
-                  type="submit" 
-                  size="lg" 
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4"
-                >
-                  Send Message
-                </Button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </section>
+      <FAQSection />
+      <ContactSection />
 
       {/* Footer */}
       <footer className="bg-gray-900 text-white py-12">
