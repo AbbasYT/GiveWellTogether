@@ -17,8 +17,8 @@ export function AboutPage() {
           <div className="absolute bottom-20 right-10 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
         </div>
         
-        <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-20">
-          <div className="max-w-7xl mx-auto">
+        <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
+          <div className="max-w-full mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               {/* Left Content */}
               <div>
@@ -40,23 +40,23 @@ export function AboutPage() {
               
               {/* Right Visual Elements */}
               <div className="relative">
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-6">
                   <div className="bg-gray-800/80 backdrop-blur-sm rounded-3xl p-6 border border-gray-700">
                     <Heart className="h-12 w-12 text-blue-400 mb-4" />
                     <h3 className="text-lg font-bold text-white mb-2">Transparent</h3>
                     <p className="text-gray-300 text-sm">Full visibility into where your money goes</p>
                   </div>
-                  <div className="bg-gray-800/80 backdrop-blur-sm rounded-3xl p-6 border border-gray-700 mt-8">
-                    <Users className="h-12 w-12 text-purple-400 mb-4" />
-                    <h3 className="text-lg font-bold text-white mb-2">Collective</h3>
-                    <p className="text-gray-300 text-sm">Stronger impact through community giving</p>
-                  </div>
-                  <div className="bg-gray-800/80 backdrop-blur-sm rounded-3xl p-6 border border-gray-700 -mt-4">
+                  <div className="bg-gray-800/80 backdrop-blur-sm rounded-3xl p-6 border border-gray-700">
                     <Shield className="h-12 w-12 text-green-400 mb-4" />
                     <h3 className="text-lg font-bold text-white mb-2">Verified</h3>
                     <p className="text-gray-300 text-sm">Rigorously vetted partner organizations</p>
                   </div>
-                  <div className="bg-gray-800/80 backdrop-blur-sm rounded-3xl p-6 border border-gray-700 mt-4">
+                  <div className="bg-gray-800/80 backdrop-blur-sm rounded-3xl p-6 border border-gray-700">
+                    <Users className="h-12 w-12 text-purple-400 mb-4" />
+                    <h3 className="text-lg font-bold text-white mb-2">Collective</h3>
+                    <p className="text-gray-300 text-sm">Stronger impact through community giving</p>
+                  </div>
+                  <div className="bg-gray-800/80 backdrop-blur-sm rounded-3xl p-6 border border-gray-700">
                     <Target className="h-12 w-12 text-orange-400 mb-4" />
                     <h3 className="text-lg font-bold text-white mb-2">Impactful</h3>
                     <p className="text-gray-300 text-sm">Real change in communities worldwide</p>
@@ -70,8 +70,8 @@ export function AboutPage() {
 
       {/* Mission & Vision Section */}
       <section className="py-20 relative">
-        <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-20">
-          <div className="max-w-7xl mx-auto">
+        <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
+          <div className="max-w-full mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
               {/* Mission */}
               <div className="bg-gray-800/50 backdrop-blur-sm rounded-3xl p-8 border border-gray-700">
@@ -114,8 +114,8 @@ export function AboutPage() {
 
       {/* How It Works Section */}
       <section className="py-20 relative bg-gradient-to-r from-gray-900/50 to-slate-900/50">
-        <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-20">
-          <div className="max-w-7xl mx-auto">
+        <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
+          <div className="max-w-full mx-auto">
             <div className="text-center mb-16">
               <h2 className="text-4xl font-bold text-white mb-6">How It Works</h2>
               <p className="text-xl text-gray-300 max-w-3xl mx-auto">
@@ -123,7 +123,7 @@ export function AboutPage() {
               </p>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
               <div className="bg-gray-800/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-700 text-center">
                 <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 text-white font-bold text-lg">1</div>
                 <h3 className="text-lg font-bold text-white mb-2">Subscribe</h3>
@@ -143,13 +143,7 @@ export function AboutPage() {
               </div>
               
               <div className="bg-gray-800/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-700 text-center">
-                <div className="w-12 h-12 bg-orange-600 rounded-full flex items-center justify-center mx-auto mb-4 text-white font-bold text-lg">4</div>
-                <h3 className="text-lg font-bold text-white mb-2">Customize</h3>
-                <p className="text-gray-300 text-sm">You may opt out of exactly one genre of donation</p>
-              </div>
-              
-              <div className="bg-gray-800/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-700 text-center">
-                <div className="w-12 h-12 bg-pink-600 rounded-full flex items-center justify-center mx-auto mb-4 text-white font-bold text-lg">5</div>
+                <div className="w-12 h-12 bg-pink-600 rounded-full flex items-center justify-center mx-auto mb-4 text-white font-bold text-lg">4</div>
                 <h3 className="text-lg font-bold text-white mb-2">Track Impact</h3>
                 <p className="text-gray-300 text-sm">Your dashboard shows exactly where your money goes</p>
               </div>
@@ -160,8 +154,8 @@ export function AboutPage() {
 
       {/* Values Section */}
       <section className="py-20 relative">
-        <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-20">
-          <div className="max-w-7xl mx-auto">
+        <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
+          <div className="max-w-full mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {/* Transparency */}
               <div className="bg-gray-800/50 backdrop-blur-sm rounded-3xl p-8 border border-gray-700">
@@ -205,7 +199,7 @@ export function AboutPage() {
 
       {/* Call to Action Section */}
       <section className="py-20 relative bg-gradient-to-r from-blue-900/20 to-purple-900/20">
-        <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-20">
+        <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
           <div className="max-w-4xl mx-auto text-center">
             <div className="bg-gray-800/80 backdrop-blur-sm rounded-3xl p-12 border border-gray-700">
               <div className="w-20 h-20 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
@@ -245,8 +239,8 @@ export function AboutPage() {
           <div className="absolute top-20 left-10 w-40 h-40 bg-blue-500/10 rounded-full blur-2xl animate-pulse"></div>
           <div className="absolute bottom-20 right-10 w-60 h-60 bg-purple-500/10 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '3s' }}></div>
         </div>
-        <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-20">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-7xl mx-auto">
+        <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-full mx-auto">
             <div>
               <h3 className="text-2xl font-bold mb-4 text-white">GiveWellTogether</h3>
               <p className="text-gray-300 leading-relaxed">
