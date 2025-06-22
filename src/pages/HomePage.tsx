@@ -94,38 +94,38 @@ export function HomePage() {
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-3xl p-8 hover:shadow-lg transition-all duration-300 border border-blue-100">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
+            <div className="text-center h-full">
+              <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-3xl p-8 hover:shadow-lg transition-all duration-300 border border-blue-100 h-full flex flex-col">
                 <div className="w-20 h-20 bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
                   <Heart className="h-10 w-10 text-white" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">Choose Your Impact</h3>
-                <p className="text-gray-600 leading-relaxed">
+                <h3 className="text-2xl font-bold text-gray-900 mb-4 flex-shrink-0">Choose Your Impact</h3>
+                <p className="text-gray-600 leading-relaxed flex-grow">
                   Select a monthly subscription that fits your budget. Every dollar counts and makes a difference.
                 </p>
               </div>
             </div>
             
-            <div className="text-center">
-              <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-3xl p-8 hover:shadow-lg transition-all duration-300 border border-blue-100">
+            <div className="text-center h-full">
+              <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-3xl p-8 hover:shadow-lg transition-all duration-300 border border-blue-100 h-full flex flex-col">
                 <div className="w-20 h-20 bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
                   <Users className="h-10 w-10 text-white" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">Equal Distribution</h3>
-                <p className="text-gray-600 leading-relaxed">
+                <h3 className="text-2xl font-bold text-gray-900 mb-4 flex-shrink-0">Equal Distribution</h3>
+                <p className="text-gray-600 leading-relaxed flex-grow">
                   Your contribution is equally distributed among all verified partner organizations each month.
                 </p>
               </div>
             </div>
             
-            <div className="text-center">
-              <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-3xl p-8 hover:shadow-lg transition-all duration-300 border border-blue-100">
+            <div className="text-center h-full">
+              <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-3xl p-8 hover:shadow-lg transition-all duration-300 border border-blue-100 h-full flex flex-col">
                 <div className="w-20 h-20 bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
                   <Shield className="h-10 w-10 text-white" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">Track Your Impact</h3>
-                <p className="text-gray-600 leading-relaxed">
+                <h3 className="text-2xl font-bold text-gray-900 mb-4 flex-shrink-0">Track Your Impact</h3>
+                <p className="text-gray-600 leading-relaxed flex-grow">
                   See exactly where your money goes with full transparency and regular impact reports.
                 </p>
               </div>
