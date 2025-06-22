@@ -84,6 +84,9 @@ export function HomePage() {
         </div>
       </section>
 
+      {/* Divider between Impact Stats and How It Works */}
+      <div className="h-px bg-gradient-to-r from-transparent via-gray-600 to-transparent"></div>
+
       {/* How It Works */}
       <section className="py-24 relative bg-gradient-to-br from-slate-900 via-gray-900 to-black overflow-hidden">
         {/* Animated background elements */}
@@ -228,6 +231,8 @@ export function HomePage() {
         </div>
       </section>
 
+      {/* Divider between Testimonials and FAQ */}
+      <div className="h-px bg-gradient-to-r from-transparent via-gray-600 to-transparent"></div>
 
       <FAQSection />
       <ContactSection />
