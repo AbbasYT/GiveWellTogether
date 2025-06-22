@@ -85,13 +85,13 @@ export function HomePage() {
       </section>
 
       {/* How It Works */}
-      <section 
-        className="py-24 relative bg-gradient-to-br from-slate-50 via-blue-50/30 to-white"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23e0f2fe' fill-opacity='0.3'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
-        }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/20 to-transparent"></div>
+      <section className="py-24 relative bg-gradient-to-br from-slate-50 via-blue-50/40 to-indigo-50/30 overflow-hidden">
+        {/* Animated background elements */}
+        <div className="absolute inset-0">
+          <div className="absolute top-20 left-10 w-72 h-72 bg-blue-200/20 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-20 right-10 w-96 h-96 bg-indigo-200/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-purple-200/15 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '4s' }}></div>
+        </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-5xl font-bold text-gray-900 mb-6">How It Works</h2>
@@ -102,8 +102,8 @@ export function HomePage() {
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
             <div className="text-center h-full">
-              <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-3xl p-8 hover:shadow-lg transition-all duration-300 border border-blue-100 h-full flex flex-col">
-                <div className="w-20 h-20 bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+              <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 hover:shadow-xl hover:scale-105 transition-all duration-500 border border-blue-100/50 h-full flex flex-col group">
+                <div className="w-20 h-20 bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:shadow-xl group-hover:scale-110 transition-all duration-300">
                   <Heart className="h-10 w-10 text-white" />
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-4 flex-shrink-0">Choose Your Impact</h3>
@@ -114,8 +114,8 @@ export function HomePage() {
             </div>
             
             <div className="text-center h-full">
-              <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-3xl p-8 hover:shadow-lg transition-all duration-300 border border-blue-100 h-full flex flex-col">
-                <div className="w-20 h-20 bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+              <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 hover:shadow-xl hover:scale-105 transition-all duration-500 border border-blue-100/50 h-full flex flex-col group">
+                <div className="w-20 h-20 bg-gradient-to-br from-indigo-600 to-purple-700 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:shadow-xl group-hover:scale-110 transition-all duration-300">
                   <Users className="h-10 w-10 text-white" />
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-4 flex-shrink-0">Equal Distribution</h3>
@@ -126,8 +126,8 @@ export function HomePage() {
             </div>
             
             <div className="text-center h-full">
-              <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-3xl p-8 hover:shadow-lg transition-all duration-300 border border-blue-100 h-full flex flex-col">
-                <div className="w-20 h-20 bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+              <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 hover:shadow-xl hover:scale-105 transition-all duration-500 border border-blue-100/50 h-full flex flex-col group">
+                <div className="w-20 h-20 bg-gradient-to-br from-purple-600 to-pink-700 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:shadow-xl group-hover:scale-110 transition-all duration-300">
                   <Shield className="h-10 w-10 text-white" />
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-4 flex-shrink-0">Track Your Impact</h3>
@@ -141,13 +141,12 @@ export function HomePage() {
       </section>
 
       {/* Testimonials */}
-      <section 
-        className="py-24 relative"
-        style={{
-          backgroundImage: 'url("https://images.pexels.com/photos/1181673/pexels-photo-1181673.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop")'
-        }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-br from-white/95 via-blue-50/90 to-white/95"></div>
+      <section className="py-24 relative bg-gradient-to-br from-white via-indigo-50/30 to-purple-50/20 overflow-hidden">
+        {/* Animated background elements */}
+        <div className="absolute inset-0">
+          <div className="absolute top-10 right-20 w-64 h-64 bg-indigo-200/25 rounded-full blur-3xl animate-bounce" style={{ animationDuration: '6s' }}></div>
+          <div className="absolute bottom-10 left-20 w-80 h-80 bg-purple-200/20 rounded-full blur-3xl animate-bounce" style={{ animationDuration: '8s', animationDelay: '1s' }}></div>
+        </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-5xl font-bold text-gray-900 mb-6">What Our Community Says</h2>
@@ -157,10 +156,10 @@ export function HomePage() {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="bg-white p-8 rounded-3xl shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300">
+            <div className="bg-white/90 backdrop-blur-sm p-8 rounded-3xl shadow-lg border border-gray-100/50 hover:shadow-2xl hover:scale-105 transition-all duration-500 group">
               <div className="flex items-center mb-4">
                 {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
+                  <Star key={i} className="h-5 w-5 text-yellow-400 fill-current group-hover:scale-110 transition-transform duration-300" style={{ transitionDelay: `${i * 50}ms` }} />
                 ))}
               </div>
               <p className="text-gray-700 mb-6 leading-relaxed">
@@ -180,10 +179,10 @@ export function HomePage() {
               </div>
             </div>
             
-            <div className="bg-white p-8 rounded-3xl shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300">
+            <div className="bg-white/90 backdrop-blur-sm p-8 rounded-3xl shadow-lg border border-gray-100/50 hover:shadow-2xl hover:scale-105 transition-all duration-500 group">
               <div className="flex items-center mb-4">
                 {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
+                  <Star key={i} className="h-5 w-5 text-yellow-400 fill-current group-hover:scale-110 transition-transform duration-300" style={{ transitionDelay: `${i * 50}ms` }} />
                 ))}
               </div>
               <p className="text-gray-700 mb-6 leading-relaxed">
@@ -203,10 +202,10 @@ export function HomePage() {
               </div>
             </div>
             
-            <div className="bg-white p-8 rounded-3xl shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300">
+            <div className="bg-white/90 backdrop-blur-sm p-8 rounded-3xl shadow-lg border border-gray-100/50 hover:shadow-2xl hover:scale-105 transition-all duration-500 group">
               <div className="flex items-center mb-4">
                 {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
+                  <Star key={i} className="h-5 w-5 text-yellow-400 fill-current group-hover:scale-110 transition-transform duration-300" style={{ transitionDelay: `${i * 50}ms` }} />
                 ))}
               </div>
               <p className="text-gray-700 mb-6 leading-relaxed">
@@ -234,13 +233,13 @@ export function HomePage() {
       <ContactSection />
 
       {/* Footer */}
-      <footer 
-        className="relative text-white py-16"
-        style={{
-          backgroundImage: 'url("https://images.pexels.com/photos/1181677/pexels-photo-1181677.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop")'
-        }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-900/95 via-slate-800/90 to-slate-900/95"></div>
+      <footer className="relative text-white py-16 bg-gradient-to-br from-slate-900 via-slate-800 to-gray-900 overflow-hidden">
+        {/* Animated background elements */}
+        <div className="absolute inset-0">
+          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-blue-900/20 via-transparent to-purple-900/20"></div>
+          <div className="absolute top-20 left-10 w-40 h-40 bg-blue-500/10 rounded-full blur-2xl animate-pulse"></div>
+          <div className="absolute bottom-20 right-10 w-60 h-60 bg-purple-500/10 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '3s' }}></div>
+        </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>

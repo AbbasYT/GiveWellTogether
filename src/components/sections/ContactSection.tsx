@@ -3,13 +3,12 @@ import { Button } from '../ui/Button';
 
 export function ContactSection() {
   return (
-    <section 
-      className="py-24 relative bg-gradient-to-br from-blue-50/40 via-white to-slate-50/40"
-      style={{
-        backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23dbeafe' fill-opacity='0.15'%3E%3Cpath d='M50 50c0-5.5 4.5-10 10-10s10 4.5 10 10-4.5 10-10 10-10-4.5-10-10zm-20 0c0-5.5 4.5-10 10-10s10 4.5 10 10-4.5 10-10 10-10-4.5-10-10zm-20 0c0-5.5 4.5-10 10-10s10 4.5 10 10-4.5 10-10 10-10-4.5-10-10z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
-      }}
-    >
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/30 to-transparent"></div>
+    <section className="py-24 relative bg-gradient-to-br from-white via-blue-50/40 to-indigo-50/30 overflow-hidden">
+      {/* Animated background elements */}
+      <div className="absolute inset-0">
+        <div className="absolute top-16 left-1/4 w-48 h-48 bg-blue-200/20 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '5s' }}></div>
+        <div className="absolute bottom-16 right-1/4 w-64 h-64 bg-indigo-200/20 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '7s', animationDelay: '1s' }}></div>
+      </div>
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-5xl font-bold text-gray-900 mb-6">Have Questions?</h2>
@@ -19,7 +18,7 @@ export function ContactSection() {
         </div>
         
         <div className="relative max-w-2xl mx-auto bg-white/95 backdrop-blur-sm rounded-3xl shadow-xl border border-gray-100 p-8">
-          <form className="space-y-6">
+          <form className="space-y-6 group">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label htmlFor="firstName" className="block text-sm font-bold text-gray-700 mb-3">
@@ -30,7 +29,7 @@ export function ContactSection() {
                   id="firstName"
                   name="firstName"
                   required
-                  className="w-full px-4 py-4 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-gray-50/50 hover:bg-white"
+                  className="w-full px-4 py-4 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 bg-gray-50/50 hover:bg-white hover:shadow-md focus:scale-105"
                 />
               </div>
               <div>
@@ -42,7 +41,7 @@ export function ContactSection() {
                   id="lastName"
                   name="lastName"
                   required
-                  className="w-full px-4 py-4 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-gray-50/50 hover:bg-white"
+                  className="w-full px-4 py-4 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 bg-gray-50/50 hover:bg-white hover:shadow-md focus:scale-105"
                 />
               </div>
             </div>
@@ -56,7 +55,7 @@ export function ContactSection() {
                 id="email"
                 name="email"
                 required
-                className="w-full px-4 py-4 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-gray-50/50 hover:bg-white"
+                className="w-full px-4 py-4 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 bg-gray-50/50 hover:bg-white hover:shadow-md focus:scale-105"
               />
             </div>
             
@@ -68,7 +67,7 @@ export function ContactSection() {
                 id="subject"
                 name="subject"
                 required
-                className="w-full px-4 py-4 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-gray-50/50 hover:bg-white"
+                className="w-full px-4 py-4 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 bg-gray-50/50 hover:bg-white hover:shadow-md focus:scale-105"
               >
                 <option value="">Select a topic</option>
                 <option value="general">General Inquiry</option>
@@ -89,7 +88,7 @@ export function ContactSection() {
                 rows={6}
                 required
                 placeholder="Tell us how we can help you..."
-                className="w-full px-4 py-4 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none transition-all duration-200 bg-gray-50/50 hover:bg-white"
+                className="w-full px-4 py-4 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none transition-all duration-300 bg-gray-50/50 hover:bg-white hover:shadow-md focus:scale-105"
               ></textarea>
             </div>
             
@@ -97,7 +96,7 @@ export function ContactSection() {
               <Button 
                 type="submit" 
                 size="lg" 
-                className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-10 py-4 rounded-2xl font-bold shadow-lg hover:shadow-xl transition-all duration-300"
+                className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-10 py-4 rounded-2xl font-bold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
               >
                 Send Message
               </Button>
