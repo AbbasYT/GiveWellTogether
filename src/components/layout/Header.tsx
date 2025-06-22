@@ -9,28 +9,31 @@ export function Header() {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   return (
-    <header className="absolute top-0 left-0 right-0 z-50">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+    <header className="absolute top-0 left-0 right-0 z-50 bg-white/5 backdrop-blur-md border-b border-white/10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-6">
           {/* Logo */}
-          <Link to="/" className="text-xl font-semibold text-white">
+          <Link to="/" className="text-2xl font-bold text-white">
             GiveWellTogether
           </Link>
 
-          {/* Center Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
+          {/* Navigation */}
+          <nav className="hidden md:flex items-center space-x-12">
             <Link to="/" className="text-white/90 hover:text-white transition-colors text-sm font-medium">
-              For Home
-            </Link>
-            <Link to="/organizations" className="text-white/90 hover:text-white transition-colors text-sm font-medium">
-              For Business
+              Home
             </Link>
             <Link to="/about" className="text-white/90 hover:text-white transition-colors text-sm font-medium">
               About Us
             </Link>
+            <Link to="/join" className="text-white/90 hover:text-white transition-colors text-sm font-medium">
+              Join Us!
+            </Link>
+            <Link to="/organizations" className="text-white/90 hover:text-white transition-colors text-sm font-medium">
+              Where Your Money Goes
+            </Link>
           </nav>
 
-          {/* Right Side - Auth or Contact */}
+          {/* Auth Section */}
           <div className="flex items-center">
             {user ? (
               <div className="relative">
@@ -74,7 +77,7 @@ export function Header() {
             ) : (
               <Link to="/signin">
                 <Button className="bg-white text-gray-900 hover:bg-gray-100 px-6 py-2 rounded-full text-sm font-medium">
-                  Contact Us
+                  Sign In
                 </Button>
               </Link>
             )}
