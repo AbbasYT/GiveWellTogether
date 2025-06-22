@@ -173,5 +173,6 @@ export function ContactSection() {
         </div>
       </div>
     </section>
+  )
   );
 }
