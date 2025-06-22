@@ -231,8 +231,11 @@ export function HomePage() {
         </div>
       </section>
 
-
       <FAQSection />
+      
+      {/* Minimal Section Divider */}
+      <div className="h-px bg-gradient-to-r from-transparent via-gray-600 to-transparent"></div>
+      
       <ContactSection />
 
       {/* Footer */}
