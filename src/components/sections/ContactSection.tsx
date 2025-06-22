@@ -31,7 +31,7 @@ export function ContactSection() {
                   </div>
                   <div>
                     <div className="text-white font-medium">Email Us</div>
-                    <div className="text-gray-300">support@givewelltogether.org</div>
+                    <div className="text-gray-300">givewelltogether@gmail.com</div>
                   </div>
                 </div>
                 
@@ -41,7 +41,7 @@ export function ContactSection() {
                   </div>
                   <div>
                     <div className="text-white font-medium">Call Us</div>
-                    <div className="text-gray-300">+1 (555) 123-4567</div>
+                    <div className="text-gray-300">+1 (555) xxx-xxx</div>
                   </div>
                 </div>
                 
