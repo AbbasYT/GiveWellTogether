@@ -59,7 +59,7 @@ export function HomePage() {
       </div>
 
       {/* Impact Stats */}
-      <section className="py-24 bg-gradient-to-b from-white to-gray-50/50">
+      <section className="py-24 bg-gradient-to-br from-blue-50 to-indigo-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
             <div>
@@ -85,7 +85,7 @@ export function HomePage() {
       </section>
 
       {/* How It Works */}
-      <section className="py-24 relative bg-gradient-to-br from-slate-50 via-blue-50/40 to-indigo-50/30 overflow-hidden">
+      <section className="py-24 relative bg-gradient-to-br from-purple-100 via-blue-100 to-indigo-200 overflow-hidden">
         {/* Animated background elements */}
         <div className="absolute inset-0">
           <div className="absolute top-20 left-10 w-72 h-72 bg-blue-200/20 rounded-full blur-3xl animate-pulse"></div>
@@ -141,7 +141,7 @@ export function HomePage() {
       </section>
 
       {/* Testimonials */}
-      <section className="py-24 relative bg-gradient-to-br from-white via-indigo-50/30 to-purple-50/20 overflow-hidden">
+      <section className="py-24 relative bg-gradient-to-br from-green-50 via-blue-50 to-purple-100 overflow-hidden">
         {/* Animated background elements */}
         <div className="absolute inset-0">
           <div className="absolute top-10 right-20 w-64 h-64 bg-indigo-200/25 rounded-full blur-3xl animate-bounce" style={{ animationDuration: '6s' }}></div>
