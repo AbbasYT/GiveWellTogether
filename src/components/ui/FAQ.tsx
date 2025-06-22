@@ -18,18 +18,15 @@ export function FAQItem({ question, answer }: FAQItemProps) {
         aria-controls={`faq-answer-${question.replace(/\s+/g, '-')}`}
       >
         <h3 className="text-lg font-bold text-white pr-4">{question}</h3>
-        <ChevronDown 
+        <ChevronDown
           className={`h-5 w-5 text-gray-400 transition-transform duration-300 flex-shrink-0 ${
             isOpen ? 'rotate-180' : ''
-          }`} 
+          }`}
         />
       </button>
 
       {isOpen && (
-        <div 
-          id={`faq-answer-${question.replace(/\s+/g, '-')}`}
-          className="px-8 pb-6"
-        >
+        <div id={`faq-answer-${question.replace(/\s+/g, '-')}`} className="px-8 pb-6">
           <p className="text-gray-300 leading-relaxed">{answer}</p>
         </div>
       )}
