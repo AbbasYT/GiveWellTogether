@@ -59,25 +59,25 @@ export function HomePage() {
       </div>
 
       {/* Impact Stats */}
-      <section className="py-24 bg-gradient-to-br from-blue-50 to-indigo-100">
+      <section className="py-24 bg-gradient-to-br from-gray-900 to-slate-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
             <div>
-              <div className="bg-white rounded-3xl p-8 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300">
-                <div className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent mb-3">$2.4M+</div>
-                <div className="text-gray-600 font-medium">Total Donated</div>
+              <div className="bg-gray-800 rounded-3xl p-8 shadow-lg border border-gray-700 hover:shadow-xl transition-all duration-300">
+                <div className="text-5xl font-bold bg-gradient-to-r from-blue-400 to-blue-500 bg-clip-text text-transparent mb-3">$2.4M+</div>
+                <div className="text-gray-300 font-medium">Total Donated</div>
               </div>
             </div>
             <div>
-              <div className="bg-white rounded-3xl p-8 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300">
-                <div className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent mb-3">15,000+</div>
-                <div className="text-gray-600 font-medium">Lives Impacted</div>
+              <div className="bg-gray-800 rounded-3xl p-8 shadow-lg border border-gray-700 hover:shadow-xl transition-all duration-300">
+                <div className="text-5xl font-bold bg-gradient-to-r from-blue-400 to-blue-500 bg-clip-text text-transparent mb-3">15,000+</div>
+                <div className="text-gray-300 font-medium">Lives Impacted</div>
               </div>
             </div>
             <div>
-              <div className="bg-white rounded-3xl p-8 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300">
-                <div className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent mb-3">127</div>
-                <div className="text-gray-600 font-medium">Partner Organizations</div>
+              <div className="bg-gray-800 rounded-3xl p-8 shadow-lg border border-gray-700 hover:shadow-xl transition-all duration-300">
+                <div className="text-5xl font-bold bg-gradient-to-r from-blue-400 to-blue-500 bg-clip-text text-transparent mb-3">127</div>
+                <div className="text-gray-300 font-medium">Partner Organizations</div>
               </div>
             </div>
           </div>
@@ -85,53 +85,53 @@ export function HomePage() {
       </section>
 
       {/* How It Works */}
-      <section className="py-24 relative bg-gradient-to-br from-purple-100 via-blue-100 to-indigo-200 overflow-hidden">
+      <section className="py-24 relative bg-gradient-to-br from-slate-900 via-gray-900 to-black overflow-hidden">
         {/* Animated background elements */}
         <div className="absolute inset-0">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-blue-200/20 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-20 right-10 w-96 h-96 bg-indigo-200/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-purple-200/15 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '4s' }}></div>
+          <div className="absolute top-20 left-10 w-72 h-72 bg-gray-700/20 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-20 right-10 w-96 h-96 bg-gray-600/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-gray-800/15 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '4s' }}></div>
         </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-5xl font-bold text-gray-900 mb-6">How It Works</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            <h2 className="text-5xl font-bold text-white mb-6">How It Works</h2>
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
               Simple, transparent, and impactful. Your subscription creates lasting change.
             </p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
             <div className="text-center h-full">
-              <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 hover:shadow-xl hover:scale-105 transition-all duration-500 border border-blue-100/50 h-full flex flex-col group">
+              <div className="bg-gray-800/80 backdrop-blur-sm rounded-3xl p-8 hover:shadow-xl hover:scale-105 transition-all duration-500 border border-gray-700/50 h-full flex flex-col group">
                 <div className="w-20 h-20 bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:shadow-xl group-hover:scale-110 transition-all duration-300">
                   <Heart className="h-10 w-10 text-white" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-4 flex-shrink-0">Choose Your Impact</h3>
-                <p className="text-gray-600 leading-relaxed flex-grow">
+                <h3 className="text-2xl font-bold text-white mb-4 flex-shrink-0">Choose Your Impact</h3>
+                <p className="text-gray-300 leading-relaxed flex-grow">
                   Select a monthly subscription that fits your budget. Every dollar counts and makes a difference.
                 </p>
               </div>
             </div>
             
             <div className="text-center h-full">
-              <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 hover:shadow-xl hover:scale-105 transition-all duration-500 border border-blue-100/50 h-full flex flex-col group">
+              <div className="bg-gray-800/80 backdrop-blur-sm rounded-3xl p-8 hover:shadow-xl hover:scale-105 transition-all duration-500 border border-gray-700/50 h-full flex flex-col group">
                 <div className="w-20 h-20 bg-gradient-to-br from-indigo-600 to-purple-700 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:shadow-xl group-hover:scale-110 transition-all duration-300">
                   <Users className="h-10 w-10 text-white" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-4 flex-shrink-0">Equal Distribution</h3>
-                <p className="text-gray-600 leading-relaxed flex-grow">
+                <h3 className="text-2xl font-bold text-white mb-4 flex-shrink-0">Equal Distribution</h3>
+                <p className="text-gray-300 leading-relaxed flex-grow">
                   Your contribution is equally distributed among all verified partner organizations each month.
                 </p>
               </div>
             </div>
             
             <div className="text-center h-full">
-              <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 hover:shadow-xl hover:scale-105 transition-all duration-500 border border-blue-100/50 h-full flex flex-col group">
+              <div className="bg-gray-800/80 backdrop-blur-sm rounded-3xl p-8 hover:shadow-xl hover:scale-105 transition-all duration-500 border border-gray-700/50 h-full flex flex-col group">
                 <div className="w-20 h-20 bg-gradient-to-br from-purple-600 to-pink-700 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:shadow-xl group-hover:scale-110 transition-all duration-300">
                   <Shield className="h-10 w-10 text-white" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-4 flex-shrink-0">Track Your Impact</h3>
-                <p className="text-gray-600 leading-relaxed flex-grow">
+                <h3 className="text-2xl font-bold text-white mb-4 flex-shrink-0">Track Your Impact</h3>
+                <p className="text-gray-300 leading-relaxed flex-grow">
                   See exactly where your money goes with full transparency and regular impact reports.
                 </p>
               </div>
@@ -141,28 +141,28 @@ export function HomePage() {
       </section>
 
       {/* Testimonials */}
-      <section className="py-24 relative bg-gradient-to-br from-green-50 via-blue-50 to-purple-100 overflow-hidden">
+      <section className="py-24 relative bg-gradient-to-br from-gray-900 via-slate-900 to-black overflow-hidden">
         {/* Animated background elements */}
         <div className="absolute inset-0">
-          <div className="absolute top-10 right-20 w-64 h-64 bg-indigo-200/25 rounded-full blur-3xl animate-bounce" style={{ animationDuration: '6s' }}></div>
-          <div className="absolute bottom-10 left-20 w-80 h-80 bg-purple-200/20 rounded-full blur-3xl animate-bounce" style={{ animationDuration: '8s', animationDelay: '1s' }}></div>
+          <div className="absolute top-10 right-20 w-64 h-64 bg-gray-700/25 rounded-full blur-3xl animate-bounce" style={{ animationDuration: '6s' }}></div>
+          <div className="absolute bottom-10 left-20 w-80 h-80 bg-gray-600/20 rounded-full blur-3xl animate-bounce" style={{ animationDuration: '8s', animationDelay: '1s' }}></div>
         </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-5xl font-bold text-gray-900 mb-6">What Our Community Says</h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <h2 className="text-5xl font-bold text-white mb-6">What Our Community Says</h2>
+            <p className="text-xl text-gray-300 max-w-2xl mx-auto">
               Real stories from people making a difference through our platform
             </p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="bg-white/90 backdrop-blur-sm p-8 rounded-3xl shadow-lg border border-gray-100/50 hover:shadow-2xl hover:scale-105 transition-all duration-500 group">
+            <div className="bg-gray-800/90 backdrop-blur-sm p-8 rounded-3xl shadow-lg border border-gray-700/50 hover:shadow-2xl hover:scale-105 transition-all duration-500 group">
               <div className="flex items-center mb-4">
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} className="h-5 w-5 text-yellow-400 fill-current group-hover:scale-110 transition-transform duration-300" style={{ transitionDelay: `${i * 50}ms` }} />
                 ))}
               </div>
-              <p className="text-gray-700 mb-6 leading-relaxed">
+              <p className="text-gray-300 mb-6 leading-relaxed">
                 "Knowing my monthly contribution helps multiple organizations gives me such peace of mind. 
                 The transparency is incredible."
               </p>
@@ -170,22 +170,22 @@ export function HomePage() {
                 <img 
                   src="https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop" 
                   alt="Sarah M." 
-                  className="w-12 h-12 rounded-full mr-4 ring-2 ring-blue-100"
+                  className="w-12 h-12 rounded-full mr-4 ring-2 ring-gray-600"
                 />
                 <div>
-                  <div className="font-bold text-gray-900">Sarah M.</div>
-                  <div className="text-gray-600">Monthly Donor</div>
+                  <div className="font-bold text-white">Sarah M.</div>
+                  <div className="text-gray-400">Monthly Donor</div>
                 </div>
               </div>
             </div>
             
-            <div className="bg-white/90 backdrop-blur-sm p-8 rounded-3xl shadow-lg border border-gray-100/50 hover:shadow-2xl hover:scale-105 transition-all duration-500 group">
+            <div className="bg-gray-800/90 backdrop-blur-sm p-8 rounded-3xl shadow-lg border border-gray-700/50 hover:shadow-2xl hover:scale-105 transition-all duration-500 group">
               <div className="flex items-center mb-4">
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} className="h-5 w-5 text-yellow-400 fill-current group-hover:scale-110 transition-transform duration-300" style={{ transitionDelay: `${i * 50}ms` }} />
                 ))}
               </div>
-              <p className="text-gray-700 mb-6 leading-relaxed">
+              <p className="text-gray-300 mb-6 leading-relaxed">
                 "I love that I don't have to choose between causes. My subscription supports 
                 education, healthcare, and environmental projects all at once."
               </p>
@@ -193,22 +193,22 @@ export function HomePage() {
                 <img 
                   src="https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop" 
                   alt="Michael R." 
-                  className="w-12 h-12 rounded-full mr-4 ring-2 ring-blue-100"
+                  className="w-12 h-12 rounded-full mr-4 ring-2 ring-gray-600"
                 />
                 <div>
-                  <div className="font-bold text-gray-900">Michael R.</div>
-                  <div className="text-gray-600">Annual Subscriber</div>
+                  <div className="font-bold text-white">Michael R.</div>
+                  <div className="text-gray-400">Annual Subscriber</div>
                 </div>
               </div>
             </div>
             
-            <div className="bg-white/90 backdrop-blur-sm p-8 rounded-3xl shadow-lg border border-gray-100/50 hover:shadow-2xl hover:scale-105 transition-all duration-500 group">
+            <div className="bg-gray-800/90 backdrop-blur-sm p-8 rounded-3xl shadow-lg border border-gray-700/50 hover:shadow-2xl hover:scale-105 transition-all duration-500 group">
               <div className="flex items-center mb-4">
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} className="h-5 w-5 text-yellow-400 fill-current group-hover:scale-110 transition-transform duration-300" style={{ transitionDelay: `${i * 50}ms` }} />
                 ))}
               </div>
-              <p className="text-gray-700 mb-6 leading-relaxed">
+              <p className="text-gray-300 mb-6 leading-relaxed">
                 "The impact reports show exactly how my donations are being used. 
                 It's amazing to see the real difference we're making together."
               </p>
@@ -216,11 +216,11 @@ export function HomePage() {
                 <img 
                   src="https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop" 
                   alt="Emily K." 
-                  className="w-12 h-12 rounded-full mr-4 ring-2 ring-blue-100"
+                  className="w-12 h-12 rounded-full mr-4 ring-2 ring-gray-600"
                 />
                 <div>
-                  <div className="font-bold text-gray-900">Emily K.</div>
-                  <div className="text-gray-600">Community Member</div>
+                  <div className="font-bold text-white">Emily K.</div>
+                  <div className="text-gray-400">Community Member</div>
                 </div>
               </div>
             </div>

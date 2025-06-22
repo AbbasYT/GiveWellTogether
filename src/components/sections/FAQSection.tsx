@@ -3,16 +3,16 @@ import { FAQItem } from '../ui/FAQ';
 
 export function FAQSection() {
   return (
-    <section className="py-24 relative bg-gradient-to-br from-gray-50 via-slate-50/50 to-blue-50/30 overflow-hidden">
+    <section className="py-24 relative bg-gradient-to-br from-black via-gray-900 to-slate-900 overflow-hidden">
       {/* Animated background elements */}
       <div className="absolute inset-0">
-        <div className="absolute top-32 right-16 w-56 h-56 bg-slate-200/30 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '4s' }}></div>
-        <div className="absolute bottom-32 left-16 w-72 h-72 bg-blue-200/25 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '6s', animationDelay: '2s' }}></div>
+        <div className="absolute top-32 right-16 w-56 h-56 bg-gray-700/30 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '4s' }}></div>
+        <div className="absolute bottom-32 left-16 w-72 h-72 bg-gray-600/25 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '6s', animationDelay: '2s' }}></div>
       </div>
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-5xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <h2 className="text-5xl font-bold text-white mb-6">Frequently Asked Questions</h2>
+          <p className="text-xl text-gray-300 max-w-2xl mx-auto">
             Everything you need to know about making an impact through our platform
           </p>
         </div>
