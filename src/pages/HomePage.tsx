@@ -22,10 +22,10 @@ export function HomePage() {
         <Header />
         
         {/* Hero Content */}
-        <div className="relative z-10 flex items-center min-h-screen">
+        <div className="relative z-10 flex items-center min-h-screen pt-20 sm:pt-24">
           <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
             <div className="max-w-4xl">
-              <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
+              <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
                 ONE
                 <br />
                 SUBSCRIPTION.
@@ -35,20 +35,20 @@ export function HomePage() {
                 LIVES CHANGED.
               </h1>
               
-              <p className="text-xl md:text-2xl text-white/90 mb-8 leading-relaxed">
+              <p className="text-lg sm:text-xl md:text-2xl text-white/90 mb-8 leading-relaxed">
                 Join thousands of donors making a real difference. Your monthly contribution 
                 is transparently distributed to verified organizations changing lives worldwide.
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link to="/pricing">
-                  <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg">
+                  <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg w-full sm:w-auto">
                     Start Making Impact
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                 </Link>
                 <Link to="/organizations">
-                  <Button variant="outline" size="lg" className="bg-white/20 border-white/30 text-white hover:bg-white/30 px-8 py-4 text-lg">
+                  <Button variant="outline" size="lg" className="bg-white/20 border-white/30 text-white hover:bg-white/30 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg w-full sm:w-auto">
                     See Where Money Goes
                   </Button>
                 </Link>

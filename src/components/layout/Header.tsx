@@ -14,9 +14,9 @@ export function Header() {
     <>
       <header className="absolute top-0 left-0 right-0 z-50">
         <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
-          <div className="flex justify-between items-center py-6">
+          <div className="flex justify-between items-center py-4 sm:py-6">
             {/* Logo */}
-            <Link to="/" className="text-2xl font-bold text-white">
+            <Link to="/" className="text-lg sm:text-2xl font-bold text-white">
               GiveWellTogether
             </Link>
 
@@ -80,7 +80,7 @@ export function Header() {
               ) : (
                 <button 
                   onClick={() => setIsSignInModalOpen(true)}
-                  className="bg-white text-slate-800 hover:bg-gray-100 px-6 py-2.5 rounded-full text-sm font-medium transition-colors shadow-sm"
+                  className="bg-white text-slate-800 hover:bg-gray-100 px-4 sm:px-6 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-medium transition-colors shadow-sm"
                 >
                   Sign In
                 </button>
