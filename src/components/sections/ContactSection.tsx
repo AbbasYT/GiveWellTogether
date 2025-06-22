@@ -72,11 +72,11 @@ export function ContactSection() {
               <h3 className="text-xl font-bold text-white mb-6">Response Times</h3>
               <div className="grid grid-cols-2 gap-4">
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-blue-400">< 2hrs</div>
+                  <div className="text-2xl font-bold text-blue-400">{"< 2hrs"}</div>
                   <div className="text-gray-300 text-sm">Email Response</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-green-400">< 24hrs</div>
+                  <div className="text-2xl font-bold text-green-400">{"< 24hrs"}</div>
                   <div className="text-gray-300 text-sm">Issue Resolution</div>
                 </div>
               </div>
@@ -173,6 +173,5 @@ export function ContactSection() {
         </div>
       </div>
     </section>
-  )
   );
 }
