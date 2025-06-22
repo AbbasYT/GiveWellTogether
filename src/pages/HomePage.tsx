@@ -84,18 +84,8 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* Section Divider */}
-      <div className="relative h-32 bg-gradient-to-r from-slate-900 via-black to-slate-900 overflow-hidden">
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="flex space-x-2">
-            <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse"></div>
-            <div className="w-3 h-3 bg-blue-400 rounded-full animate-pulse" style={{ animationDelay: '0.5s' }}></div>
-            <div className="w-3 h-3 bg-blue-300 rounded-full animate-pulse" style={{ animationDelay: '1s' }}></div>
-          </div>
-        </div>
-        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-blue-500/50 to-transparent"></div>
-        <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-blue-500/50 to-transparent"></div>
-      </div>
+      {/* Minimal Section Divider */}
+      <div className="h-px bg-gradient-to-r from-transparent via-gray-600 to-transparent"></div>
 
       {/* How It Works */}
       <section className="py-24 relative bg-gradient-to-br from-slate-900 via-gray-900 to-black overflow-hidden">
