@@ -85,7 +85,13 @@ export function HomePage() {
       </section>
 
       {/* How It Works */}
-      <section className="py-24 bg-white">
+      <section 
+        className="py-24 relative bg-gradient-to-br from-slate-50 via-blue-50/30 to-white"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23e0f2fe' fill-opacity='0.3'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+        }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/20 to-transparent"></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-5xl font-bold text-gray-900 mb-6">How It Works</h2>
@@ -135,7 +141,13 @@ export function HomePage() {
       </section>
 
       {/* Testimonials */}
-      <section className="py-24 bg-gradient-to-b from-gray-50/50 to-white">
+      <section 
+        className="py-24 relative"
+        style={{
+          backgroundImage: 'url("https://images.pexels.com/photos/1181673/pexels-photo-1181673.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop")'
+        }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-br from-white/95 via-blue-50/90 to-white/95"></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-5xl font-bold text-gray-900 mb-6">What Our Community Says</h2>
@@ -222,7 +234,13 @@ export function HomePage() {
       <ContactSection />
 
       {/* Footer */}
-      <footer className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white py-16">
+      <footer 
+        className="relative text-white py-16"
+        style={{
+          backgroundImage: 'url("https://images.pexels.com/photos/1181677/pexels-photo-1181677.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop")'
+        }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-900/95 via-slate-800/90 to-slate-900/95"></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
@@ -256,7 +274,7 @@ export function HomePage() {
               </ul>
             </div>
           </div>
-          <div className="border-t border-gray-700 mt-12 pt-8 text-center text-gray-300">
+          <div className="relative border-t border-gray-700 mt-12 pt-8 text-center text-gray-300">
             <p>&copy; 2024 Give Well Together. All rights reserved.</p>
           </div>
         </div>

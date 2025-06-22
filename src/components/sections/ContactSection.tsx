@@ -3,7 +3,13 @@ import { Button } from '../ui/Button';
 
 export function ContactSection() {
   return (
-    <section className="py-24 bg-gradient-to-b from-gray-50/50 to-white">
+    <section 
+      className="py-24 relative bg-gradient-to-br from-blue-50/40 via-white to-slate-50/40"
+      style={{
+        backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23dbeafe' fill-opacity='0.15'%3E%3Cpath d='M50 50c0-5.5 4.5-10 10-10s10 4.5 10 10-4.5 10-10 10-10-4.5-10-10zm-20 0c0-5.5 4.5-10 10-10s10 4.5 10 10-4.5 10-10 10-10-4.5-10-10zm-20 0c0-5.5 4.5-10 10-10s10 4.5 10 10-4.5 10-10 10-10-4.5-10-10z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+      }}
+    >
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/30 to-transparent"></div>
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-5xl font-bold text-gray-900 mb-6">Have Questions?</h2>
@@ -12,7 +18,7 @@ export function ContactSection() {
           </p>
         </div>
         
-        <div className="max-w-2xl mx-auto bg-white rounded-3xl shadow-xl border border-gray-100 p-8">
+        <div className="relative max-w-2xl mx-auto bg-white/95 backdrop-blur-sm rounded-3xl shadow-xl border border-gray-100 p-8">
           <form className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>

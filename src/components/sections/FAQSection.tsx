@@ -3,7 +3,13 @@ import { FAQItem } from '../ui/FAQ';
 
 export function FAQSection() {
   return (
-    <section className="py-24 bg-gradient-to-b from-white to-gray-50/50">
+    <section 
+      className="py-24 relative"
+      style={{
+        backgroundImage: 'url("https://images.pexels.com/photos/1181406/pexels-photo-1181406.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop")'
+      }}
+    >
+      <div className="absolute inset-0 bg-gradient-to-br from-white/96 via-slate-50/92 to-white/96"></div>
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-5xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
@@ -12,7 +18,7 @@ export function FAQSection() {
           </p>
         </div>
         
-        <div className="space-y-4">
+        <div className="relative space-y-4">
           <FAQItem
             question="How is my money distributed?"
             answer="Your monthly subscription is divided equally among all verified partner organizations. We update the distribution monthly as new organizations join our platform."
