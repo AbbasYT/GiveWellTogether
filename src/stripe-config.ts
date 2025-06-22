@@ -16,6 +16,22 @@ export const products: Product[] = [
     mode: 'subscription',
     price: 15.00,
   },
+  {
+    id: 'prod_SXudCGUIT0fOoa',
+    priceId: 'price_1RcooDRnYW51Zw7fj51b9Cih',
+    name: 'Give Well Together',
+    description: 'One Payment. Countless Lives Changed',
+    mode: 'subscription',
+    price: 50.00,
+  },
+  {
+    id: 'prod_SXueiN21mYwAYN',
+    priceId: 'price_1RcoopRnYW51Zw7f2D5HGmIM',
+    name: 'Give Well Together',
+    description: 'One Payment. Countless Lives Changed',
+    mode: 'subscription',
+    price: 100.00,
+  },
 ];
 
 export const getProductByPriceId = (priceId: string): Product | undefined => {

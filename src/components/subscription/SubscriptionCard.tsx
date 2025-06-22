@@ -58,15 +58,60 @@ export function SubscriptionCard({ product, isCurrentPlan = false }: Subscriptio
     }
   };
 
+  const getPriceDisplay = () => {
+    if (product.price >= 100) {
+      return `$${product.price.toFixed(0)}`;
+    }
+    return `$${product.price.toFixed(2)}`;
+  };
+
+  const getPopularBadge = () => {
+    if (product.price === 50.00) {
+      return (
+        <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+          <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium">
+            Most Popular
+          </span>
+        </div>
+      );
+    }
+    return null;
+  };
+
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 border border-gray-200">
+    <div className={`relative bg-white rounded-lg shadow-md p-6 border-2 transition-all duration-200 hover:shadow-lg ${
+      product.price === 50.00 ? 'border-blue-500 scale-105' : 'border-gray-200'
+    }`}>
+      {getPopularBadge()}
+      
       <div className="text-center">
         <h3 className="text-xl font-semibold text-gray-900 mb-2">{product.name}</h3>
         <p className="text-gray-600 mb-4">{product.description}</p>
         
         <div className="mb-6">
-          <span className="text-3xl font-bold text-gray-900">${product.price}</span>
-          <span className="text-gray-600">/{product.mode === 'subscription' ? 'month' : 'one-time'}</span>
+          <span className="text-4xl font-bold text-gray-900">{getPriceDisplay()}</span>
+          <span className="text-gray-600 text-lg">/month</span>
+        </div>
+
+        <div className="mb-6 space-y-2 text-sm text-gray-600">
+          <div className="flex items-center justify-center">
+            <svg className="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+            </svg>
+            Monthly charitable giving
+          </div>
+          <div className="flex items-center justify-center">
+            <svg className="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+            </svg>
+            Impact tracking & reports
+          </div>
+          <div className="flex items-center justify-center">
+            <svg className="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+            </svg>
+            Cancel anytime
+          </div>
         </div>
 
         {error && (
@@ -83,9 +128,13 @@ export function SubscriptionCard({ product, isCurrentPlan = false }: Subscriptio
           <Button
             onClick={handleSubscribe}
             loading={loading}
-            className="w-full"
+            className={`w-full ${
+              product.price === 50.00 
+                ? 'bg-blue-600 hover:bg-blue-700 focus:ring-blue-500' 
+                : ''
+            }`}
           >
-            {product.mode === 'subscription' ? 'Subscribe Now' : 'Buy Now'}
+            {loading ? 'Processing...' : 'Subscribe Now'}
           </Button>
         )}
       </div>
