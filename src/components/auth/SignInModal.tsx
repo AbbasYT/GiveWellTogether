@@ -58,7 +58,7 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
           <div className="w-12 h-12 bg-slate-900 rounded-2xl mx-auto mb-4 flex items-center justify-center">
             <div className="w-6 h-6 bg-white rounded-lg"></div>
           </div>
-          <h2 className="text-2xl font-semibold text-gray-900">Create your account</h2>
+          <h2 className="text-2xl font-semibold text-gray-900">Sign in to your account</h2>
         </div>
 
         {/* Google Sign In Button */}
@@ -90,7 +90,7 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
           
           <input
             type="password"
-            placeholder="Create a password"
+            placeholder="Your password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
@@ -108,15 +108,15 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
 
         <div className="mt-6 text-center">
           <p className="text-sm text-gray-600">
-            Already have an account?{' '}
+            Don't have an account?{' '}
             <button className="text-slate-700 hover:text-slate-800 font-medium underline">
-              Sign in
+              Contact us to get started
             </button>
           </p>
         </div>
 
         <div className="mt-6 text-xs text-center text-gray-500">
-          By signing up, you agree to the{' '}
+          By signing in, you agree to the{' '}
           <a href="#" className="underline hover:text-gray-700">Terms of Service</a>
           {' '}and{' '}
           <a href="#" className="underline hover:text-gray-700">Privacy Policy</a>
