@@ -256,7 +256,7 @@ export function HomePage() {
             
             <FAQItem
               question="What's the minimum subscription amount?"
-              answer="Our minimum subscription starts at $10 per month, making it accessible for anyone who wants to make a meaningful impact regardless of their budget."
+              answer="Our minimum subscription starts at $15 per month, making it accessible for anyone who wants to make a meaningful impact regardless of their budget."
             />
           </div>
         </div>
