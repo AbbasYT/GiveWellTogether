@@ -9,7 +9,7 @@ export function PricingPage() {
 
   const plans = [
     {
-      name: 'Starter',
+      name: 'Tier 1',
       monthlyPrice: 15,
       yearlyPrice: 180,
       description: 'Perfect for getting started with giving',
@@ -22,7 +22,7 @@ export function PricingPage() {
       ]
     },
     {
-      name: 'Supporter',
+      name: 'Tier 2',
       monthlyPrice: 50,
       yearlyPrice: 600,
       description: 'Amplify your impact with greater giving',
@@ -35,7 +35,7 @@ export function PricingPage() {
       ]
     },
     {
-      name: 'Champion',
+      name: 'Tier3',
       monthlyPrice: 100,
       yearlyPrice: 1200,
       description: 'Maximum impact for dedicated givers',
