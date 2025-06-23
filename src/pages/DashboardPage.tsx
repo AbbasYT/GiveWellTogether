@@ -40,7 +40,7 @@ interface OrganizationDistribution {
 
 export function DashboardPage() {
   const { user, loading: authLoading } = useAuth();
-  const { subscription, loading: subLoading, isActive } = useSubscription();
+  const { subscription, loading: subLoading } = useSubscription();
   const [donationHistory, setDonationHistory] = useState<DonationHistory[]>([]);
   const [totalDonated, setTotalDonated] = useState(0);
   const [currentCycleAmount, setCurrentCycleAmount] = useState(0);
@@ -161,11 +161,39 @@ export function DashboardPage() {
     return <Navigate to="/pricing" replace />;
   }
 
-  // Check if user has any subscription (active or not)
-  const hasSubscription = subscription && subscription.subscription_status && subscription.subscription_status !== 'not_started';
+  // Debug: Log subscription data to console
+  console.log('Subscription data:', subscription);
 
-  if (!hasSubscription) {
-    return <Navigate to="/pricing" replace />;
+  // Allow access if user has any subscription record (even if not active)
+  const hasAnySubscription = subscription && subscription.subscription_status;
+
+  if (!hasAnySubscription) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-black">
+        <Header />
+        <div className="pt-24 pb-12">
+          <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
+            <div className="max-w-4xl mx-auto text-center">
+              <div className="bg-gray-800/80 backdrop-blur-sm rounded-3xl p-12 border border-gray-700">
+                <h1 className="text-3xl font-bold text-white mb-4">No Subscription Found</h1>
+                <p className="text-gray-300 mb-6">
+                  You need an active subscription to access the dashboard.
+                </p>
+                <p className="text-sm text-gray-400 mb-8">
+                  Debug info: {subscription ? `Status: ${subscription.subscription_status}` : 'No subscription data'}
+                </p>
+                <Button
+                  onClick={() => window.location.href = '/pricing'}
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3"
+                >
+                  View Pricing Plans
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   const subscriptionPlan = getSubscriptionPlan();
