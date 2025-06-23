@@ -3,25 +3,13 @@ import { Link } from 'react-router-dom';
 import { Button } from '../ui/Button';
 import { useAuth } from '../../hooks/useAuth';
 import { SignInModal } from '../auth/SignInModal';
-import { SignUpModal } from '../auth/SignUpModal';
 import { User, ChevronDown, Menu, X } from 'lucide-react';
 
 export function Header() {
   const { user, signOut } = useAuth();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isSignInModalOpen, setIsSignInModalOpen] = useState(false);
-  const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  const handleSwitchToSignUp = () => {
-    setIsSignInModalOpen(false);
-    setIsSignUpModalOpen(true);
-  };
-
-  const handleSwitchToSignIn = () => {
-    setIsSignUpModalOpen(false);
-    setIsSignInModalOpen(true);
-  };
 
   return (
     <>
@@ -50,7 +38,7 @@ export function Header() {
             </nav>
 
             {/* Desktop Auth Section */}
-            <div className="hidden md:flex items-center space-x-3">
+            <div className="hidden md:flex items-center">
               {user ? (
                 <div className="relative">
                   <button
@@ -91,20 +79,12 @@ export function Header() {
                   )}
                 </div>
               ) : (
-                <>
-                  <button 
-                    onClick={() => setIsSignInModalOpen(true)}
-                    className="text-white/90 hover:text-white px-4 py-2 text-sm font-medium transition-colors"
-                  >
-                    Sign In
-                  </button>
-                  <button 
-                    onClick={() => setIsSignUpModalOpen(true)}
-                    className="bg-white text-slate-800 hover:bg-gray-100 px-4 sm:px-6 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-medium transition-colors shadow-sm"
-                  >
-                    Sign Up
-                  </button>
-                </>
+                <button 
+                  onClick={() => setIsSignInModalOpen(true)}
+                  className="bg-white text-slate-800 hover:bg-gray-100 px-4 sm:px-6 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-medium transition-colors shadow-sm"
+                >
+                  Sign In
+                </button>
               )}
             </div>
 
@@ -149,20 +129,12 @@ export function Header() {
                   )}
                 </div>
               ) : (
-                <>
-                  <button 
-                    onClick={() => setIsSignInModalOpen(true)}
-                    className="text-white/90 hover:text-white px-3 py-2 text-xs font-medium transition-colors"
-                  >
-                    Sign In
-                  </button>
-                  <button 
-                    onClick={() => setIsSignUpModalOpen(true)}
-                    className="bg-white text-slate-800 hover:bg-gray-100 px-3 py-2 rounded-full text-xs font-medium transition-colors shadow-sm"
-                  >
-                    Sign Up
-                  </button>
-                </>
+                <button 
+                  onClick={() => setIsSignInModalOpen(true)}
+                  className="bg-white text-slate-800 hover:bg-gray-100 px-4 py-2 rounded-full text-xs font-medium transition-colors shadow-sm"
+                >
+                  Sign In
+                </button>
               )}
               
               {/* Hamburger Menu Button */}
@@ -219,14 +191,7 @@ export function Header() {
 
       <SignInModal 
         isOpen={isSignInModalOpen} 
-        onClose={() => setIsSignInModalOpen(false)}
-        onSwitchToSignUp={handleSwitchToSignUp}
-      />
-
-      <SignUpModal 
-        isOpen={isSignUpModalOpen} 
-        onClose={() => setIsSignUpModalOpen(false)}
-        onSwitchToSignIn={handleSwitchToSignIn}
+        onClose={() => setIsSignInModalOpen(false)} 
       />
     </>
   );
