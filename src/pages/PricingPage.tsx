@@ -31,7 +31,6 @@ export function PricingPage() {
         'Full transparency dashboard',
         'Equal distribution to all partners',
         'Tax-deductible receipts',
-        'Priority customer support',
         'Cancel anytime'
       ]
     },
@@ -45,8 +44,6 @@ export function PricingPage() {
         'Full transparency dashboard',
         'Equal distribution to all partners',
         'Tax-deductible receipts',
-        'Priority customer support',
-        'Quarterly impact calls',
         'Cancel anytime'
       ]
     }
