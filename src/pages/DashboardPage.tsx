@@ -4,24 +4,11 @@ import { useAuth } from '../hooks/useAuth';
 import { useSubscription } from '../hooks/useSubscription';
 import { supabase } from '../lib/supabase';
 import { Navigate } from 'react-router-dom';
-import { 
-  Calendar, 
-  CreditCard, 
-  Settings, 
-  PieChart, 
-  TrendingUp, 
-  DollarSign,
-  Clock,
-  Users,
-  Mail,
-  Twitter,
-  Facebook,
-  Shield,
-  Edit3,
-  ExternalLink
-} from 'lucide-react';
 import { Button } from '../components/ui/Button';
-import { formatPrice } from '../stripe-config';
+import { DonationSummary } from '../components/dashboard/DonationSummary';
+import { DistributionBreakdown } from '../components/dashboard/DistributionBreakdown';
+import { DonationTimeline } from '../components/dashboard/DonationTimeline';
+import { DashboardSidebar } from '../components/dashboard/DashboardSidebar';
 
 interface DonationHistory {
   id: number;
@@ -58,7 +45,6 @@ export function DashboardPage() {
     twitter: '',
     facebook: ''
   });
-  const [isEditingContact, setIsEditingContact] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -139,16 +125,6 @@ export function DashboardPage() {
     return plans.find(plan => plan.priceId === subscription.price_id);
   };
 
-  const handleContactInfoSave = async () => {
-    // Here you would save to your user preferences table
-    setIsEditingContact(false);
-  };
-
-  const handleManageSubscription = () => {
-    // This would redirect to Stripe customer portal
-    window.open('https://billing.stripe.com/p/login/test_your_portal_link', '_blank');
-  };
-
   if (authLoading || subLoading) {
     return (
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
@@ -219,316 +195,27 @@ export function DashboardPage() {
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Left Column - Main Content */}
                 <div className="lg:col-span-2 space-y-8">
-                  {/* Donation Summary */}
-                  <div className="bg-gray-800/80 backdrop-blur-sm rounded-3xl p-8 border border-gray-700">
-                    <div className="flex items-center mb-6">
-                      <DollarSign className="h-8 w-8 text-blue-400 mr-3" />
-                      <h2 className="text-2xl font-bold text-white">Donation Summary</h2>
-                    </div>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                      <div className="bg-gray-700/50 rounded-2xl p-6 text-center">
-                        <div className="text-3xl font-bold text-blue-400 mb-2">
-                          {formatPrice(totalDonated)}
-                        </div>
-                        <div className="text-gray-300">Total Donated</div>
-                      </div>
-                      
-                      <div className="bg-gray-700/50 rounded-2xl p-6 text-center">
-                        <div className="text-3xl font-bold text-green-400 mb-2">
-                          {formatPrice(currentCycleAmount)}
-                        </div>
-                        <div className="text-gray-300">This Billing Cycle</div>
-                      </div>
-                      
-                      <div className="bg-gray-700/50 rounded-2xl p-6 text-center">
-                        <div className="text-lg font-bold text-purple-400 mb-2">
-                          {nextBillingDate ? nextBillingDate.toLocaleDateString() : 'N/A'}
-                        </div>
-                        <div className="text-gray-300">Next Billing Date</div>
-                      </div>
-                    </div>
+                  <DonationSummary
+                    totalDonated={totalDonated}
+                    currentCycleAmount={currentCycleAmount}
+                    nextBillingDate={nextBillingDate}
+                    subscriptionPlan={subscriptionPlan}
+                    subscription={subscription}
+                  />
 
-                    {subscriptionPlan && (
-                      <div className="mt-6 p-4 bg-blue-900/30 rounded-2xl border border-blue-700/50">
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <div className="text-white font-semibold">Current Plan: {subscriptionPlan.name}</div>
-                            <div className="text-blue-300">{formatPrice(subscriptionPlan.price)}/month</div>
-                          </div>
-                          <div className="text-right">
-                            <div className="text-sm text-gray-300">Status</div>
-                            <div className="text-green-400 font-semibold capitalize">{subscription?.subscription_status}</div>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
+                  <DistributionBreakdown organizations={organizations} />
 
-                  {/* Distribution Breakdown */}
-                  <div className="bg-gray-800/80 backdrop-blur-sm rounded-3xl p-8 border border-gray-700">
-                    <div className="flex items-center mb-6">
-                      <PieChart className="h-8 w-8 text-purple-400 mr-3" />
-                      <h2 className="text-2xl font-bold text-white">Distribution Breakdown</h2>
-                    </div>
-                    
-                    <div className="mb-6">
-                      <p className="text-gray-300 mb-4">
-                        Your monthly contribution is distributed equally among all verified partner organizations:
-                      </p>
-                      
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {organizations.map((org, index) => (
-                          <div key={index} className="bg-gray-700/50 rounded-2xl p-4">
-                            <div className="flex justify-between items-center mb-2">
-                              <div className="font-semibold text-white">{org.name}</div>
-                              <div className="text-blue-400 font-bold">{org.percentage.toFixed(1)}%</div>
-                            </div>
-                            <div className="text-sm text-gray-300 mb-2">{org.category}</div>
-                            <div className="text-green-400 font-semibold">{formatPrice(org.amount)}</div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div className="bg-blue-900/30 rounded-2xl p-4 border border-blue-700/50">
-                      <div className="flex items-center text-blue-300">
-                        <Shield className="h-5 w-5 mr-2" />
-                        <span className="text-sm">
-                          Equal distribution ensures fair support across all verified organizations. 
-                          This approach maximizes collective impact and prevents popularity bias.
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Donation Timeline */}
-                  <div className="bg-gray-800/80 backdrop-blur-sm rounded-3xl p-8 border border-gray-700">
-                    <div className="flex items-center mb-6">
-                      <Clock className="h-8 w-8 text-green-400 mr-3" />
-                      <h2 className="text-2xl font-bold text-white">Donation Timeline</h2>
-                    </div>
-                    
-                    {donationHistory.length > 0 ? (
-                      <div className="space-y-4">
-                        {donationHistory.slice(0, 10).map((donation, index) => (
-                          <div key={donation.id} className="bg-gray-700/50 rounded-2xl p-4">
-                            <div className="flex justify-between items-center">
-                              <div>
-                                <div className="text-white font-semibold">
-                                  {formatPrice(donation.amount_total)}
-                                </div>
-                                <div className="text-sm text-gray-300">
-                                  {new Date(donation.order_date).toLocaleDateString('en-US', {
-                                    year: 'numeric',
-                                    month: 'long',
-                                    day: 'numeric'
-                                  })}
-                                </div>
-                              </div>
-                              <div className="text-right">
-                                <div className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                                  donation.order_status === 'completed' 
-                                    ? 'bg-green-900/50 text-green-300' 
-                                    : 'bg-yellow-900/50 text-yellow-300'
-                                }`}>
-                                  {donation.order_status}
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                        
-                        {donationHistory.length > 10 && (
-                          <div className="text-center">
-                            <Button variant="outline" className="bg-gray-700/50 border-gray-600 text-gray-300 hover:bg-gray-600/50">
-                              View All History
-                            </Button>
-                          </div>
-                        )}
-                      </div>
-                    ) : (
-                      <div className="text-center py-8">
-                        <Calendar className="h-12 w-12 text-gray-500 mx-auto mb-4" />
-                        <p className="text-gray-400">No donation history yet. Your first payment will appear here.</p>
-                      </div>
-                    )}
-                  </div>
+                  <DonationTimeline donationHistory={donationHistory} />
                 </div>
 
                 {/* Right Column - Sidebar */}
-                <div className="space-y-8">
-                  {/* Contact Information */}
-                  <div className="bg-gray-800/80 backdrop-blur-sm rounded-3xl p-6 border border-gray-700">
-                    <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-xl font-bold text-white">Contact Information</h3>
-                      <Button
-                        onClick={() => setIsEditingContact(!isEditingContact)}
-                        variant="ghost"
-                        size="sm"
-                        className="text-gray-400 hover:text-white"
-                      >
-                        <Edit3 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                    
-                    <p className="text-sm text-gray-400 mb-4">
-                      Optional: Share your contact info for thank-you notes and impact updates (no spam, ever).
-                    </p>
-                    
-                    {isEditingContact ? (
-                      <div className="space-y-4">
-                        <div>
-                          <label className="block text-sm font-medium text-gray-300 mb-2">
-                            <Mail className="h-4 w-4 inline mr-2" />
-                            Email
-                          </label>
-                          <input
-                            type="email"
-                            value={contactInfo.email}
-                            onChange={(e) => setContactInfo({...contactInfo, email: e.target.value})}
-                            className="w-full px-3 py-2 bg-gray-700/50 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            placeholder="your@email.com"
-                          />
-                        </div>
-                        
-                        <div>
-                          <label className="block text-sm font-medium text-gray-300 mb-2">
-                            <Twitter className="h-4 w-4 inline mr-2" />
-                            Twitter Handle
-                          </label>
-                          <input
-                            type="text"
-                            value={contactInfo.twitter}
-                            onChange={(e) => setContactInfo({...contactInfo, twitter: e.target.value})}
-                            className="w-full px-3 py-2 bg-gray-700/50 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            placeholder="@username"
-                          />
-                        </div>
-                        
-                        <div>
-                          <label className="block text-sm font-medium text-gray-300 mb-2">
-                            <Facebook className="h-4 w-4 inline mr-2" />
-                            Facebook Profile
-                          </label>
-                          <input
-                            type="text"
-                            value={contactInfo.facebook}
-                            onChange={(e) => setContactInfo({...contactInfo, facebook: e.target.value})}
-                            className="w-full px-3 py-2 bg-gray-700/50 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            placeholder="facebook.com/username"
-                          />
-                        </div>
-                        
-                        <div className="flex gap-2">
-                          <Button
-                            onClick={handleContactInfoSave}
-                            size="sm"
-                            className="bg-blue-600 hover:bg-blue-700 text-white flex-1"
-                          >
-                            Save
-                          </Button>
-                          <Button
-                            onClick={() => setIsEditingContact(false)}
-                            variant="outline"
-                            size="sm"
-                            className="bg-gray-700/50 border-gray-600 text-gray-300 hover:bg-gray-600/50 flex-1"
-                          >
-                            Cancel
-                          </Button>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="space-y-3">
-                        <div className="flex items-center text-gray-300">
-                          <Mail className="h-4 w-4 mr-3 text-gray-500" />
-                          <span>{contactInfo.email || 'Not provided'}</span>
-                        </div>
-                        <div className="flex items-center text-gray-300">
-                          <Twitter className="h-4 w-4 mr-3 text-gray-500" />
-                          <span>{contactInfo.twitter || 'Not provided'}</span>
-                        </div>
-                        <div className="flex items-center text-gray-300">
-                          <Facebook className="h-4 w-4 mr-3 text-gray-500" />
-                          <span>{contactInfo.facebook || 'Not provided'}</span>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Subscription Controls */}
-                  <div className="bg-gray-800/80 backdrop-blur-sm rounded-3xl p-6 border border-gray-700">
-                    <h3 className="text-xl font-bold text-white mb-4">Subscription Controls</h3>
-                    
-                    <div className="space-y-3">
-                      <Button
-                        onClick={handleManageSubscription}
-                        className="w-full bg-blue-600 hover:bg-blue-700 text-white justify-between"
-                      >
-                        <span className="flex items-center">
-                          <CreditCard className="h-4 w-4 mr-2" />
-                          Manage Subscription
-                        </span>
-                        <ExternalLink className="h-4 w-4" />
-                      </Button>
-                      
-                      <Button
-                        onClick={() => window.location.href = '/pricing'}
-                        variant="outline"
-                        className="w-full bg-gray-700/50 border-gray-600 text-gray-300 hover:bg-gray-600/50 justify-between"
-                      >
-                        <span className="flex items-center">
-                          <TrendingUp className="h-4 w-4 mr-2" />
-                          Change Tier
-                        </span>
-                        <ExternalLink className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </div>
-
-                  {/* Settings Shortcut */}
-                  <div className="bg-gray-800/80 backdrop-blur-sm rounded-3xl p-6 border border-gray-700">
-                    <h3 className="text-xl font-bold text-white mb-4">Quick Actions</h3>
-                    
-                    <Button
-                      onClick={() => window.location.href = '/settings'}
-                      variant="outline"
-                      className="w-full bg-gray-700/50 border-gray-600 text-gray-300 hover:bg-gray-600/50 justify-between"
-                    >
-                      <span className="flex items-center">
-                        <Settings className="h-4 w-4 mr-2" />
-                        Settings & Preferences
-                      </span>
-                      <ExternalLink className="h-4 w-4" />
-                    </Button>
-                  </div>
-
-                  {/* Impact Stats */}
-                  <div className="bg-gray-800/80 backdrop-blur-sm rounded-3xl p-6 border border-gray-700">
-                    <h3 className="text-xl font-bold text-white mb-4">Your Impact</h3>
-                    
-                    <div className="space-y-4">
-                      <div className="flex items-center justify-between">
-                        <span className="text-gray-300">Organizations Supported</span>
-                        <span className="text-blue-400 font-bold">{organizations.length}</span>
-                      </div>
-                      
-                      <div className="flex items-center justify-between">
-                        <span className="text-gray-300">Months Active</span>
-                        <span className="text-green-400 font-bold">
-                          {donationHistory.length > 0 ? Math.max(1, donationHistory.length) : 0}
-                        </span>
-                      </div>
-                      
-                      <div className="flex items-center justify-between">
-                        <span className="text-gray-300">Lives Impacted</span>
-                        <span className="text-purple-400 font-bold">
-                          {Math.floor((totalDonated / 100) * 0.8)} {/* Rough estimate */}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <DashboardSidebar
+                  contactInfo={contactInfo}
+                  setContactInfo={setContactInfo}
+                  organizations={organizations}
+                  donationHistory={donationHistory}
+                  totalDonated={totalDonated}
+                />
               </div>
             )}
           </div>
