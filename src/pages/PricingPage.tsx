@@ -87,7 +87,7 @@ export function PricingPage() {
     } else if (planIndex > currentTierIndex) {
       return 'Upgrade to this tier';
     } else {
-      return 'Downgrade to this tier';
+      return 'Move to this tier';
     }
   };
 
