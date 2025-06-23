@@ -5,9 +5,10 @@ import { X } from 'lucide-react';
 interface SignInModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onSignInSuccess?: () => void;
 }
 
-export function SignInModal({ isOpen, onClose }: SignInModalProps) {
+export function SignInModal({ isOpen, onClose, onSignInSuccess }: SignInModalProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -25,7 +26,17 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
       });
 
       if (error) throw error;
-      onClose();
+      
+      // Call the success callback to proceed with payment
+      if (onSignInSuccess) {
+        onSignInSuccess();
+      } else {
+        onClose();
+      }
+      
+      // Reset form
+      setEmail('');
+      setPassword('');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
@@ -59,6 +70,7 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
             <div className="w-6 h-6 bg-white rounded-lg"></div>
           </div>
           <h2 className="text-2xl font-semibold text-gray-900">Sign in to your account</h2>
+          <p className="text-gray-600 mt-2">Sign in to continue with your subscription</p>
         </div>
 
         {error && (
@@ -91,7 +103,7 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
             disabled={loading}
             className="w-full bg-slate-700 hover:bg-slate-800 text-white py-3.5 rounded-2xl font-medium transition-colors disabled:opacity-50"
           >
-            {loading ? 'Signing in...' : 'Sign In'}
+            {loading ? 'Signing in...' : 'Sign In & Continue'}
           </button>
         </form>
 
