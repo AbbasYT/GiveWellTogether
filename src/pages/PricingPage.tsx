@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { Header } from '../components/layout/Header';
 import { Link } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
-import { Check, ArrowRight, CreditCard, Shield, Receipt } from 'lucide-react';
+import { Check, ArrowRight, CreditCard, Shield, Receipt, Crown } from 'lucide-react';
 import { useStripe } from '../hooks/useStripe';
 import { useAuth } from '../hooks/useAuth';
+import { useSubscription } from '../hooks/useSubscription';
 import { SignUpModal } from '../components/auth/SignUpModal';
 import { SignInModal } from '../components/auth/SignInModal';
 import { stripeProducts } from '../stripe-config';
@@ -16,6 +17,7 @@ export function PricingPage() {
   const [pendingPlan, setPendingPlan] = useState<any>(null);
   const { createCheckoutSession, loading: stripeLoading, error: stripeError } = useStripe();
   const { user } = useAuth();
+  const { subscription, isActive } = useSubscription();
 
   const plans = [
     {
@@ -65,11 +67,52 @@ export function PricingPage() {
     }
   ];
 
-  const handleSubscribe = async (plan: typeof plans[0]) => {
+  const getCurrentTierIndex = () => {
+    if (!subscription?.price_id || !isActive()) return -1;
+    
+    const currentPriceId = subscription.price_id;
+    return plans.findIndex(plan => 
+      plan.monthlyPriceId === currentPriceId || plan.yearlyPriceId === currentPriceId
+    );
+  };
+
+  const currentTierIndex = getCurrentTierIndex();
+
+  const getButtonText = (planIndex: number) => {
+    if (!user) return 'Start Making Impact';
+    if (!isActive()) return 'Start Making Impact';
+    
+    if (planIndex === currentTierIndex) {
+      return 'You\'re on this tier';
+    } else if (planIndex > currentTierIndex) {
+      return 'Upgrade to this tier';
+    } else {
+      return 'Downgrade to this tier';
+    }
+  };
+
+  const getButtonVariant = (planIndex: number) => {
+    if (!user || !isActive()) return 'default';
+    
+    if (planIndex === currentTierIndex) {
+      return 'current';
+    } else if (planIndex > currentTierIndex) {
+      return 'upgrade';
+    } else {
+      return 'downgrade';
+    }
+  };
+
+  const handleSubscribe = async (plan: typeof plans[0], planIndex: number) => {
     if (!user) {
       // Store the plan they want to subscribe to
       setPendingPlan(plan);
       setIsSignUpModalOpen(true);
+      return;
+    }
+
+    // If user is on this tier already, don't do anything
+    if (planIndex === currentTierIndex && isActive()) {
       return;
     }
 
@@ -78,7 +121,7 @@ export function PricingPage() {
     await createCheckoutSession({
       priceId,
       mode: 'subscription',
-      successUrl: `${window.location.origin}/dashboard?success=true`,
+      successUrl: `${window.location.origin}/pricing?success=true`,
       cancelUrl: `${window.location.origin}/pricing?canceled=true`,
     });
   };
@@ -94,7 +137,7 @@ export function PricingPage() {
       await createCheckoutSession({
         priceId,
         mode: 'subscription',
-        successUrl: `${window.location.origin}/dashboard?success=true`,
+        successUrl: `${window.location.origin}/pricing?success=true`,
         cancelUrl: `${window.location.origin}/pricing?canceled=true`,
       });
       
@@ -119,7 +162,7 @@ export function PricingPage() {
       await createCheckoutSession({
         priceId,
         mode: 'subscription',
-        successUrl: `${window.location.origin}/dashboard?success=true`,
+        successUrl: `${window.location.origin}/pricing?success=true`,
         cancelUrl: `${window.location.origin}/pricing?canceled=true`,
       });
       
@@ -193,44 +236,71 @@ export function PricingPage() {
       <section className="pb-20 relative">
         <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-full mx-auto">
-            {plans.map((plan, index) => (
-              <div
-                key={plan.name}
-                className="relative bg-gray-800/80 backdrop-blur-sm rounded-3xl p-8 border border-gray-700 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:border-gray-600"
-              >
-                <div className="text-center mb-8">
-                  <h3 className="text-2xl font-bold text-white mb-2">{plan.name}</h3>
-                  <p className="text-gray-300 mb-6">{plan.description}</p>
-                  
-                  <div className="mb-6">
-                    <span className="text-5xl font-bold text-white">
-                      ${billingCycle === 'monthly' ? plan.monthlyPrice : plan.yearlyPrice}
-                    </span>
-                    <span className="text-gray-300 ml-2">
-                      /{billingCycle === 'monthly' ? 'month' : 'year'}
-                    </span>
-                  </div>
-                </div>
-
-                <ul className="space-y-4 mb-8">
-                  {plan.features.map((feature, featureIndex) => (
-                    <li key={featureIndex} className="flex items-center text-gray-300">
-                      <Check className="h-5 w-5 text-green-400 mr-3 flex-shrink-0" />
-                      <span>{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                <Button
-                  onClick={() => handleSubscribe(plan)}
-                  disabled={stripeLoading}
-                  className="w-full py-4 text-lg font-bold rounded-2xl transition-all duration-300 bg-gray-700 hover:bg-gray-600 text-white disabled:opacity-50"
+            {plans.map((plan, index) => {
+              const buttonVariant = getButtonVariant(index);
+              const buttonText = getButtonText(index);
+              const isCurrentTier = index === currentTierIndex && isActive();
+              
+              return (
+                <div
+                  key={plan.name}
+                  className={`relative bg-gray-800/80 backdrop-blur-sm rounded-3xl p-8 border transition-all duration-300 hover:scale-105 hover:shadow-2xl ${
+                    isCurrentTier 
+                      ? 'border-blue-500 ring-2 ring-blue-500/20' 
+                      : 'border-gray-700 hover:border-gray-600'
+                  }`}
                 >
-                  {stripeLoading ? 'Processing...' : 'Start Making Impact'}
-                  {!stripeLoading && <ArrowRight className="ml-2 h-5 w-5" />}
-                </Button>
-              </div>
-            ))}
+                  {isCurrentTier && (
+                    <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                      <div className="bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-bold flex items-center">
+                        <Crown className="h-4 w-4 mr-2" />
+                        Current Plan
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="text-center mb-8">
+                    <h3 className="text-2xl font-bold text-white mb-2">{plan.name}</h3>
+                    <p className="text-gray-300 mb-6">{plan.description}</p>
+                    
+                    <div className="mb-6">
+                      <span className="text-5xl font-bold text-white">
+                        ${billingCycle === 'monthly' ? plan.monthlyPrice : plan.yearlyPrice}
+                      </span>
+                      <span className="text-gray-300 ml-2">
+                        /{billingCycle === 'monthly' ? 'month' : 'year'}
+                      </span>
+                    </div>
+                  </div>
+
+                  <ul className="space-y-4 mb-8">
+                    {plan.features.map((feature, featureIndex) => (
+                      <li key={featureIndex} className="flex items-center text-gray-300">
+                        <Check className="h-5 w-5 text-green-400 mr-3 flex-shrink-0" />
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <Button
+                    onClick={() => handleSubscribe(plan, index)}
+                    disabled={stripeLoading || isCurrentTier}
+                    className={`w-full py-4 text-lg font-bold rounded-2xl transition-all duration-300 ${
+                      isCurrentTier
+                        ? 'bg-blue-600 text-white cursor-default'
+                        : buttonVariant === 'upgrade'
+                        ? 'bg-green-600 hover:bg-green-700 text-white'
+                        : buttonVariant === 'downgrade'
+                        ? 'bg-orange-600 hover:bg-orange-700 text-white'
+                        : 'bg-gray-700 hover:bg-gray-600 text-white'
+                    } disabled:opacity-50`}
+                  >
+                    {stripeLoading ? 'Processing...' : buttonText}
+                    {!stripeLoading && !isCurrentTier && <ArrowRight className="ml-2 h-5 w-5" />}
+                  </Button>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
