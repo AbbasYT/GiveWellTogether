@@ -3,15 +3,22 @@ import { Header } from '../components/layout/Header';
 import { Link } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
 import { Check, ArrowRight, CreditCard, Shield, Receipt } from 'lucide-react';
+import { useStripe } from '../hooks/useStripe';
+import { useAuth } from '../hooks/useAuth';
+import { stripeProducts } from '../stripe-config';
 
 export function PricingPage() {
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly');
+  const { createCheckoutSession, loading: stripeLoading, error: stripeError } = useStripe();
+  const { user } = useAuth();
 
   const plans = [
     {
       name: 'Tier 1',
       monthlyPrice: 15,
       yearlyPrice: 180,
+      monthlyPriceId: stripeProducts[2].priceId, // $15 plan
+      yearlyPriceId: stripeProducts[2].priceId, // Same for now since no yearly discount
       description: 'Perfect for getting started with giving',
       features: [
         'Monthly impact reports',
@@ -25,6 +32,8 @@ export function PricingPage() {
       name: 'Tier 2',
       monthlyPrice: 50,
       yearlyPrice: 600,
+      monthlyPriceId: stripeProducts[1].priceId, // $50 plan
+      yearlyPriceId: stripeProducts[1].priceId, // Same for now since no yearly discount
       description: 'Amplify your impact with greater giving',
       features: [
         'Monthly impact reports',
@@ -35,9 +44,11 @@ export function PricingPage() {
       ]
     },
     {
-      name: 'Tier3',
+      name: 'Tier 3',
       monthlyPrice: 100,
       yearlyPrice: 1200,
+      monthlyPriceId: stripeProducts[0].priceId, // $100 plan
+      yearlyPriceId: stripeProducts[0].priceId, // Same for now since no yearly discount
       description: 'Maximum impact for dedicated givers',
       features: [
         'Monthly impact reports',
@@ -49,10 +60,20 @@ export function PricingPage() {
     }
   ];
 
-  const handleSubscribe = (planName: string, price: number) => {
-    // This will be implemented with Stripe integration
-    console.log(`Subscribe to ${planName} - ${billingCycle} at $${price}`);
-    alert('Stripe integration needed - please set up Stripe first');
+  const handleSubscribe = async (plan: typeof plans[0]) => {
+    if (!user) {
+      alert('Please sign in to subscribe');
+      return;
+    }
+
+    const priceId = billingCycle === 'monthly' ? plan.monthlyPriceId : plan.yearlyPriceId;
+    
+    await createCheckoutSession({
+      priceId,
+      mode: 'subscription',
+      successUrl: `${window.location.origin}/dashboard?success=true`,
+      cancelUrl: `${window.location.origin}/pricing?canceled=true`,
+    });
   };
 
   return (
@@ -105,6 +126,13 @@ export function PricingPage() {
                 </button>
               </div>
             </div>
+
+            {/* Error Display */}
+            {stripeError && (
+              <div className="mb-8 p-4 bg-red-900/50 border border-red-700 rounded-2xl text-red-300 max-w-md mx-auto">
+                {stripeError}
+              </div>
+            )}
           </div>
         </div>
       </section>
@@ -142,14 +170,12 @@ export function PricingPage() {
                 </ul>
 
                 <Button
-                  onClick={() => handleSubscribe(
-                    plan.name,
-                    billingCycle === 'monthly' ? plan.monthlyPrice : plan.yearlyPrice
-                  )}
-                  className="w-full py-4 text-lg font-bold rounded-2xl transition-all duration-300 bg-gray-700 hover:bg-gray-600 text-white"
+                  onClick={() => handleSubscribe(plan)}
+                  disabled={stripeLoading}
+                  className="w-full py-4 text-lg font-bold rounded-2xl transition-all duration-300 bg-gray-700 hover:bg-gray-600 text-white disabled:opacity-50"
                 >
-                  Start Making Impact
-                  <ArrowRight className="ml-2 h-5 w-5" />
+                  {stripeLoading ? 'Processing...' : 'Start Making Impact'}
+                  {!stripeLoading && <ArrowRight className="ml-2 h-5 w-5" />}
                 </Button>
               </div>
             ))}
