@@ -180,45 +180,43 @@ export function DashboardPage() {
       
       <div className="pt-24 pb-12">
         <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
-          <div className="max-w-7xl mx-auto">
-            {/* Header */}
-            <div className="mb-8">
-              <h1 className="text-4xl font-bold text-white mb-2">Your Impact Dashboard</h1>
-              <p className="text-xl text-gray-300">Track your giving journey and see the difference you're making</p>
-            </div>
-
-            {loading ? (
-              <div className="flex items-center justify-center py-12">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                {/* Left Column - Main Content */}
-                <div className="lg:col-span-2 space-y-8">
-                  <DonationSummary
-                    totalDonated={totalDonated}
-                    currentCycleAmount={currentCycleAmount}
-                    nextBillingDate={nextBillingDate}
-                    subscriptionPlan={subscriptionPlan}
-                    subscription={subscription}
-                  />
-
-                  <DistributionBreakdown organizations={organizations} />
-
-                  <DonationTimeline donationHistory={donationHistory} />
-                </div>
-
-                {/* Right Column - Sidebar */}
-                <DashboardSidebar
-                  contactInfo={contactInfo}
-                  setContactInfo={setContactInfo}
-                  organizations={organizations}
-                  donationHistory={donationHistory}
-                  totalDonated={totalDonated}
-                />
-              </div>
-            )}
+          {/* Header */}
+          <div className="mb-8">
+            <h1 className="text-4xl font-bold text-white mb-2">Your Impact Dashboard</h1>
+            <p className="text-xl text-gray-300">Track your giving journey and see the difference you're making</p>
           </div>
+
+          {loading ? (
+            <div className="flex items-center justify-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              {/* Left Column - Main Content */}
+              <div className="lg:col-span-2 space-y-8">
+                <DonationSummary
+                  totalDonated={totalDonated}
+                  currentCycleAmount={currentCycleAmount}
+                  nextBillingDate={nextBillingDate}
+                  subscriptionPlan={subscriptionPlan}
+                  subscription={subscription}
+                />
+
+                <DistributionBreakdown organizations={organizations} />
+
+                <DonationTimeline donationHistory={donationHistory} />
+              </div>
+
+              {/* Right Column - Sidebar */}
+              <DashboardSidebar
+                contactInfo={contactInfo}
+                setContactInfo={setContactInfo}
+                organizations={organizations}
+                donationHistory={donationHistory}
+                totalDonated={totalDonated}
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>
