@@ -4,6 +4,7 @@ import { useAuth } from './hooks/useAuth';
 import { HomePage } from './pages/HomePage';
 import { AboutPage } from './pages/AboutPage';
 import { PricingPage } from './pages/PricingPage';
+import { DashboardPage } from './pages/DashboardPage';
 
 function App() {
   const { loading } = useAuth();
@@ -22,10 +23,10 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/pricing" element={<PricingPage />} />
+        <Route path="/dashboard" element={<DashboardPage />} />
         {/* Placeholder routes for future pages */}
         <Route path="/join" element={<div>Join Us - Coming Soon</div>} />
         <Route path="/organizations" element={<div>Organizations - Coming Soon</div>} />
-        <Route path="/dashboard" element={<div>Dashboard - Coming Soon</div>} />
         <Route path="/settings" element={<div>Settings - Coming Soon</div>} />
       </Routes>
     </Router>
