@@ -30,13 +30,13 @@ export function AboutPage() {
                   Simplifying charitable giving while maximizing transparency and impact through collective generosity.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <Link to="/pricing" className="inline-block">
-                    <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg w-full sm:w-auto">
-                      Start Your Impact Journey
-                      <ArrowRight className="ml-2 h-5 w-5" />
-                    </Button>
-                  </Link>
-                </div>
+  <Button asChild size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg w-full sm:w-auto">
+    <Link to="/pricing" className="inline-flex items-center">
+      Start Your Impact Journey
+      <ArrowRight className="ml-2 h-5 w-5" />
+    </Link>
+  </Button>
+</div>
               </div>
               
               {/* Right Visual Elements */}
