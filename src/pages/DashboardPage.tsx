@@ -62,7 +62,7 @@ export function DashboardPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!authLoading && !subLoading && user && isActive()) {
+    if (!authLoading && !subLoading && user) {
       fetchDashboardData();
     }
   }, [user, subscription, authLoading, subLoading]);
@@ -157,7 +157,14 @@ export function DashboardPage() {
     );
   }
 
-  if (!user || !isActive()) {
+  if (!user) {
+    return <Navigate to="/pricing" replace />;
+  }
+
+  // Check if user has any subscription (active or not)
+  const hasSubscription = subscription && subscription.subscription_status && subscription.subscription_status !== 'not_started';
+
+  if (!hasSubscription) {
     return <Navigate to="/pricing" replace />;
   }
 
