@@ -7,28 +7,22 @@ export function SubscriptionControls() {
   const { openCustomerPortal, loading, error } = useStripePortal();
 
   const handleManageSubscription = () => {
-    openCustomerPortal();
+    // Use the actual Stripe portal link you provided
+    window.open('https://billing.stripe.com/p/login/test_9B6dRb1MN3J6bkscQc4Rq00', '_blank');
   };
 
   return (
     <div className="bg-gray-800/80 backdrop-blur-sm rounded-3xl p-6 border border-gray-700">
       <h3 className="text-xl font-bold text-white mb-4">Subscription Controls</h3>
       
-      {error && (
-        <div className="mb-4 p-3 bg-red-900/50 border border-red-700 rounded-lg text-red-300 text-sm">
-          {error}
-        </div>
-      )}
-      
       <div className="space-y-3">
         <Button
           onClick={handleManageSubscription}
-          disabled={loading}
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white justify-between disabled:opacity-50"
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white justify-between"
         >
           <span className="flex items-center">
             <CreditCard className="h-4 w-4 mr-2" />
-            {loading ? 'Opening Portal...' : 'Manage Subscription'}
+            Manage Subscription
           </span>
           <ExternalLink className="h-4 w-4" />
         </Button>
