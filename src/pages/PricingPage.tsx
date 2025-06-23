@@ -103,6 +103,17 @@ export function PricingPage() {
     }
   };
 
+  const proceedToCheckout = async (plan: typeof plans[0]) => {
+    const priceId = billingCycle === 'monthly' ? plan.monthlyPriceId : plan.yearlyPriceId;
+    
+    await createCheckoutSession({
+      priceId,
+      mode: 'subscription',
+      successUrl: `${window.location.origin}/dashboard?payment=success`,
+      cancelUrl: `${window.location.origin}/pricing?payment=canceled`,
+    });
+  };
+
   const handleSubscribe = async (plan: typeof plans[0], planIndex: number) => {
     if (!user) {
       // Store the plan they want to subscribe to
@@ -116,34 +127,21 @@ export function PricingPage() {
       return;
     }
 
-    const priceId = billingCycle === 'monthly' ? plan.monthlyPriceId : plan.yearlyPriceId;
-    
-    await createCheckoutSession({
-      priceId,
-      mode: 'subscription',
-      successUrl: `${window.location.origin}/pricing?success=true`,
-      cancelUrl: `${window.location.origin}/pricing?canceled=true`,
-    });
+    // If user exists, proceed directly to checkout
+    await proceedToCheckout(plan);
   };
 
   const handleSignUpSuccess = async () => {
     // Close the signup modal
     setIsSignUpModalOpen(false);
     
-    // If there's a pending plan, proceed with payment
-    if (pendingPlan) {
-      const priceId = billingCycle === 'monthly' ? pendingPlan.monthlyPriceId : pendingPlan.yearlyPriceId;
-      
-      await createCheckoutSession({
-        priceId,
-        mode: 'subscription',
-        successUrl: `${window.location.origin}/pricing?success=true`,
-        cancelUrl: `${window.location.origin}/pricing?canceled=true`,
-      });
-      
-      // Clear the pending plan
-      setPendingPlan(null);
-    }
+    // Small delay to ensure auth state is updated
+    setTimeout(async () => {
+      if (pendingPlan) {
+        await proceedToCheckout(pendingPlan);
+        setPendingPlan(null);
+      }
+    }, 500);
   };
 
   const handleSwitchToSignIn = () => {
@@ -155,20 +153,13 @@ export function PricingPage() {
     // Close the signin modal
     setIsSignInModalOpen(false);
     
-    // If there's a pending plan, proceed with payment
-    if (pendingPlan) {
-      const priceId = billingCycle === 'monthly' ? pendingPlan.monthlyPriceId : pendingPlan.yearlyPriceId;
-      
-      await createCheckoutSession({
-        priceId,
-        mode: 'subscription',
-        successUrl: `${window.location.origin}/pricing?success=true`,
-        cancelUrl: `${window.location.origin}/pricing?canceled=true`,
-      });
-      
-      // Clear the pending plan
-      setPendingPlan(null);
-    }
+    // Small delay to ensure auth state is updated
+    setTimeout(async () => {
+      if (pendingPlan) {
+        await proceedToCheckout(pendingPlan);
+        setPendingPlan(null);
+      }
+    }, 500);
   };
 
   return (

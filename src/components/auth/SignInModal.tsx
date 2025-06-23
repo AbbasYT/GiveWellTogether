@@ -103,7 +103,7 @@ export function SignInModal({ isOpen, onClose, onSignInSuccess }: SignInModalPro
             disabled={loading}
             className="w-full bg-slate-700 hover:bg-slate-800 text-white py-3.5 rounded-2xl font-medium transition-colors disabled:opacity-50"
           >
-            {loading ? 'Signing in...' : 'Sign In & Continue'}
+            {loading ? 'Signing in...' : 'Sign In & Continue to Payment'}
           </button>
         </form>
 

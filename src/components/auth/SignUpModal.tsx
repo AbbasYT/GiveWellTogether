@@ -44,7 +44,7 @@ export function SignUpModal({ isOpen, onClose, onSwitchToSignIn, onSignUpSuccess
 
       if (error) throw error;
       
-      // Call the success callback to proceed with payment
+      // Call the success callback to proceed with payment immediately
       if (onSignUpSuccess) {
         onSignUpSuccess();
       }
@@ -130,7 +130,7 @@ export function SignUpModal({ isOpen, onClose, onSwitchToSignIn, onSignUpSuccess
             disabled={loading}
             className="w-full bg-slate-700 hover:bg-slate-800 text-white py-3.5 rounded-2xl font-medium transition-colors disabled:opacity-50"
           >
-            {loading ? 'Creating account...' : 'Create Account & Continue'}
+            {loading ? 'Creating account...' : 'Create Account & Continue to Payment'}
           </button>
         </form>
 

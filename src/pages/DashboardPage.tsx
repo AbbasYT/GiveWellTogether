@@ -3,12 +3,13 @@ import { Header } from '../components/layout/Header';
 import { useAuth } from '../hooks/useAuth';
 import { useSubscription } from '../hooks/useSubscription';
 import { supabase } from '../lib/supabase';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useSearchParams } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
 import { DonationSummary } from '../components/dashboard/DonationSummary';
 import { DistributionBreakdown } from '../components/dashboard/DistributionBreakdown';
 import { DonationTimeline } from '../components/dashboard/DonationTimeline';
 import { DashboardSidebar } from '../components/dashboard/DashboardSidebar';
+import { CheckCircle, AlertCircle } from 'lucide-react';
 
 interface DonationHistory {
   id: number;
@@ -27,7 +28,8 @@ interface OrganizationDistribution {
 
 export function DashboardPage() {
   const { user, loading: authLoading } = useAuth();
-  const { subscription, loading: subLoading } = useSubscription();
+  const { subscription, loading: subLoading, isActive } = useSubscription();
+  const [searchParams] = useSearchParams();
   const [donationHistory, setDonationHistory] = useState<DonationHistory[]>([]);
   const [totalDonated, setTotalDonated] = useState(0);
   const [currentCycleAmount, setCurrentCycleAmount] = useState(0);
@@ -46,6 +48,9 @@ export function DashboardPage() {
     facebook: ''
   });
   const [loading, setLoading] = useState(true);
+
+  // Check for payment success/failure from URL params
+  const paymentStatus = searchParams.get('payment');
 
   useEffect(() => {
     if (!authLoading && !subLoading && user) {
@@ -137,13 +142,8 @@ export function DashboardPage() {
     return <Navigate to="/pricing" replace />;
   }
 
-  // Debug: Log subscription data to console
-  console.log('Subscription data:', subscription);
-
-  // Allow access if user has any subscription record (even if not active)
-  const hasAnySubscription = subscription && subscription.subscription_status;
-
-  if (!hasAnySubscription) {
+  // Only allow access if user has an active subscription
+  if (!isActive()) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-black">
         <Header />
@@ -151,18 +151,21 @@ export function DashboardPage() {
           <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
             <div className="max-w-4xl mx-auto text-center">
               <div className="bg-gray-800/80 backdrop-blur-sm rounded-3xl p-12 border border-gray-700">
-                <h1 className="text-3xl font-bold text-white mb-4">No Subscription Found</h1>
+                <AlertCircle className="h-16 w-16 text-orange-400 mx-auto mb-6" />
+                <h1 className="text-3xl font-bold text-white mb-4">Active Subscription Required</h1>
                 <p className="text-gray-300 mb-6">
-                  You need an active subscription to access the dashboard.
+                  You need an active subscription to access the dashboard. Complete your payment to start making an impact.
                 </p>
-                <p className="text-sm text-gray-400 mb-8">
-                  Debug info: {subscription ? `Status: ${subscription.subscription_status}` : 'No subscription data'}
-                </p>
+                {subscription && (
+                  <p className="text-sm text-gray-400 mb-8">
+                    Current status: <span className="capitalize text-orange-400">{subscription.subscription_status}</span>
+                  </p>
+                )}
                 <Button
                   onClick={() => window.location.href = '/pricing'}
                   className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3"
                 >
-                  View Pricing Plans
+                  Complete Your Subscription
                 </Button>
               </div>
             </div>
@@ -180,6 +183,31 @@ export function DashboardPage() {
       
       <div className="pt-24 pb-12">
         <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
+          {/* Payment Success/Failure Messages */}
+          {paymentStatus === 'success' && (
+            <div className="mb-8 p-4 bg-green-900/50 border border-green-700 rounded-2xl text-green-300 max-w-4xl mx-auto">
+              <div className="flex items-center">
+                <CheckCircle className="h-6 w-6 mr-3" />
+                <div>
+                  <h3 className="font-bold">Payment Successful!</h3>
+                  <p className="text-sm">Welcome to GiveWellTogether! Your subscription is now active and you're making a difference.</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {paymentStatus === 'canceled' && (
+            <div className="mb-8 p-4 bg-orange-900/50 border border-orange-700 rounded-2xl text-orange-300 max-w-4xl mx-auto">
+              <div className="flex items-center">
+                <AlertCircle className="h-6 w-6 mr-3" />
+                <div>
+                  <h3 className="font-bold">Payment Canceled</h3>
+                  <p className="text-sm">Your payment was canceled. You can try again anytime from the pricing page.</p>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Header */}
           <div className="mb-8">
             <h1 className="text-4xl font-bold text-white mb-2">Your Impact Dashboard</h1>
