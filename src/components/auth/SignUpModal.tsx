@@ -14,6 +14,7 @@ export function SignUpModal({ isOpen, onClose, onSwitchToSignIn }: SignUpModalPr
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,11 +44,14 @@ export function SignUpModal({ isOpen, onClose, onSwitchToSignIn }: SignUpModalPr
 
       if (error) throw error;
       
-      // Account created successfully, user is automatically signed in
-      onClose();
-      setEmail('');
-      setPassword('');
-      setConfirmPassword('');
+      setSuccess(true);
+      setTimeout(() => {
+        onClose();
+        setSuccess(false);
+        setEmail('');
+        setPassword('');
+        setConfirmPassword('');
+      }, 2000);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
@@ -82,6 +86,12 @@ export function SignUpModal({ isOpen, onClose, onSwitchToSignIn }: SignUpModalPr
           </div>
           <h2 className="text-2xl font-semibold text-gray-900">Create your account</h2>
         </div>
+
+        {success && (
+          <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-2xl text-green-700 text-sm">
+            Account created successfully! You can now sign in.
+          </div>
+        )}
 
         {error && (
           <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-2xl text-red-700 text-sm">
@@ -121,10 +131,10 @@ export function SignUpModal({ isOpen, onClose, onSwitchToSignIn }: SignUpModalPr
 
           <button
             type="submit"
-            disabled={loading}
+            disabled={loading || success}
             className="w-full bg-slate-700 hover:bg-slate-800 text-white py-3.5 rounded-2xl font-medium transition-colors disabled:opacity-50"
           >
-            {loading ? 'Creating account...' : 'Create Account'}
+            {loading ? 'Creating account...' : success ? 'Account created!' : 'Create Account'}
           </button>
         </form>
 
