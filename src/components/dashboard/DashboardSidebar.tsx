@@ -74,13 +74,6 @@ export function DashboardSidebar({
               {donationHistory.length > 0 ? Math.max(1, donationHistory.length) : 0}
             </span>
           </div>
-          
-          <div className="flex items-center justify-between">
-            <span className="text-gray-300">Lives Impacted</span>
-            <span className="text-purple-400 font-bold">
-              {Math.floor((totalDonated / 100) * 0.8)} {/* Rough estimate */}
-            </span>
-          </div>
         </div>
       </div>
     </div>
