@@ -24,14 +24,14 @@ export function PricingPage() {
   const yearlyProducts = getYearlyProducts();
   const currentProducts = billingCycle === 'monthly' ? monthlyProducts : yearlyProducts;
 
-  // Create plans array from current products
-  const plans = currentProducts.map((product, index) => ({
-    name: `Tier ${3 - index}`, // Tier 3, Tier 2, Tier 1
+  // Create plans array from current products - reverse order so Tier 1 is on the right
+  const plans = currentProducts.reverse().map((product, index) => ({
+    name: `Tier ${index + 1}`, // Tier 1, Tier 2, Tier 3
     price: product.price,
     priceId: product.priceId,
-    description: index === 0 ? 'Maximum impact for dedicated givers' : 
+    description: index === 0 ? 'Perfect for getting started with giving' : 
                  index === 1 ? 'Amplify your impact with greater giving' : 
-                 'Perfect for getting started with giving',
+                 'Maximum impact for dedicated givers',
     features: [
       'Monthly impact reports',
       'Full transparency dashboard',
@@ -52,7 +52,7 @@ export function PricingPage() {
     // Check if current subscription matches the billing cycle being viewed
     if (currentProduct.interval !== billingCycle) return -1;
     
-    return currentProducts.findIndex(product => product.priceId === currentPriceId);
+    return plans.findIndex(plan => plan.priceId === currentPriceId);
   };
 
   const currentTierIndex = getCurrentTierIndex();
