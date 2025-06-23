@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
 import { Check, ArrowRight, CreditCard, Shield, Receipt, Crown } from 'lucide-react';
 import { useStripe } from '../hooks/useStripe';
-import { useStripeSubscriptionChange } from '../hooks/useStripeSubscriptionChange';
 import { useAuth } from '../hooks/useAuth';
 import { useSubscription } from '../hooks/useSubscription';
 import { SignUpModal } from '../components/auth/SignUpModal';
@@ -17,9 +16,8 @@ export function PricingPage() {
   const [isSignInModalOpen, setIsSignInModalOpen] = useState(false);
   const [pendingPlan, setPendingPlan] = useState<any>(null);
   const { createCheckoutSession, loading: stripeLoading, error: stripeError } = useStripe();
-  const { changeSubscriptionTier, loading: changeLoading, error: changeError } = useStripeSubscriptionChange();
   const { user } = useAuth();
-  const { subscription, isActive, refetch } = useSubscription();
+  const { subscription, isActive } = useSubscription();
 
   const plans = [
     {
@@ -129,24 +127,7 @@ export function PricingPage() {
       return;
     }
 
-    // If user has an active subscription, change the tier instead of creating new subscription
-    if (isActive() && subscription?.subscription_id) {
-      try {
-        const newPriceId = billingCycle === 'monthly' ? plan.monthlyPriceId : plan.yearlyPriceId;
-        await changeSubscriptionTier(newPriceId);
-        
-        // Refresh subscription data
-        await refetch();
-        
-        // Show success message or redirect
-        alert('Subscription updated successfully! Changes will be reflected in your next billing cycle.');
-      } catch (error) {
-        console.error('Failed to change subscription tier:', error);
-      }
-      return;
-    }
-
-    // If user exists but no active subscription, proceed to checkout
+    // If user exists, proceed directly to checkout
     await proceedToCheckout(plan);
   };
 
@@ -180,9 +161,6 @@ export function PricingPage() {
       }
     }, 500);
   };
-
-  const isLoading = stripeLoading || changeLoading;
-  const displayError = stripeError || changeError;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-black">
@@ -236,9 +214,9 @@ export function PricingPage() {
             </div>
 
             {/* Error Display */}
-            {displayError && (
+            {stripeError && (
               <div className="mb-8 p-4 bg-red-900/50 border border-red-700 rounded-2xl text-red-300 max-w-md mx-auto">
-                {displayError}
+                {stripeError}
               </div>
             )}
           </div>
@@ -297,7 +275,7 @@ export function PricingPage() {
 
                   <Button
                     onClick={() => handleSubscribe(plan, index)}
-                    disabled={isLoading || isCurrentTier}
+                    disabled={stripeLoading || isCurrentTier}
                     className={`w-full py-4 text-lg font-bold rounded-2xl transition-all duration-300 ${
                       isCurrentTier
                         ? 'bg-blue-600 text-white cursor-default'
@@ -308,8 +286,8 @@ export function PricingPage() {
                         : 'bg-gray-700 hover:bg-gray-600 text-white'
                     } disabled:opacity-50`}
                   >
-                    {isLoading ? 'Processing...' : buttonText}
-                    {!isLoading && !isCurrentTier && <ArrowRight className="ml-2 h-5 w-5" />}
+                    {stripeLoading ? 'Processing...' : buttonText}
+                    {!stripeLoading && !isCurrentTier && <ArrowRight className="ml-2 h-5 w-5" />}
                   </Button>
                 </div>
               );
@@ -380,7 +358,7 @@ export function PricingPage() {
                 <h3 className="text-xl font-bold text-white mb-4">Can I change my plan anytime?</h3>
                 <p className="text-gray-300">
                   Yes! You can upgrade, downgrade, or cancel your subscription at any time from your dashboard. 
-                  Changes take effect at your next billing cycle with prorated billing.
+                  Changes take effect at your next billing cycle.
                 </p>
               </div>
               
