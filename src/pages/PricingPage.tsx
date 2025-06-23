@@ -5,10 +5,15 @@ import { Button } from '../components/ui/Button';
 import { Check, ArrowRight, CreditCard, Shield, Receipt } from 'lucide-react';
 import { useStripe } from '../hooks/useStripe';
 import { useAuth } from '../hooks/useAuth';
+import { SignUpModal } from '../components/auth/SignUpModal';
+import { SignInModal } from '../components/auth/SignInModal';
 import { stripeProducts } from '../stripe-config';
 
 export function PricingPage() {
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly');
+  const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
+  const [isSignInModalOpen, setIsSignInModalOpen] = useState(false);
+  const [pendingPlan, setPendingPlan] = useState<any>(null);
   const { createCheckoutSession, loading: stripeLoading, error: stripeError } = useStripe();
   const { user } = useAuth();
 
@@ -62,7 +67,10 @@ export function PricingPage() {
 
   const handleSubscribe = async (plan: typeof plans[0]) => {
     if (!user) {
-      alert('Please sign in to subscribe');
+      // Store the plan they want to subscribe to
+      setPendingPlan(plan);
+      // Show signup modal
+      setIsSignUpModalOpen(true);
       return;
     }
 
@@ -75,6 +83,53 @@ export function PricingPage() {
       cancelUrl: `${window.location.origin}/pricing?canceled=true`,
     });
   };
+
+  const handleSignUpSuccess = () => {
+    // Close signup modal
+    setIsSignUpModalOpen(false);
+    // Clear pending plan
+    setPendingPlan(null);
+    // User is now signed in automatically, they can proceed with payment
+  };
+
+  const handleSwitchToSignIn = () => {
+    setIsSignUpModalOpen(false);
+    setIsSignInModalOpen(true);
+  };
+
+  const handleSignInSuccess = () => {
+    setIsSignInModalOpen(false);
+    // If there's a pending plan, proceed with checkout
+    if (pendingPlan) {
+      const priceId = billingCycle === 'monthly' ? pendingPlan.monthlyPriceId : pendingPlan.yearlyPriceId;
+      createCheckoutSession({
+        priceId,
+        mode: 'subscription',
+        successUrl: `${window.location.origin}/dashboard?success=true`,
+        cancelUrl: `${window.location.origin}/pricing?canceled=true`,
+      });
+      setPendingPlan(null);
+    }
+  };
+
+  const handleSwitchToSignUp = () => {
+    setIsSignInModalOpen(false);
+    setIsSignUpModalOpen(true);
+  };
+
+  // Auto-proceed with payment if user just signed up/in and there's a pending plan
+  React.useEffect(() => {
+    if (user && pendingPlan) {
+      const priceId = billingCycle === 'monthly' ? pendingPlan.monthlyPriceId : pendingPlan.yearlyPriceId;
+      createCheckoutSession({
+        priceId,
+        mode: 'subscription',
+        successUrl: `${window.location.origin}/dashboard?success=true`,
+        cancelUrl: `${window.location.origin}/pricing?canceled=true`,
+      });
+      setPendingPlan(null);
+    }
+  }, [user, pendingPlan, billingCycle, createCheckoutSession]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-black">
@@ -342,6 +397,25 @@ export function PricingPage() {
           </div>
         </div>
       </footer>
+
+      {/* Modals */}
+      <SignUpModal 
+        isOpen={isSignUpModalOpen} 
+        onClose={() => {
+          setIsSignUpModalOpen(false);
+          setPendingPlan(null);
+        }}
+        onSwitchToSignIn={handleSwitchToSignIn}
+      />
+
+      <SignInModal 
+        isOpen={isSignInModalOpen} 
+        onClose={() => {
+          setIsSignInModalOpen(false);
+          setPendingPlan(null);
+        }}
+        onSwitchToSignUp={handleSwitchToSignUp}
+      />
     </div>
   );
 }
