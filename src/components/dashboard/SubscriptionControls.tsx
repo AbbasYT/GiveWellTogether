@@ -1,25 +1,34 @@
 import React from 'react';
 import { CreditCard, TrendingUp, ExternalLink } from 'lucide-react';
 import { Button } from '../ui/Button';
+import { useStripePortal } from '../../hooks/useStripePortal';
 
 export function SubscriptionControls() {
+  const { openCustomerPortal, loading, error } = useStripePortal();
+
   const handleManageSubscription = () => {
-    // This would redirect to Stripe customer portal
-    window.open('https://billing.stripe.com/p/login/test_your_portal_link', '_blank');
+    openCustomerPortal();
   };
 
   return (
     <div className="bg-gray-800/80 backdrop-blur-sm rounded-3xl p-6 border border-gray-700">
       <h3 className="text-xl font-bold text-white mb-4">Subscription Controls</h3>
       
+      {error && (
+        <div className="mb-4 p-3 bg-red-900/50 border border-red-700 rounded-lg text-red-300 text-sm">
+          {error}
+        </div>
+      )}
+      
       <div className="space-y-3">
         <Button
           onClick={handleManageSubscription}
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white justify-between"
+          disabled={loading}
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white justify-between disabled:opacity-50"
         >
           <span className="flex items-center">
             <CreditCard className="h-4 w-4 mr-2" />
-            Manage Subscription
+            {loading ? 'Opening Portal...' : 'Manage Subscription'}
           </span>
           <ExternalLink className="h-4 w-4" />
         </Button>
