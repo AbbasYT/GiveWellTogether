@@ -44,7 +44,7 @@ export const stripeProducts: StripeProduct[] = [
   // Yearly plans - UPDATE THESE PRICE IDs WITH YOUR ACTUAL STRIPE YEARLY PRICE IDs
   {
     id: 'prod_yearly_tier3',
-    priceId: 'REPLACE_WITH_YEARLY_TIER3_PRICE_ID', // Replace with actual yearly price ID for $1200/year
+    priceId: 'prod_SYOqygvnDyqEX1', // Replace with actual yearly price ID for $1200/year
     name: 'Give Well Together - Tier 3 (Yearly)',
     description: 'One Payment. Countless Lives Changed',
     mode: 'subscription',
@@ -54,7 +54,7 @@ export const stripeProducts: StripeProduct[] = [
   },
   {
     id: 'prod_yearly_tier2',
-    priceId: 'REPLACE_WITH_YEARLY_TIER2_PRICE_ID', // Replace with actual yearly price ID for $600/year
+    priceId: 'prod_SYOpF6AVMJ2W8O', // Replace with actual yearly price ID for $600/year
     name: 'Give Well Together - Tier 2 (Yearly)',
     description: 'One Payment. Countless Lives Changed',
     mode: 'subscription',
@@ -64,7 +64,7 @@ export const stripeProducts: StripeProduct[] = [
   }, 
   {
     id: 'prod_yearly_tier1',
-    priceId: 'REPLACE_WITH_YEARLY_TIER1_PRICE_ID', // Replace with actual yearly price ID for $180/year
+    priceId: 'prod_SYOpCVtTGh9Cgc', // Replace with actual yearly price ID for $180/year
     name: 'Give Well Together - Tier 1 (Yearly)',
     description: 'One Payment. Countless Lives Changed',
     mode: 'subscription',
