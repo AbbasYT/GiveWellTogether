@@ -41,7 +41,7 @@ export const stripeProducts: StripeProduct[] = [
     currency: 'usd',
     interval: 'month'
   },
-  // Yearly plans - PLEASE UPDATE THESE PRICE IDs WITH YOUR ACTUAL STRIPE YEARLY PRICE IDs
+  // Yearly plans - UPDATE THESE PRICE IDs WITH YOUR ACTUAL STRIPE YEARLY PRICE IDs
   {
     id: 'prod_yearly_tier3',
     priceId: 'REPLACE_WITH_YEARLY_TIER3_PRICE_ID', // Replace with actual yearly price ID for $1200/year

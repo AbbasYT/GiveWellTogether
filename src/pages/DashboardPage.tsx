@@ -10,6 +10,7 @@ import { DistributionBreakdown } from '../components/dashboard/DistributionBreak
 import { DonationTimeline } from '../components/dashboard/DonationTimeline';
 import { DashboardSidebar } from '../components/dashboard/DashboardSidebar';
 import { CheckCircle, AlertCircle } from 'lucide-react';
+import { getProductByPriceId } from '../stripe-config';
 
 interface DonationHistory {
   id: number;
@@ -62,44 +63,40 @@ export function DashboardPage() {
     try {
       setLoading(true);
       
-      // Fetch donation history
-      const { data: orders, error: ordersError } = await supabase
-        .from('stripe_user_orders')
-        .select('*')
-        .order('order_date', { ascending: false });
-
-      if (ordersError) throw ordersError;
-
-      if (orders) {
-        setDonationHistory(orders);
-        
-        // Calculate total donated
-        const total = orders.reduce((sum, order) => sum + (order.amount_total || 0), 0);
-        setTotalDonated(total);
-        
-        // Calculate current cycle amount (this month's donations)
-        const currentMonth = new Date().getMonth();
-        const currentYear = new Date().getFullYear();
-        const currentCycleTotal = orders
-          .filter(order => {
-            const orderDate = new Date(order.order_date);
-            return orderDate.getMonth() === currentMonth && orderDate.getFullYear() === currentYear;
-          })
-          .reduce((sum, order) => sum + (order.amount_total || 0), 0);
-        
-        setCurrentCycleAmount(currentCycleTotal);
-      }
+      // Generate mock donation history starting from January 1, 2025
+      const mockDonationHistory = generateMockDonationHistory();
+      setDonationHistory(mockDonationHistory);
+      
+      // Calculate total donated
+      const total = mockDonationHistory.reduce((sum, order) => sum + (order.amount_total || 0), 0);
+      setTotalDonated(total);
+      
+      // Calculate current cycle amount (this month's donations)
+      const currentMonth = new Date().getMonth();
+      const currentYear = new Date().getFullYear();
+      const currentCycleTotal = mockDonationHistory
+        .filter(order => {
+          const orderDate = new Date(order.order_date);
+          return orderDate.getMonth() === currentMonth && orderDate.getFullYear() === currentYear;
+        })
+        .reduce((sum, order) => sum + (order.amount_total || 0), 0);
+      
+      setCurrentCycleAmount(currentCycleTotal);
 
       // Set next billing date from subscription
       if (subscription?.current_period_end) {
         setNextBillingDate(new Date(subscription.current_period_end * 1000));
       }
 
-      // Calculate organization distribution
+      // Calculate organization distribution based on monthly amount
       if (subscription?.price_id) {
-        const subscriptionPlan = getSubscriptionPlan();
+        const subscriptionPlan = getProductByPriceId(subscription.price_id);
         if (subscriptionPlan) {
-          const monthlyAmount = subscriptionPlan.price;
+          // Always calculate monthly distribution regardless of billing cycle
+          const monthlyAmount = subscriptionPlan.interval === 'year' 
+            ? subscriptionPlan.price / 12 // Convert yearly to monthly
+            : subscriptionPlan.price;
+          
           const amountPerOrg = monthlyAmount / organizations.length;
           const percentage = 100 / organizations.length;
           
@@ -117,17 +114,42 @@ export function DashboardPage() {
     }
   };
 
+  const generateMockDonationHistory = () => {
+    const history = [];
+    const startDate = new Date('2025-01-01');
+    const currentDate = new Date();
+    
+    // Get subscription plan to determine monthly amount
+    const subscriptionPlan = subscription?.price_id ? getProductByPriceId(subscription.price_id) : null;
+    const monthlyAmount = subscriptionPlan 
+      ? (subscriptionPlan.interval === 'year' ? subscriptionPlan.price / 12 : subscriptionPlan.price)
+      : 1500; // Default to $15 if no plan found
+
+    let currentMonth = new Date(startDate);
+    let id = 1;
+
+    while (currentMonth <= currentDate) {
+      // Only add if the month is complete or it's the current month
+      if (currentMonth.getMonth() !== currentDate.getMonth() || currentMonth.getFullYear() !== currentDate.getFullYear() || currentDate.getDate() >= 28) {
+        history.push({
+          id: id++,
+          amount_total: monthlyAmount,
+          currency: 'usd',
+          order_date: new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 28).toISOString(),
+          order_status: 'completed'
+        });
+      }
+      
+      // Move to next month
+      currentMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1);
+    }
+
+    return history.reverse(); // Most recent first
+  };
+
   const getSubscriptionPlan = () => {
     if (!subscription?.price_id) return null;
-    
-    // This would normally come from your stripe-config
-    const plans = [
-      { priceId: 'price_1RcoopRnYW51Zw7f2D5HGmIM', price: 10000, name: 'Tier 3' },
-      { priceId: 'price_1RcooDRnYW51Zw7fj51b9Cih', price: 5000, name: 'Tier 2' },
-      { priceId: 'price_1RcolnRnYW51Zw7fMaZfU3R4', price: 1500, name: 'Tier 1' }
-    ];
-    
-    return plans.find(plan => plan.priceId === subscription.price_id);
+    return getProductByPriceId(subscription.price_id);
   };
 
   if (authLoading || subLoading) {

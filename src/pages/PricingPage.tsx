@@ -8,7 +8,7 @@ import { useAuth } from '../hooks/useAuth';
 import { useSubscription } from '../hooks/useSubscription';
 import { SignUpModal } from '../components/auth/SignUpModal';
 import { SignInModal } from '../components/auth/SignInModal';
-import { stripeProducts } from '../stripe-config';
+import { getMonthlyProducts, getYearlyProducts, getProductByPriceId } from '../stripe-config';
 
 export function PricingPage() {
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly');
@@ -19,61 +19,40 @@ export function PricingPage() {
   const { user } = useAuth();
   const { subscription, isActive } = useSubscription();
 
-  const plans = [
-    {
-      name: 'Tier 1',
-      monthlyPrice: 15,
-      yearlyPrice: 180,
-      monthlyPriceId: stripeProducts[2].priceId, // $15 plan
-      yearlyPriceId: stripeProducts[2].priceId, // Same for now since no yearly discount
-      description: 'Perfect for getting started with giving',
-      features: [
-        'Monthly impact reports',
-        'Full transparency dashboard',
-        'Equal distribution to all partners',
-        'Tax-deductible receipts',
-        'Cancel anytime'
-      ]
-    },
-    {
-      name: 'Tier 2',
-      monthlyPrice: 50,
-      yearlyPrice: 600,
-      monthlyPriceId: stripeProducts[1].priceId, // $50 plan
-      yearlyPriceId: stripeProducts[1].priceId, // Same for now since no yearly discount
-      description: 'Amplify your impact with greater giving',
-      features: [
-        'Monthly impact reports',
-        'Full transparency dashboard',
-        'Equal distribution to all partners',
-        'Tax-deductible receipts',
-        'Cancel anytime'
-      ]
-    },
-    {
-      name: 'Tier 3',
-      monthlyPrice: 100,
-      yearlyPrice: 1200,
-      monthlyPriceId: stripeProducts[0].priceId, // $100 plan
-      yearlyPriceId: stripeProducts[0].priceId, // Same for now since no yearly discount
-      description: 'Maximum impact for dedicated givers',
-      features: [
-        'Monthly impact reports',
-        'Full transparency dashboard',
-        'Equal distribution to all partners',
-        'Tax-deductible receipts',
-        'Cancel anytime'
-      ]
-    }
-  ];
+  // Get products based on billing cycle
+  const monthlyProducts = getMonthlyProducts();
+  const yearlyProducts = getYearlyProducts();
+  const currentProducts = billingCycle === 'monthly' ? monthlyProducts : yearlyProducts;
+
+  // Create plans array from current products
+  const plans = currentProducts.map((product, index) => ({
+    name: `Tier ${3 - index}`, // Tier 3, Tier 2, Tier 1
+    price: product.price,
+    priceId: product.priceId,
+    description: index === 0 ? 'Maximum impact for dedicated givers' : 
+                 index === 1 ? 'Amplify your impact with greater giving' : 
+                 'Perfect for getting started with giving',
+    features: [
+      'Monthly impact reports',
+      'Full transparency dashboard',
+      'Equal distribution to all partners',
+      'Tax-deductible receipts',
+      'Cancel anytime'
+    ]
+  }));
 
   const getCurrentTierIndex = () => {
     if (!subscription?.price_id || !isActive()) return -1;
     
     const currentPriceId = subscription.price_id;
-    return plans.findIndex(plan => 
-      plan.monthlyPriceId === currentPriceId || plan.yearlyPriceId === currentPriceId
-    );
+    const currentProduct = getProductByPriceId(currentPriceId);
+    
+    if (!currentProduct) return -1;
+    
+    // Check if current subscription matches the billing cycle being viewed
+    if (currentProduct.interval !== billingCycle) return -1;
+    
+    return currentProducts.findIndex(product => product.priceId === currentPriceId);
   };
 
   const currentTierIndex = getCurrentTierIndex();
@@ -104,10 +83,8 @@ export function PricingPage() {
   };
 
   const proceedToCheckout = async (plan: typeof plans[0]) => {
-    const priceId = billingCycle === 'monthly' ? plan.monthlyPriceId : plan.yearlyPriceId;
-    
     await createCheckoutSession({
-      priceId,
+      priceId: plan.priceId,
       mode: 'subscription',
       successUrl: `${window.location.origin}/dashboard?payment=success`,
       cancelUrl: `${window.location.origin}/pricing?payment=canceled`,
@@ -256,11 +233,16 @@ export function PricingPage() {
                     
                     <div className="mb-6">
                       <span className="text-5xl font-bold text-white">
-                        ${billingCycle === 'monthly' ? plan.monthlyPrice : plan.yearlyPrice}
+                        ${(plan.price / 100).toLocaleString()}
                       </span>
                       <span className="text-gray-300 ml-2">
                         /{billingCycle === 'monthly' ? 'month' : 'year'}
                       </span>
+                      {billingCycle === 'yearly' && (
+                        <div className="text-sm text-green-400 mt-2">
+                          Save ${((plan.price / 100) * 0.2).toLocaleString()} per year
+                        </div>
+                      )}
                     </div>
                   </div>
 
