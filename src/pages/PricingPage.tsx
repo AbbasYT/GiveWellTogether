@@ -45,13 +45,6 @@ export function PricingPage() {
     if (!subscription?.price_id || !isActive()) return -1;
     
     const currentPriceId = subscription.price_id;
-    const currentProduct = getProductByPriceId(currentPriceId);
-    
-    if (!currentProduct) return -1;
-    
-    // Check if current subscription matches the billing cycle being viewed
-    if (currentProduct.interval !== billingCycle) return -1;
-    
     return plans.findIndex(plan => plan.priceId === currentPriceId);
   };
 

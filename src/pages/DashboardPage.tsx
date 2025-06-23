@@ -63,25 +63,54 @@ export function DashboardPage() {
     try {
       setLoading(true);
       
-      // Generate mock donation history starting from January 1, 2025
-      const mockDonationHistory = generateMockDonationHistory();
-      setDonationHistory(mockDonationHistory);
-      
-      // Calculate total donated
-      const total = mockDonationHistory.reduce((sum, order) => sum + (order.amount_total || 0), 0);
-      setTotalDonated(total);
-      
-      // Calculate current cycle amount (this month's donations)
-      const currentMonth = new Date().getMonth();
-      const currentYear = new Date().getFullYear();
-      const currentCycleTotal = mockDonationHistory
-        .filter(order => {
-          const orderDate = new Date(order.order_date);
-          return orderDate.getMonth() === currentMonth && orderDate.getFullYear() === currentYear;
-        })
-        .reduce((sum, order) => sum + (order.amount_total || 0), 0);
-      
-      setCurrentCycleAmount(currentCycleTotal);
+      // Fetch actual donation history from database
+      const { data: orders, error: ordersError } = await supabase
+        .from('stripe_user_orders')
+        .select('*')
+        .order('order_date', { ascending: false });
+
+      if (ordersError) throw ordersError;
+
+      if (orders && orders.length > 0) {
+        // Use actual donation history if available
+        setDonationHistory(orders);
+        
+        // Calculate total donated
+        const total = orders.reduce((sum, order) => sum + (order.amount_total || 0), 0);
+        setTotalDonated(total);
+        
+        // Calculate current cycle amount (this month's donations)
+        const currentMonth = new Date().getMonth();
+        const currentYear = new Date().getFullYear();
+        const currentCycleTotal = orders
+          .filter(order => {
+            const orderDate = new Date(order.order_date);
+            return orderDate.getMonth() === currentMonth && orderDate.getFullYear() === currentYear;
+          })
+          .reduce((sum, order) => sum + (order.amount_total || 0), 0);
+        
+        setCurrentCycleAmount(currentCycleTotal);
+      } else {
+        // Generate mock donation history only if no actual history exists
+        const mockDonationHistory = generateMockDonationHistory();
+        setDonationHistory(mockDonationHistory);
+        
+        // Calculate total donated
+        const total = mockDonationHistory.reduce((sum, order) => sum + (order.amount_total || 0), 0);
+        setTotalDonated(total);
+        
+        // Calculate current cycle amount (this month's donations)
+        const currentMonth = new Date().getMonth();
+        const currentYear = new Date().getFullYear();
+        const currentCycleTotal = mockDonationHistory
+          .filter(order => {
+            const orderDate = new Date(order.order_date);
+            return orderDate.getMonth() === currentMonth && orderDate.getFullYear() === currentYear;
+          })
+          .reduce((sum, order) => sum + (order.amount_total || 0), 0);
+        
+        setCurrentCycleAmount(currentCycleTotal);
+      }
 
       // Set next billing date from subscription
       if (subscription?.current_period_end) {
@@ -116,8 +145,6 @@ export function DashboardPage() {
 
   const generateMockDonationHistory = () => {
     const history = [];
-    const startDate = new Date('2025-01-01');
-    const currentDate = new Date();
     
     // Get subscription plan to determine monthly amount
     const subscriptionPlan = subscription?.price_id ? getProductByPriceId(subscription.price_id) : null;
@@ -125,17 +152,27 @@ export function DashboardPage() {
       ? (subscriptionPlan.interval === 'year' ? subscriptionPlan.price / 12 : subscriptionPlan.price)
       : 1500; // Default to $15 if no plan found
 
+    // Start from subscription start date or current date if no subscription
+    const startDate = subscription?.current_period_start 
+      ? new Date(subscription.current_period_start * 1000)
+      : new Date();
+    
+    const currentDate = new Date();
     let currentMonth = new Date(startDate);
     let id = 1;
 
-    while (currentMonth <= currentDate) {
-      // Only add if the month is complete or it's the current month
-      if (currentMonth.getMonth() !== currentDate.getMonth() || currentMonth.getFullYear() !== currentDate.getFullYear() || currentDate.getDate() >= 28) {
+    // Only generate history if subscription started before current month
+    while (currentMonth < currentDate) {
+      // Move to the 28th of the month for billing
+      const billingDate = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 28);
+      
+      // Only add if billing date has passed
+      if (billingDate <= currentDate) {
         history.push({
           id: id++,
           amount_total: monthlyAmount,
           currency: 'usd',
-          order_date: new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 28).toISOString(),
+          order_date: billingDate.toISOString(),
           order_status: 'completed'
         });
       }

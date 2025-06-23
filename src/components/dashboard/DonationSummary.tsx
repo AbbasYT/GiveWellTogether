@@ -52,7 +52,9 @@ export function DonationSummary({
           <div className="flex items-center justify-between">
             <div>
               <div className="text-white font-semibold">Current Plan: {subscriptionPlan.name}</div>
-              <div className="text-blue-300">{formatPrice(subscriptionPlan.price)}/month</div>
+              <div className="text-blue-300">
+                {formatPrice(subscriptionPlan.price)}/{subscriptionPlan.interval === 'year' ? 'year' : 'month'}
+              </div>
             </div>
             <div className="text-right">
               <div className="text-sm text-gray-300">Status</div>
