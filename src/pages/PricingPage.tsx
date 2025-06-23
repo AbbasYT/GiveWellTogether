@@ -11,7 +11,7 @@ export function PricingPage() {
     {
       name: 'Starter',
       monthlyPrice: 15,
-      yearlyPrice: 150, // 10 months price for yearly
+      yearlyPrice: 180,
       description: 'Perfect for getting started with giving',
       features: [
         'Monthly impact reports',
@@ -24,7 +24,7 @@ export function PricingPage() {
     {
       name: 'Supporter',
       monthlyPrice: 50,
-      yearlyPrice: 500, // 10 months price for yearly
+      yearlyPrice: 600,
       description: 'Amplify your impact with greater giving',
       features: [
         'Monthly impact reports',
@@ -33,13 +33,12 @@ export function PricingPage() {
         'Tax-deductible receipts',
         'Priority customer support',
         'Cancel anytime'
-      ],
-      popular: true
+      ]
     },
     {
       name: 'Champion',
-      monthlyPrice: 115,
-      yearlyPrice: 1150, // 10 months price for yearly
+      monthlyPrice: 100,
+      yearlyPrice: 1200,
       description: 'Maximum impact for dedicated givers',
       features: [
         'Monthly impact reports',
@@ -106,9 +105,6 @@ export function PricingPage() {
                   }`}
                 >
                   Yearly
-                  <span className="ml-2 text-xs bg-green-500 text-white px-2 py-1 rounded-full">
-                    Save 17%
-                  </span>
                 </button>
               </div>
             </div>
@@ -123,20 +119,8 @@ export function PricingPage() {
             {plans.map((plan, index) => (
               <div
                 key={plan.name}
-                className={`relative bg-gray-800/80 backdrop-blur-sm rounded-3xl p-8 border transition-all duration-300 hover:scale-105 hover:shadow-2xl ${
-                  plan.popular
-                    ? 'border-blue-500 ring-2 ring-blue-500/20'
-                    : 'border-gray-700 hover:border-gray-600'
-                }`}
+                className="relative bg-gray-800/80 backdrop-blur-sm rounded-3xl p-8 border border-gray-700 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:border-gray-600"
               >
-                {plan.popular && (
-                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                    <span className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-full text-sm font-bold shadow-lg">
-                      Most Popular
-                    </span>
-                  </div>
-                )}
-
                 <div className="text-center mb-8">
                   <h3 className="text-2xl font-bold text-white mb-2">{plan.name}</h3>
                   <p className="text-gray-300 mb-6">{plan.description}</p>
@@ -149,12 +133,6 @@ export function PricingPage() {
                       /{billingCycle === 'monthly' ? 'month' : 'year'}
                     </span>
                   </div>
-
-                  {billingCycle === 'yearly' && (
-                    <p className="text-green-400 text-sm font-medium">
-                      Save ${(plan.monthlyPrice * 12) - plan.yearlyPrice} per year
-                    </p>
-                  )}
                 </div>
 
                 <ul className="space-y-4 mb-8">
@@ -171,11 +149,7 @@ export function PricingPage() {
                     plan.name,
                     billingCycle === 'monthly' ? plan.monthlyPrice : plan.yearlyPrice
                   )}
-                  className={`w-full py-4 text-lg font-bold rounded-2xl transition-all duration-300 ${
-                    plan.popular
-                      ? 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl'
-                      : 'bg-gray-700 hover:bg-gray-600 text-white'
-                  }`}
+                  className="w-full py-4 text-lg font-bold rounded-2xl transition-all duration-300 bg-gray-700 hover:bg-gray-600 text-white"
                 >
                   Start Making Impact
                   <ArrowRight className="ml-2 h-5 w-5" />
