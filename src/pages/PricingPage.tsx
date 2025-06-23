@@ -142,16 +142,6 @@ export function PricingPage() {
         alert('Subscription updated successfully! Changes will be reflected in your next billing cycle.');
       } catch (error) {
         console.error('Failed to change subscription tier:', error);
-        
-        // Check if the error is specifically about no active subscription found
-        if (error instanceof Error && error.message.includes('No active subscription found')) {
-          // Fall back to creating a new checkout session
-          await proceedToCheckout(plan);
-          return;
-        }
-        
-        // For other errors, re-throw to maintain existing error handling
-        throw error;
       }
       return;
     }
