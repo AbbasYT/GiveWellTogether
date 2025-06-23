@@ -238,11 +238,6 @@ export function PricingPage() {
                       <span className="text-gray-300 ml-2">
                         /{billingCycle === 'monthly' ? 'month' : 'year'}
                       </span>
-                      {billingCycle === 'yearly' && (
-                        <div className="text-sm text-green-400 mt-2">
-                          Save ${((plan.price / 100) * 0.2).toLocaleString()} per year
-                        </div>
-                      )}
                     </div>
                   </div>
 
