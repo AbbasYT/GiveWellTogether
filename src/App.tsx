@@ -6,6 +6,7 @@ import { AboutPage } from './pages/AboutPage';
 import { PricingPage } from './pages/PricingPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { SettingsPage } from './pages/SettingsPage';
+import { JoinUsPage } from './pages/JoinUsPage';
 
 function App() {
   const { loading } = useAuth();
@@ -26,8 +27,8 @@ function App() {
         <Route path="/pricing" element={<PricingPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/settings" element={<SettingsPage />} />
+        <Route path="/join" element={<JoinUsPage />} />
         {/* Placeholder routes for future pages */}
-        <Route path="/join" element={<div>Join Us - Coming Soon</div>} />
         <Route path="/organizations" element={<div>Organizations - Coming Soon</div>} />
       </Routes>
     </Router>
