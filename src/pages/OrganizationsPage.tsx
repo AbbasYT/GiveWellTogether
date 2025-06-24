@@ -3,7 +3,7 @@ import { Header } from '../components/layout/Header';
 import { Footer } from '../components/layout/Footer';
 import { supabase } from '../lib/supabase';
 import { MapPin, ExternalLink, Globe, Quote, DollarSign, Users, Calendar, Award } from 'lucide-react';
-import { formatPrice } from '../stripe-config';
+import { formatPrice, getProductByPriceId } from '../stripe-config';
 
 interface Organization {
   id: string;
@@ -58,7 +58,7 @@ export function OrganizationsPage() {
 
       if (orgsError) throw orgsError;
 
-      // Fetch subscription data to calculate funding
+      // Fetch ALL subscription data to calculate real funding
       const { data: subscriptions, error: subsError } = await supabase
         .from('stripe_user_subscriptions')
         .select('*')
@@ -66,18 +66,36 @@ export function OrganizationsPage() {
 
       if (subsError) throw subsError;
 
-      // Calculate total monthly funding and donor count
+      console.log('Active subscriptions found:', subscriptions);
+
+      // Calculate total monthly funding and donor count from REAL data
       const activeDonors = subscriptions?.length || 0;
       let totalMonthly = 0;
 
       subscriptions?.forEach(sub => {
         if (sub.price_id) {
-          // Convert price from cents to dollars
-          const priceInDollars = getPriceFromPriceId(sub.price_id) / 100;
-          // If yearly, convert to monthly
-          const monthlyAmount = sub.price_id.includes('yearly') ? priceInDollars / 12 : priceInDollars;
-          totalMonthly += monthlyAmount;
+          console.log('Processing subscription with price_id:', sub.price_id);
+          
+          // Use the stripe-config to get the real product data
+          const product = getProductByPriceId(sub.price_id);
+          if (product) {
+            console.log('Found product:', product);
+            // Convert price from cents to dollars
+            const priceInDollars = product.price / 100;
+            // If yearly, convert to monthly
+            const monthlyAmount = product.interval === 'year' ? priceInDollars / 12 : priceInDollars;
+            totalMonthly += monthlyAmount;
+            console.log('Added monthly amount:', monthlyAmount, 'Total so far:', totalMonthly);
+          } else {
+            console.warn('No product found for price_id:', sub.price_id);
+          }
         }
+      });
+
+      console.log('Final calculations:', {
+        activeDonors,
+        totalMonthly,
+        approvedOrgsCount: approvedOrgs?.length || 0
       });
 
       setTotalDonors(activeDonors);
@@ -111,19 +129,6 @@ export function OrganizationsPage() {
     } finally {
       setLoading(false);
     }
-  };
-
-  const getPriceFromPriceId = (priceId: string): number => {
-    // Map price IDs to amounts (in cents)
-    const priceMap: { [key: string]: number } = {
-      'price_1RcolnRnYW51Zw7fMaZfU3R4': 1500, // Tier 1 Monthly
-      'price_1RcooDRnYW51Zw7fj51b9Cih': 5000, // Tier 2 Monthly
-      'price_1RcoopRnYW51Zw7f2D5HGmIM': 10000, // Tier 3 Monthly
-      'price_1RdI1WRnYW51Zw7fS7BbRR1k': 18000, // Tier 1 Yearly
-      'price_1RdI1xRnYW51Zw7f3V7F60wZ': 60000, // Tier 2 Yearly
-      'price_1RdI2QRnYW51Zw7f4ItuGE9M': 120000, // Tier 3 Yearly
-    };
-    return priceMap[priceId] || 0;
   };
 
   const getLogoUrl = (index: number): string => {
