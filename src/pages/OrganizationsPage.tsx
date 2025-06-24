@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Header } from '../components/layout/Header';
 import { Footer } from '../components/layout/Footer';
 import { supabase } from '../lib/supabase';
-import { MapPin, ExternalLink, Globe, Quote, DollarSign, Users, Calendar, Award } from 'lucide-react';
+import { MapPin, ExternalLink, Globe, Quote, Users, Award } from 'lucide-react';
 import { formatPrice } from '../stripe-config';
 
 interface Organization {
@@ -22,9 +22,6 @@ interface Organization {
 
 interface OrganizationWithStats extends Organization {
   logo_url: string;
-  monthly_funding: number;
-  total_funding: number;
-  months_active: number;
   testimonial: {
     text: string;
     author: string;
@@ -90,24 +87,12 @@ export function OrganizationsPage() {
 
       setTotalDonors(activeDonors);
       setTotalMonthlyFunding(totalMonthly);
-
-      // Calculate funding per organization
-      const fundingPerOrg = approvedOrgs?.length > 0 ? totalMonthly / approvedOrgs.length : 0;
       
-      // Calculate months active (from creation to now)
-      const now = new Date();
-      
-      // Add sample data and calculate stats for each organization
+      // Add sample data for each organization
       const orgsWithStats: OrganizationWithStats[] = (approvedOrgs || []).map((org, index) => {
-        const createdDate = new Date(org.created_at);
-        const monthsActive = Math.max(1, Math.floor((now.getTime() - createdDate.getTime()) / (1000 * 60 * 60 * 24 * 30)));
-        
         return {
           ...org,
           logo_url: getLogoUrl(index),
-          monthly_funding: fundingPerOrg,
-          total_funding: fundingPerOrg * monthsActive,
-          months_active: monthsActive,
           testimonial: getTestimonial(index),
           color_scheme: getColorScheme(index)
         };
@@ -311,32 +296,6 @@ export function OrganizationsPage() {
                       <p className="text-gray-300 leading-relaxed">{org.achievements}</p>
                     </div>
                   )}
-
-                  {/* Funding Stats */}
-                  <div className="p-6 border-b border-gray-700/50">
-                    <h4 className={`text-lg font-semibold ${org.color_scheme.accent} mb-4 flex items-center`}>
-                      <DollarSign className="h-5 w-5 mr-2" />
-                      Funding from GiveWellTogether
-                    </h4>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="bg-green-900/30 rounded-2xl p-4 text-center border border-green-700/50">
-                        <div className="text-2xl font-bold text-green-400 mb-1">
-                          {formatPrice(org.monthly_funding * 100)}
-                        </div>
-                        <div className="text-green-300 text-sm">Monthly</div>
-                      </div>
-                      <div className="bg-blue-900/30 rounded-2xl p-4 text-center border border-blue-700/50">
-                        <div className="text-2xl font-bold text-blue-400 mb-1">
-                          {formatPrice(org.total_funding * 100)}
-                        </div>
-                        <div className="text-blue-300 text-sm">Total Raised</div>
-                      </div>
-                    </div>
-                    <div className="mt-4 flex items-center text-gray-300 text-sm">
-                      <Calendar className="h-4 w-4 mr-2" />
-                      Active for {org.months_active} month{org.months_active !== 1 ? 's' : ''}
-                    </div>
-                  </div>
 
                   {/* Testimonial */}
                   <div className="p-6 border-b border-gray-700/50">
