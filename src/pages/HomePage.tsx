@@ -41,7 +41,7 @@ export function HomePage() {
                 is transparently distributed to verified organizations changing lives worldwide.
               </p>
               
-              <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex flex-col sm:flex-row gap-4 mb-8">
                 <Link to="/pricing">
                   <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg w-full sm:w-auto">
                     Start Making Impact
@@ -53,6 +53,22 @@ export function HomePage() {
                     See Where Money Goes
                   </Button>
                 </Link>
+              </div>
+
+              {/* Bolt Badge */}
+              <div className="flex items-center">
+                <a 
+                  href="https://bolt.new/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-block hover:scale-105 transition-transform duration-300 hover:shadow-lg"
+                >
+                  <img 
+                    src="/bolt badge.png" 
+                    alt="Built with Bolt" 
+                    className="h-12 sm:h-14 w-auto opacity-90 hover:opacity-100 transition-opacity duration-300"
+                  />
+                </a>
               </div>
             </div>
           </div>
