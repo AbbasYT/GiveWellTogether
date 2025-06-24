@@ -2,7 +2,6 @@ import React from 'react';
 import { Settings, ExternalLink } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '../ui/Button';
-import { ContactInformation } from './ContactInformation';
 import { SubscriptionControls } from './SubscriptionControls';
 
 interface ContactInfo {
@@ -35,11 +34,6 @@ export function DashboardSidebar({
 }: DashboardSidebarProps) {
   return (
     <div className="space-y-8">
-      <ContactInformation 
-        contactInfo={contactInfo}
-        setContactInfo={setContactInfo}
-      />
-
       <SubscriptionControls />
 
       {/* Settings Shortcut */}
