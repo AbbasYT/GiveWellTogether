@@ -137,37 +137,50 @@ export function SettingsPage() {
             </div>
           )}
 
-          <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
-            <ContactInfoSection
-              contactInfo={contactInfo}
-              setContactInfo={setContactInfo}
-              onSaveSuccess={handleSaveSuccess}
-              onError={handleError}
-            />
+          {/* Settings Sections - Using flexbox layout instead of grid */}
+          <div className="space-y-8">
+            {/* Row 1: Contact Info and Subscription */}
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
+              <ContactInfoSection
+                contactInfo={contactInfo}
+                setContactInfo={setContactInfo}
+                onSaveSuccess={handleSaveSuccess}
+                onError={handleError}
+              />
 
-            <SubscriptionSection />
+              <SubscriptionSection />
+            </div>
 
-            <CommunicationSection
-              communicationPrefs={communicationPrefs}
-              setCommunicationPrefs={setCommunicationPrefs}
-              onSaveSuccess={handleSaveSuccess}
-              onError={handleError}
-            />
+            {/* Row 2: Communication and Security */}
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
+              <CommunicationSection
+                communicationPrefs={communicationPrefs}
+                setCommunicationPrefs={setCommunicationPrefs}
+                onSaveSuccess={handleSaveSuccess}
+                onError={handleError}
+              />
 
-            <TaxDocumentsSection
-              onSaveSuccess={handleSaveSuccess}
-              onError={handleError}
-            />
+              <SecuritySection
+                onSaveSuccess={handleSaveSuccess}
+                onError={handleError}
+              />
+            </div>
 
-            <SecuritySection
-              onSaveSuccess={handleSaveSuccess}
-              onError={handleError}
-            />
+            {/* Row 3: Tax Documents (full width) */}
+            <div className="grid grid-cols-1">
+              <TaxDocumentsSection
+                onSaveSuccess={handleSaveSuccess}
+                onError={handleError}
+              />
+            </div>
 
-            <DeleteAccountSection
-              onSaveSuccess={handleSaveSuccess}
-              onError={handleError}
-            />
+            {/* Row 4: Delete Account (full width) */}
+            <div className="grid grid-cols-1">
+              <DeleteAccountSection
+                onSaveSuccess={handleSaveSuccess}
+                onError={handleError}
+              />
+            </div>
           </div>
         </div>
       </div>
