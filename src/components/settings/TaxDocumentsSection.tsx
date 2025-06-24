@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Receipt, Download, Calendar, FileText } from 'lucide-react';
+import { Receipt, Download, Calendar, FileText, AlertCircle } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { useAuth } from '../../hooks/useAuth';
 import { useSubscription } from '../../hooks/useSubscription';
@@ -48,8 +48,17 @@ export function TaxDocumentsSection({ onSaveSuccess, onError }: TaxDocumentsSect
       let filteredOrders = orders || [];
       let periodLabel = '';
 
+      // Check if we have valid orders (not from 1970)
+      const validOrders = orders?.filter(order => {
+        const orderDate = new Date(order.order_date);
+        const orderYear = orderDate.getFullYear();
+        return orderYear > 1990; // Filter out obviously wrong dates
+      }) || [];
+
+      console.log('Valid orders (not from 1970):', validOrders);
+
       if (period === 'current_month') {
-        filteredOrders = orders?.filter(order => {
+        filteredOrders = validOrders.filter(order => {
           const orderDate = new Date(order.order_date);
           const orderYear = orderDate.getFullYear();
           const orderMonth = orderDate.getMonth();
@@ -63,10 +72,10 @@ export function TaxDocumentsSection({ onSaveSuccess, onError }: TaxDocumentsSect
           });
           
           return orderYear === currentYear && orderMonth === currentMonth;
-        }) || [];
+        });
         periodLabel = `${now.toLocaleString('default', { month: 'long' })} ${currentYear}`;
       } else {
-        filteredOrders = orders?.filter(order => {
+        filteredOrders = validOrders.filter(order => {
           const orderDate = new Date(order.order_date);
           const orderYear = orderDate.getFullYear();
           
@@ -78,7 +87,7 @@ export function TaxDocumentsSection({ onSaveSuccess, onError }: TaxDocumentsSect
           });
           
           return orderYear === currentYear;
-        }) || [];
+        });
         periodLabel = `${currentYear}`;
       }
 
@@ -88,10 +97,20 @@ export function TaxDocumentsSection({ onSaveSuccess, onError }: TaxDocumentsSect
       if (filteredOrders.length === 0) {
         // Provide more detailed error message
         const totalOrdersCount = orders?.length || 0;
+        const validOrdersCount = validOrders.length;
+        
         if (totalOrdersCount === 0) {
           onError(`No payment history found. You may not have any completed payments yet.`);
+        } else if (validOrdersCount === 0) {
+          onError(`Found ${totalOrdersCount} order(s) but they have invalid dates (from 1970). This suggests the payment data needs to be resynced from Stripe.`);
         } else {
-          onError(`No payments found for ${periodLabel}. You have ${totalOrdersCount} total payment(s) in your history, but none match the selected period.`);
+          // Show available dates to help user understand
+          const availableDates = validOrders.map(order => {
+            const date = new Date(order.order_date);
+            return `${date.toLocaleString('default', { month: 'long' })} ${date.getFullYear()}`;
+          }).join(', ');
+          
+          onError(`No payments found for ${periodLabel}. You have ${validOrdersCount} valid payment(s) from: ${availableDates}`);
         }
         return;
       }
@@ -253,6 +272,17 @@ export function TaxDocumentsSection({ onSaveSuccess, onError }: TaxDocumentsSect
         <p className="text-green-300 text-sm">
           Download tax invoices for your charitable donations. All donations are tax-deductible to the extent allowed by law.
         </p>
+      </div>
+
+      {/* Data Status Warning */}
+      <div className="mb-4 p-3 bg-yellow-900/30 rounded-lg border border-yellow-700/50">
+        <div className="flex items-center">
+          <AlertCircle className="h-4 w-4 text-yellow-400 mr-2" />
+          <p className="text-yellow-300 text-sm">
+            <strong>Note:</strong> If you see "no payments found" but have made payments, your payment data may need to be resynced from Stripe. 
+            This can happen with test payments or if webhooks weren't properly processed.
+          </p>
+        </div>
       </div>
 
       <div className="space-y-4">
