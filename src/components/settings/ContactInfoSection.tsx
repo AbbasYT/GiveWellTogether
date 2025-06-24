@@ -38,6 +38,21 @@ export function ContactInfoSection({ contactInfo, setContactInfo, onSaveSuccess,
     setLoading(true);
     
     try {
+      // Check if email has changed from the auth email
+      const emailChanged = contactInfo.email !== user?.email;
+      
+      if (emailChanged && contactInfo.email) {
+        // Update the authentication email first
+        const { error: authError } = await supabase.auth.updateUser({
+          email: contactInfo.email
+        });
+
+        if (authError) {
+          throw new Error(`Failed to update authentication email: ${authError.message}`);
+        }
+      }
+
+      // Update the user profile
       const { error: saveError } = await supabase
         .from('user_profiles')
         .upsert({
@@ -53,10 +68,14 @@ export function ContactInfoSection({ contactInfo, setContactInfo, onSaveSuccess,
 
       if (saveError) throw saveError;
       
-      onSaveSuccess('Contact information updated successfully');
+      if (emailChanged) {
+        onSaveSuccess('Contact information and login email updated successfully. Please check your new email for verification if required.');
+      } else {
+        onSaveSuccess('Contact information updated successfully');
+      }
       setIsEditing(false);
-    } catch (err) {
-      onError('Failed to save contact information');
+    } catch (err: any) {
+      onError(err.message || 'Failed to save contact information');
     } finally {
       setLoading(false);
     }
@@ -119,12 +138,20 @@ export function ContactInfoSection({ contactInfo, setContactInfo, onSaveSuccess,
         </p>
       </div>
 
+      {contactInfo.email !== user?.email && (
+        <div className="mb-4 p-3 bg-orange-900/30 rounded-lg border border-orange-700/50">
+          <p className="text-orange-300 text-sm">
+            <strong>Note:</strong> Changing your email will also update your login email. You may need to verify the new email address.
+          </p>
+        </div>
+      )}
+
       {isEditing ? (
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">
               <Mail className="h-4 w-4 inline mr-2" />
-              Email
+              Email (Login & Contact)
             </label>
             <input
               type="email"
@@ -133,6 +160,9 @@ export function ContactInfoSection({ contactInfo, setContactInfo, onSaveSuccess,
               className="w-full px-3 py-2 bg-gray-700/50 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="your@email.com"
             />
+            <p className="text-xs text-gray-400 mt-1">
+              This email will be used for both login and contact purposes
+            </p>
           </div>
 
           <div>

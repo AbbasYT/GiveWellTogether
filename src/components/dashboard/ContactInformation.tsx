@@ -158,6 +158,21 @@ export function ContactInformation({ contactInfo, setContactInfo }: ContactInfor
     setSaveSuccess(false);
 
     try {
+      // Check if email has changed from the auth email
+      const emailChanged = contactInfo.email !== user?.email;
+      
+      if (emailChanged && contactInfo.email) {
+        // Update the authentication email first
+        const { error: authError } = await supabase.auth.updateUser({
+          email: contactInfo.email
+        });
+
+        if (authError) {
+          setValidationErrors({ email: `Failed to update login email: ${authError.message}` });
+          return;
+        }
+      }
+
       // Clean up the data before saving
       const cleanedData = {
         user_id: user.id,
@@ -232,13 +247,21 @@ export function ContactInformation({ contactInfo, setContactInfo }: ContactInfor
           Contact information saved successfully!
         </div>
       )}
+
+      {contactInfo.email !== user?.email && (
+        <div className="mb-4 p-3 bg-orange-900/30 rounded-lg border border-orange-700/50">
+          <p className="text-orange-300 text-sm">
+            <strong>Note:</strong> Changing your email will also update your login email.
+          </p>
+        </div>
+      )}
       
       {isEditingContact ? (
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">
               <Mail className="h-4 w-4 inline mr-2" />
-              Email
+              Email (Login & Contact)
             </label>
             <input
               type="email"
