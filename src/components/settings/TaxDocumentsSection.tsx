@@ -5,6 +5,7 @@ import { useAuth } from '../../hooks/useAuth';
 import { useSubscription } from '../../hooks/useSubscription';
 import { supabase } from '../../lib/supabase';
 import { getProductByPriceId, formatPrice } from '../../stripe-config';
+import jsPDF from 'jspdf';
 
 interface TaxDocumentsSectionProps {
   onSaveSuccess: (message: string) => void;
@@ -87,19 +88,16 @@ export function TaxDocumentsSection({ onSaveSuccess, onError }: TaxDocumentsSect
       // Calculate totals
       const totalAmount = filteredOrders.reduce((sum, order) => sum + (order.amount_total || 0), 0);
 
-      // Generate HTML content for the invoice
-      const htmlContent = generateInvoiceHTML({
+      // Generate PDF
+      generatePDF({
         user,
         orders: filteredOrders,
         totalAmount,
         period: periodLabel,
         currentPlan
       });
-
-      // Create and download HTML file instead of trying to generate PDF
-      downloadHTMLAsFile(htmlContent, `GiveWellTogether_Invoice_${periodLabel.replace(' ', '_')}.html`);
       
-      onSaveSuccess(`Tax invoice for ${periodLabel} downloaded successfully. You can print this HTML file as a PDF from your browser.`);
+      onSaveSuccess(`Tax invoice for ${periodLabel} downloaded successfully as PDF.`);
     } catch (err) {
       onError('Failed to generate tax invoice');
       console.error('Invoice generation error:', err);
@@ -108,205 +106,152 @@ export function TaxDocumentsSection({ onSaveSuccess, onError }: TaxDocumentsSect
     }
   };
 
-  const generateInvoiceHTML = ({ user, orders, totalAmount, period, currentPlan }: any) => {
+  const generatePDF = ({ user, orders, totalAmount, period, currentPlan }: any) => {
+    const doc = new jsPDF();
     const currentDate = new Date().toLocaleDateString();
     
-    return `<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <title>GiveWellTogether Tax Invoice - ${period}</title>
-    <style>
-        body { 
-            font-family: Arial, sans-serif; 
-            margin: 40px; 
-            color: #333; 
-            line-height: 1.6;
-        }
-        .header { 
-            text-align: center; 
-            margin-bottom: 40px; 
-            border-bottom: 2px solid #2563eb; 
-            padding-bottom: 20px; 
-        }
-        .company-name { 
-            font-size: 28px; 
-            font-weight: bold; 
-            color: #2563eb; 
-            margin-bottom: 10px; 
-        }
-        .invoice-title { 
-            font-size: 24px; 
-            color: #1f2937; 
-            margin-bottom: 5px; 
-        }
-        .period { 
-            font-size: 16px; 
-            color: #6b7280; 
-        }
-        .details { 
-            display: flex; 
-            justify-content: space-between; 
-            margin: 30px 0; 
-            flex-wrap: wrap;
-        }
-        .details-section { 
-            flex: 1; 
-            min-width: 250px;
-            margin-bottom: 20px;
-        }
-        .details-section h3 { 
-            color: #1f2937; 
-            border-bottom: 1px solid #e5e7eb; 
-            padding-bottom: 5px; 
-            margin-bottom: 10px;
-        }
-        .table { 
-            width: 100%; 
-            border-collapse: collapse; 
-            margin: 30px 0; 
-        }
-        .table th, .table td { 
-            border: 1px solid #e5e7eb; 
-            padding: 12px; 
-            text-align: left; 
-        }
-        .table th { 
-            background-color: #f9fafb; 
-            font-weight: bold; 
-        }
-        .total-row { 
-            background-color: #f3f4f6; 
-            font-weight: bold; 
-        }
-        .footer { 
-            margin-top: 40px; 
-            padding-top: 20px; 
-            border-top: 1px solid #e5e7eb; 
-            font-size: 12px; 
-            color: #6b7280; 
-        }
-        .tax-note { 
-            background-color: #fef3c7; 
-            padding: 15px; 
-            border-radius: 8px; 
-            margin: 20px 0; 
-            border: 1px solid #f59e0b;
-        }
-        .print-note {
-            background-color: #dbeafe;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 20px 0;
-            border: 1px solid #3b82f6;
-            text-align: center;
-        }
-        @media print {
-            .print-note { display: none; }
-            body { margin: 20px; }
-        }
-    </style>
-</head>
-<body>
-    <div class="print-note">
-        <p style="margin: 0; color: #1e40af; font-weight: bold;">
-            📄 To save as PDF: Press Ctrl+P (or Cmd+P on Mac) → Select "Save as PDF" → Click Save
-        </p>
-    </div>
-
-    <div class="header">
-        <div class="company-name">GiveWellTogether</div>
-        <div class="invoice-title">Tax Invoice</div>
-        <div class="period">Period: ${period}</div>
-    </div>
-
-    <div class="details">
-        <div class="details-section">
-            <h3>Bill To:</h3>
-            <p><strong>${user?.email}</strong></p>
-            <p>Customer ID: ${user?.id?.substring(0, 8)}...</p>
-            <p>Invoice Date: ${currentDate}</p>
-        </div>
-        <div class="details-section">
-            <h3>Service Provider:</h3>
-            <p><strong>GiveWellTogether</strong></p>
-            <p>Charitable Giving Platform</p>
-            <p>Email: support@givewelltogether.com</p>
-        </div>
-    </div>
-
-    ${currentPlan ? `
-    <div class="details-section">
-        <h3>Subscription Details:</h3>
-        <p><strong>Plan:</strong> ${currentPlan.name}</p>
-        <p><strong>Amount:</strong> ${formatPrice(currentPlan.price)} per ${currentPlan.interval}</p>
-    </div>
-    ` : ''}
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Description</th>
-                <th>Amount</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            ${orders.map((order: any) => `
-                <tr>
-                    <td>${new Date(order.order_date).toLocaleDateString()}</td>
-                    <td>Charitable Donation Subscription</td>
-                    <td>${formatPrice(order.amount_total)}</td>
-                    <td style="color: #059669; text-transform: capitalize;">${order.order_status}</td>
-                </tr>
-            `).join('')}
-            <tr class="total-row">
-                <td colspan="2"><strong>Total for ${period}</strong></td>
-                <td><strong>${formatPrice(totalAmount)}</strong></td>
-                <td></td>
-            </tr>
-        </tbody>
-    </table>
-
-    <div class="tax-note">
-        <h3 style="margin-top: 0; color: #92400e;">Tax Deductibility Notice</h3>
-        <p style="margin-bottom: 0; color: #92400e;">
-            All donations made through GiveWellTogether are tax-deductible to the extent allowed by law. 
-            This invoice serves as your receipt for tax purposes. Please consult with your tax advisor 
-            for specific guidance on charitable deductions.
-        </p>
-    </div>
-
-    <div class="footer">
-        <p><strong>Thank you for making a difference through GiveWellTogether!</strong></p>
-        <p>This invoice was generated on ${currentDate}. For questions about this invoice, please contact support@givewelltogether.com</p>
-        <p>GiveWellTogether - One Subscription. Countless Lives Changed.</p>
-    </div>
-</body>
-</html>`;
-  };
-
-  const downloadHTMLAsFile = (htmlContent: string, filename: string) => {
-    // Create a blob with the HTML content
-    const blob = new Blob([htmlContent], { type: 'text/html' });
+    // Set up colors
+    const primaryBlue = '#2563eb';
+    const darkGray = '#1f2937';
+    const lightGray = '#6b7280';
     
-    // Create a temporary URL for the blob
-    const url = URL.createObjectURL(blob);
+    // Header
+    doc.setFontSize(24);
+    doc.setTextColor(primaryBlue);
+    doc.text('GiveWellTogether', 105, 30, { align: 'center' });
     
-    // Create a temporary anchor element and trigger download
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    a.style.display = 'none';
+    doc.setFontSize(18);
+    doc.setTextColor(darkGray);
+    doc.text('Tax Invoice', 105, 45, { align: 'center' });
     
-    // Add to DOM, click, and remove
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    doc.setFontSize(12);
+    doc.setTextColor(lightGray);
+    doc.text(`Period: ${period}`, 105, 55, { align: 'center' });
     
-    // Clean up the URL
-    URL.revokeObjectURL(url);
+    // Draw header line
+    doc.setDrawColor(primaryBlue);
+    doc.setLineWidth(1);
+    doc.line(20, 65, 190, 65);
+    
+    // Bill To section
+    doc.setFontSize(14);
+    doc.setTextColor(darkGray);
+    doc.text('Bill To:', 20, 80);
+    
+    doc.setFontSize(11);
+    doc.setTextColor('#000000');
+    doc.text(user?.email || 'N/A', 20, 90);
+    doc.text(`Customer ID: ${user?.id?.substring(0, 8)}...`, 20, 100);
+    doc.text(`Invoice Date: ${currentDate}`, 20, 110);
+    
+    // Service Provider section
+    doc.setFontSize(14);
+    doc.setTextColor(darkGray);
+    doc.text('Service Provider:', 120, 80);
+    
+    doc.setFontSize(11);
+    doc.setTextColor('#000000');
+    doc.text('GiveWellTogether', 120, 90);
+    doc.text('Charitable Giving Platform', 120, 100);
+    doc.text('support@givewelltogether.com', 120, 110);
+    
+    // Subscription details (if available)
+    let yPosition = 130;
+    if (currentPlan) {
+      doc.setFontSize(14);
+      doc.setTextColor(darkGray);
+      doc.text('Subscription Details:', 20, yPosition);
+      
+      doc.setFontSize(11);
+      doc.setTextColor('#000000');
+      doc.text(`Plan: ${currentPlan.name}`, 20, yPosition + 10);
+      doc.text(`Amount: ${formatPrice(currentPlan.price)} per ${currentPlan.interval}`, 20, yPosition + 20);
+      
+      yPosition += 40;
+    }
+    
+    // Table header
+    doc.setFontSize(12);
+    doc.setTextColor('#000000');
+    doc.setFillColor(249, 250, 251); // Light gray background
+    doc.rect(20, yPosition, 170, 10, 'F');
+    
+    doc.text('Date', 25, yPosition + 7);
+    doc.text('Description', 60, yPosition + 7);
+    doc.text('Amount', 130, yPosition + 7);
+    doc.text('Status', 160, yPosition + 7);
+    
+    // Draw table border
+    doc.setDrawColor('#e5e7eb');
+    doc.rect(20, yPosition, 170, 10);
+    
+    yPosition += 10;
+    
+    // Table rows
+    orders.forEach((order: any, index: number) => {
+      const rowY = yPosition + (index * 10);
+      
+      // Alternate row background
+      if (index % 2 === 1) {
+        doc.setFillColor(248, 250, 252);
+        doc.rect(20, rowY, 170, 10, 'F');
+      }
+      
+      doc.setFontSize(10);
+      doc.setTextColor('#000000');
+      
+      const orderDate = new Date(order.order_date).toLocaleDateString();
+      doc.text(orderDate, 25, rowY + 7);
+      doc.text('Charitable Donation Subscription', 60, rowY + 7);
+      doc.text(formatPrice(order.amount_total), 130, rowY + 7);
+      doc.text(order.order_status, 160, rowY + 7);
+      
+      // Draw row border
+      doc.setDrawColor('#e5e7eb');
+      doc.rect(20, rowY, 170, 10);
+    });
+    
+    // Total row
+    const totalRowY = yPosition + (orders.length * 10);
+    doc.setFillColor(243, 244, 246); // Slightly darker gray
+    doc.rect(20, totalRowY, 170, 10, 'F');
+    
+    doc.setFontSize(11);
+    doc.setFont(undefined, 'bold');
+    doc.text(`Total for ${period}`, 25, totalRowY + 7);
+    doc.text(formatPrice(totalAmount), 130, totalRowY + 7);
+    
+    doc.setDrawColor('#e5e7eb');
+    doc.rect(20, totalRowY, 170, 10);
+    
+    // Tax notice
+    const taxNoticeY = totalRowY + 25;
+    doc.setFillColor(254, 243, 199); // Yellow background
+    doc.rect(20, taxNoticeY, 170, 25, 'F');
+    doc.setDrawColor('#f59e0b');
+    doc.rect(20, taxNoticeY, 170, 25);
+    
+    doc.setFontSize(12);
+    doc.setFont(undefined, 'bold');
+    doc.setTextColor('#92400e');
+    doc.text('Tax Deductibility Notice', 25, taxNoticeY + 8);
+    
+    doc.setFontSize(9);
+    doc.setFont(undefined, 'normal');
+    doc.text('All donations made through GiveWellTogether are tax-deductible to the extent', 25, taxNoticeY + 15);
+    doc.text('allowed by law. This invoice serves as your receipt for tax purposes.', 25, taxNoticeY + 22);
+    
+    // Footer
+    const footerY = taxNoticeY + 40;
+    doc.setFontSize(10);
+    doc.setTextColor(lightGray);
+    doc.text('Thank you for making a difference through GiveWellTogether!', 105, footerY, { align: 'center' });
+    doc.text(`This invoice was generated on ${currentDate}`, 105, footerY + 8, { align: 'center' });
+    doc.text('GiveWellTogether - One Subscription. Countless Lives Changed.', 105, footerY + 16, { align: 'center' });
+    
+    // Save the PDF
+    const filename = `GiveWellTogether_Invoice_${period.replace(' ', '_')}.pdf`;
+    doc.save(filename);
   };
 
   return (
@@ -330,7 +275,7 @@ export function TaxDocumentsSection({ onSaveSuccess, onError }: TaxDocumentsSect
             className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center"
           >
             <Calendar className="h-4 w-4 mr-2" />
-            {loading ? 'Generating...' : 'Current Month Invoice'}
+            {loading ? 'Generating...' : 'Download Monthly Invoice'}
           </Button>
 
           <Button
@@ -339,21 +284,20 @@ export function TaxDocumentsSection({ onSaveSuccess, onError }: TaxDocumentsSect
             className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-center"
           >
             <FileText className="h-4 w-4 mr-2" />
-            {loading ? 'Generating...' : 'Current Year Invoice'}
+            {loading ? 'Generating...' : 'Download Yearly Invoice'}
           </Button>
         </div>
 
         <div className="p-4 bg-gray-700/50 rounded-lg">
           <h3 className="text-white font-semibold mb-2 flex items-center">
             <Download className="h-4 w-4 mr-2" />
-            How to Save as PDF
+            Direct PDF Download
           </h3>
           <ul className="text-gray-300 text-sm space-y-1">
-            <li>• Click the invoice button to download an HTML file</li>
-            <li>• Open the downloaded file in your browser</li>
-            <li>• Press <kbd className="bg-gray-600 px-1 rounded">Ctrl+P</kbd> (or <kbd className="bg-gray-600 px-1 rounded">Cmd+P</kbd> on Mac)</li>
-            <li>• Select "Save as PDF" as the destination</li>
-            <li>• Click "Save" to create your PDF invoice</li>
+            <li>• Click any button above to instantly download a PDF invoice</li>
+            <li>• No additional steps required - the PDF is ready for your records</li>
+            <li>• Professional formatting optimized for tax documentation</li>
+            <li>• Includes all payment details and tax deductibility information</li>
           </ul>
         </div>
 
@@ -363,8 +307,8 @@ export function TaxDocumentsSection({ onSaveSuccess, onError }: TaxDocumentsSect
             Invoice Information
           </h3>
           <ul className="text-gray-300 text-sm space-y-1">
-            <li>• Current Month: Invoice for payments made this month</li>
-            <li>• Current Year: Comprehensive invoice for all payments this year</li>
+            <li>• Monthly Invoice: All payments made in the current month</li>
+            <li>• Yearly Invoice: Comprehensive invoice for all payments this year</li>
             <li>• All invoices include payment details and tax deductibility information</li>
             <li>• Keep these invoices for your tax records</li>
           </ul>
