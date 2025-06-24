@@ -35,14 +35,7 @@ export function DashboardPage() {
   const [totalDonated, setTotalDonated] = useState(0);
   const [currentCycleAmount, setCurrentCycleAmount] = useState(0);
   const [nextBillingDate, setNextBillingDate] = useState<Date | null>(null);
-  const [organizations] = useState<OrganizationDistribution[]>([
-    { name: 'Education First', category: 'Education', amount: 0, percentage: 0 },
-    { name: 'Clean Water Initiative', category: 'Health', amount: 0, percentage: 0 },
-    { name: 'Forest Protection Fund', category: 'Environment', amount: 0, percentage: 0 },
-    { name: 'Emergency Relief Network', category: 'Disaster Relief', amount: 0, percentage: 0 },
-    { name: 'Community Development Alliance', category: 'Poverty', amount: 0, percentage: 0 },
-    { name: 'Human Rights Advocacy', category: 'Human Rights', amount: 0, percentage: 0 }
-  ]);
+  const [organizations, setOrganizations] = useState<OrganizationDistribution[]>([]);
   const [contactInfo, setContactInfo] = useState({
     email: '',
     twitter: '',
@@ -60,9 +53,51 @@ export function DashboardPage() {
     }
   }, [user, subscription, authLoading, subLoading]);
 
+  const fetchApprovedOrganizations = async () => {
+    try {
+      console.log('Fetching approved organizations...');
+      
+      const { data: approvedOrgs, error } = await supabase
+        .from('organization_applications')
+        .select('organization_name, primary_category')
+        .eq('status', 'approved')
+        .order('created_at', { ascending: true });
+
+      if (error) {
+        console.error('Error fetching approved organizations:', error);
+        throw error;
+      }
+
+      console.log('Approved organizations:', approvedOrgs);
+      return approvedOrgs || [];
+    } catch (error) {
+      console.error('Error fetching approved organizations:', error);
+      return [];
+    }
+  };
+
+  const calculateOrganizationDistribution = (approvedOrgs: any[], monthlyAmount: number) => {
+    if (approvedOrgs.length === 0) {
+      return [];
+    }
+
+    const amountPerOrg = monthlyAmount / approvedOrgs.length;
+    const percentage = 100 / approvedOrgs.length;
+
+    return approvedOrgs.map(org => ({
+      name: org.organization_name,
+      category: org.primary_category,
+      amount: amountPerOrg,
+      percentage: percentage
+    }));
+  };
+
   const fetchDashboardData = async () => {
     try {
       setLoading(true);
+      
+      // Fetch approved organizations first
+      const approvedOrgs = await fetchApprovedOrganizations();
       
       // **ONLY** fetch real payment data from database - NO MOCK DATA
       const { data: orders, error: ordersError } = await supabase
@@ -116,8 +151,8 @@ export function DashboardPage() {
         setNextBillingDate(new Date(subscription.current_period_end * 1000));
       }
 
-      // Calculate organization distribution based on monthly amount
-      if (subscription?.price_id) {
+      // Calculate organization distribution based on monthly amount and approved organizations
+      if (subscription?.price_id && approvedOrgs.length > 0) {
         const subscriptionPlan = getProductByPriceId(subscription.price_id);
         if (subscriptionPlan) {
           // Always calculate monthly distribution regardless of billing cycle
@@ -125,14 +160,13 @@ export function DashboardPage() {
             ? subscriptionPlan.price / 12 // Convert yearly to monthly
             : subscriptionPlan.price;
           
-          const amountPerOrg = monthlyAmount / organizations.length;
-          const percentage = 100 / organizations.length;
-          
-          organizations.forEach(org => {
-            org.amount = amountPerOrg;
-            org.percentage = percentage;
-          });
+          const distributionData = calculateOrganizationDistribution(approvedOrgs, monthlyAmount);
+          setOrganizations(distributionData);
         }
+      } else if (approvedOrgs.length > 0) {
+        // If no subscription but we have approved orgs, show them with 0 amounts
+        const distributionData = calculateOrganizationDistribution(approvedOrgs, 0);
+        setOrganizations(distributionData);
       }
 
     } catch (error) {
@@ -281,6 +315,21 @@ export function DashboardPage() {
                   <RefreshCw className={`h-4 w-4 mr-2 ${syncingPayments ? 'animate-spin' : ''}`} />
                   {syncingPayments ? 'Syncing...' : 'Sync Payments'}
                 </Button>
+              </div>
+            </div>
+          )}
+
+          {/* Organization Count Info */}
+          {organizations.length > 0 && (
+            <div className="mb-8 p-4 bg-blue-900/50 border border-blue-700 rounded-2xl text-blue-300 max-w-4xl mx-auto">
+              <div className="flex items-center">
+                <CheckCircle className="h-6 w-6 mr-3" />
+                <div>
+                  <h3 className="font-bold">Distribution Updated</h3>
+                  <p className="text-sm">
+                    Your monthly contribution is now distributed equally among {organizations.length} approved partner organizations.
+                  </p>
+                </div>
               </div>
             </div>
           )}
