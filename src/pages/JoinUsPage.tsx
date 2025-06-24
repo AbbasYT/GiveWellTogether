@@ -33,6 +33,7 @@ interface OrganizationApplication {
   programs_services: string;
   beneficiaries: string;
   achievements?: string;
+  status: string;
   created_at: string;
 }
 
@@ -114,10 +115,10 @@ export function JoinUsPage() {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    fetchApprovedApplications();
+    fetchAllApplications();
   }, []);
 
-  const fetchApprovedApplications = async () => {
+  const fetchAllApplications = async () => {
     try {
       const { data, error } = await supabase
         .from('organization_applications')
@@ -137,9 +138,9 @@ export function JoinUsPage() {
           programs_services,
           beneficiaries,
           achievements,
+          status,
           created_at
         `)
-        .eq('status', 'approved')
         .order('created_at', { ascending: false });
 
       if (error) throw error;
@@ -198,6 +199,9 @@ export function JoinUsPage() {
         terms_conditions: false
       });
 
+      // Refresh the applications list
+      await fetchAllApplications();
+
       // Scroll to success message
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (err: any) {
@@ -209,6 +213,33 @@ export function JoinUsPage() {
 
   const toggleCard = (cardId: string) => {
     setExpandedCard(expandedCard === cardId ? null : cardId);
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'approved':
+        return 'text-green-400';
+      case 'rejected':
+        return 'text-red-400';
+      case 'under_review':
+        return 'text-yellow-400';
+      default:
+        return 'text-gray-400';
+    }
+  };
+
+  const getStatusBadge = (status: string) => {
+    const baseClasses = 'px-2 py-1 rounded-full text-xs font-semibold';
+    switch (status) {
+      case 'approved':
+        return `${baseClasses} bg-green-900/50 text-green-300`;
+      case 'rejected':
+        return `${baseClasses} bg-red-900/50 text-red-300`;
+      case 'under_review':
+        return `${baseClasses} bg-yellow-900/50 text-yellow-300`;
+      default:
+        return `${baseClasses} bg-gray-900/50 text-gray-300`;
+    }
   };
 
   return (
@@ -638,6 +669,12 @@ export function JoinUsPage() {
                       ) : (
                         <ChevronDown className="h-5 w-5 text-gray-400 flex-shrink-0" />
                       )}
+                    </div>
+                    
+                    <div className="flex items-center justify-between mb-4">
+                      <span className={getStatusBadge(app.status)}>
+                        {app.status.charAt(0).toUpperCase() + app.status.slice(1).replace('_', ' ')}
+                      </span>
                     </div>
                     
                     <div className="space-y-2 mb-4">
