@@ -1,5 +1,6 @@
 import React from 'react';
 import { Settings, ExternalLink } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { Button } from '../ui/Button';
 import { ContactInformation } from './ContactInformation';
 import { SubscriptionControls } from './SubscriptionControls';
@@ -45,17 +46,18 @@ export function DashboardSidebar({
       <div className="bg-gray-800/80 backdrop-blur-sm rounded-3xl p-6 border border-gray-700">
         <h3 className="text-xl font-bold text-white mb-4">Quick Actions</h3>
         
-        <Button
-          onClick={() => window.location.href = '/settings'}
-          variant="outline"
-          className="w-full bg-gray-700/50 border-gray-600 text-gray-300 hover:bg-gray-600/50 justify-between"
-        >
-          <span className="flex items-center">
-            <Settings className="h-4 w-4 mr-2" />
-            Settings & Preferences
-          </span>
-          <ExternalLink className="h-4 w-4" />
-        </Button>
+        <Link to="/settings">
+          <Button
+            variant="outline"
+            className="w-full bg-gray-700/50 border-gray-600 text-gray-300 hover:bg-gray-600/50 justify-between"
+          >
+            <span className="flex items-center">
+              <Settings className="h-4 w-4 mr-2" />
+              Settings & Preferences
+            </span>
+            <ExternalLink className="h-4 w-4" />
+          </Button>
+        </Link>
       </div>
 
       {/* Impact Stats */}
