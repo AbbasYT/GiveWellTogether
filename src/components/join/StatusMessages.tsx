@@ -10,9 +10,9 @@ export function StatusMessages({ submitSuccess, error }: StatusMessagesProps) {
   if (!submitSuccess && !error) return null;
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
+    <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-20 mb-8">
       {submitSuccess && (
-        <div className="p-6 bg-green-900/50 border border-green-700 rounded-2xl text-green-300">
+        <div className="p-6 bg-green-900/50 border border-green-700 rounded-2xl text-green-300 max-w-6xl mx-auto">
           <div className="flex items-center">
             <CheckCircle className="h-6 w-6 mr-3" />
             <div>
@@ -24,7 +24,7 @@ export function StatusMessages({ submitSuccess, error }: StatusMessagesProps) {
       )}
 
       {error && (
-        <div className="p-6 bg-red-900/50 border border-red-700 rounded-2xl text-red-300">
+        <div className="p-6 bg-red-900/50 border border-red-700 rounded-2xl text-red-300 max-w-6xl mx-auto">
           <div className="flex items-center">
             <AlertCircle className="h-6 w-6 mr-3" />
             <div>

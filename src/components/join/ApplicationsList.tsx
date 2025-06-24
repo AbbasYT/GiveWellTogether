@@ -59,10 +59,10 @@ export function ApplicationsList({ applications }: ApplicationsListProps) {
   return (
     <>
       <section className="py-12 relative bg-gradient-to-r from-gray-900/50 to-slate-900/50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-20">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-white mb-6">Organization Applications</h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-300 max-w-4xl mx-auto">
               View submitted applications from organizations. These may be approved, rejected, or under review. Click on any card to learn more.
             </p>
             <p className="text-sm text-gray-400 mt-2">
@@ -77,7 +77,7 @@ export function ApplicationsList({ applications }: ApplicationsListProps) {
               <p className="text-gray-500 text-sm mt-2">Check the browser console for debugging information.</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-none">
               {applications.map((app) => (
                 <div
                   key={app.id}

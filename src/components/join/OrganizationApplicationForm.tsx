@@ -139,8 +139,8 @@ export function OrganizationApplicationForm({ onSubmitSuccess, onError }: Organi
 
   return (
     <section className="py-12 relative">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-gray-800/80 backdrop-blur-sm rounded-3xl p-8 border border-gray-700">
+      <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-20">
+        <div className="bg-gray-800/80 backdrop-blur-sm rounded-3xl p-8 border border-gray-700 max-w-6xl mx-auto">
           <h2 className="text-3xl font-bold text-white mb-6 text-center">Organization Application</h2>
           <p className="text-gray-300 mb-8 text-center">
             Complete this comprehensive application to join our network of verified partner organizations.
