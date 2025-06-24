@@ -80,13 +80,16 @@ export function ContactInformation({ contactInfo, setContactInfo }: ContactInfor
   const validateEmail = (email: string): string | null => {
     if (!email) return null; // Empty is allowed
     
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    // More comprehensive email validation regex that follows RFC 5322 standards
+    const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+    
     if (!emailRegex.test(email)) {
-      return 'Please enter a valid email address with @ and a domain (e.g., user@example.com)';
+      return 'Please enter a valid email address';
     }
     
-    if (!email.includes('.com') && !email.includes('.org') && !email.includes('.net') && !email.includes('.edu')) {
-      return 'Email must contain a valid domain extension (.com, .org, .net, .edu, etc.)';
+    // Basic length check
+    if (email.length > 254) {
+      return 'Email address is too long';
     }
     
     return null;

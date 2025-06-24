@@ -34,7 +34,22 @@ export function ContactInfoSection({ contactInfo, setContactInfo, onSaveSuccess,
     }
   }, [user, contactInfo, setContactInfo]);
 
+  const validateEmail = (email: string): boolean => {
+    if (!email) return true; // Empty is allowed
+    
+    // More comprehensive email validation regex that follows RFC 5322 standards
+    const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+    
+    return emailRegex.test(email) && email.length <= 254;
+  };
+
   const handleSave = async () => {
+    // Validate email before saving
+    if (!validateEmail(contactInfo.email)) {
+      onError('Please enter a valid email address');
+      return;
+    }
+
     setLoading(true);
     
     try {
