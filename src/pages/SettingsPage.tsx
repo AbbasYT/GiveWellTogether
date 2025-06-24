@@ -74,10 +74,10 @@ export function SettingsPage() {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    if (user && isActive()) {
+    if (user) {
       loadUserData();
     }
-  }, [user, subscription]);
+  }, [user]);
 
   const loadUserData = async () => {
     try {
@@ -220,9 +220,8 @@ export function SettingsPage() {
     return <Navigate to="/pricing" replace />;
   }
 
-  if (!isActive()) {
-    return <Navigate to="/dashboard" replace />;
-  }
+  // Remove the subscription check - allow access to settings even without active subscription
+  // Users should be able to manage their account settings regardless of subscription status
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-black">
@@ -400,24 +399,44 @@ export function SettingsPage() {
               </div>
 
               <div className="space-y-4">
-                <div className="p-4 bg-gray-700/50 rounded-lg">
-                  <div className="text-white font-semibold mb-2">Current Plan</div>
-                  <div className="text-gray-300">
-                    Status: <span className="text-green-400 capitalize">{subscription?.subscription_status}</span>
+                {subscription ? (
+                  <div className="p-4 bg-gray-700/50 rounded-lg">
+                    <div className="text-white font-semibold mb-2">Current Plan</div>
+                    <div className="text-gray-300">
+                      Status: <span className="text-green-400 capitalize">{subscription?.subscription_status}</span>
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  <div className="p-4 bg-gray-700/50 rounded-lg">
+                    <div className="text-white font-semibold mb-2">No Active Subscription</div>
+                    <div className="text-gray-300">
+                      You don't have an active subscription yet.
+                    </div>
+                  </div>
+                )}
 
-                <Button
-                  onClick={() => openCustomerPortal()}
-                  disabled={portalLoading}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white"
-                >
-                  {portalLoading ? 'Opening Portal...' : 'Manage Subscription & Billing'}
-                </Button>
+                {subscription && isActive() ? (
+                  <Button
+                    onClick={() => openCustomerPortal()}
+                    disabled={portalLoading}
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                  >
+                    {portalLoading ? 'Opening Portal...' : 'Manage Subscription & Billing'}
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={() => window.location.href = '/pricing'}
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                  >
+                    Start Subscription
+                  </Button>
+                )}
 
                 <p className="text-gray-400 text-sm">
-                  This will open Stripe's secure portal where you can update payment methods, 
-                  change plans, view invoices, and cancel your subscription.
+                  {subscription && isActive() 
+                    ? "This will open Stripe's secure portal where you can update payment methods, change plans, view invoices, and cancel your subscription."
+                    : "Choose a subscription plan to start making an impact."
+                  }
                 </p>
               </div>
             </div>
