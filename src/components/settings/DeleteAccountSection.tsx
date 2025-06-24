@@ -43,8 +43,8 @@ export function DeleteAccountSection({ onSaveSuccess, onError }: DeleteAccountSe
         </p>
       </div>
 
-      {!showDeleteConfirm ? (
-        <div className="space-y-4">
+      <div className="space-y-4">
+        {!showDeleteConfirm ? (
           <Button
             onClick={() => setShowDeleteConfirm(true)}
             variant="outline"
@@ -53,7 +53,35 @@ export function DeleteAccountSection({ onSaveSuccess, onError }: DeleteAccountSe
             <Trash2 className="h-4 w-4 mr-2" />
             Start Account Deletion Process
           </Button>
+        ) : (
+          <div className="space-y-4">
+            <p className="text-white font-semibold">Ready to start the account deletion process?</p>
+            <p className="text-gray-300 text-sm">
+              Step 1: Cancel your subscription in Stripe<br />
+              Step 2: Contact support for backend account deletion
+            </p>
+            <div className="flex gap-2 max-w-md">
+              <Button
+                onClick={handleCancelSubscription}
+                disabled={loading}
+                className="bg-orange-600 hover:bg-orange-700 text-white flex-1"
+              >
+                <CreditCard className="h-4 w-4 mr-2" />
+                {loading ? 'Opening Stripe...' : 'Go to Stripe to Cancel Subscription'}
+              </Button>
+              <Button
+                onClick={() => setShowDeleteConfirm(false)}
+                variant="outline"
+                className="bg-gray-700/50 border-gray-600 text-gray-300 hover:bg-gray-600/50 flex-1"
+              >
+                Cancel
+              </Button>
+            </div>
+          </div>
+        )}
 
+        {/* Contact Support Section - Always Visible */}
+        <div className="border-t border-gray-600 pt-4">
           <div className="flex items-center">
             <input
               type="checkbox"
@@ -68,7 +96,7 @@ export function DeleteAccountSection({ onSaveSuccess, onError }: DeleteAccountSe
           </div>
 
           {showContactSupport && (
-            <div className="p-4 bg-blue-900/30 rounded-lg border border-blue-700/50">
+            <div className="mt-4 p-4 bg-blue-900/30 rounded-lg border border-blue-700/50">
               <div className="flex items-center mb-2">
                 <Mail className="h-5 w-5 text-blue-400 mr-2" />
                 <span className="text-blue-300 font-semibold">Support Contact</span>
@@ -88,32 +116,7 @@ export function DeleteAccountSection({ onSaveSuccess, onError }: DeleteAccountSe
             </div>
           )}
         </div>
-      ) : (
-        <div className="space-y-4">
-          <p className="text-white font-semibold">Ready to start the account deletion process?</p>
-          <p className="text-gray-300 text-sm">
-            Step 1: Cancel your subscription in Stripe<br />
-            Step 2: Contact support for backend account deletion
-          </p>
-          <div className="flex gap-2 max-w-md">
-            <Button
-              onClick={handleCancelSubscription}
-              disabled={loading}
-              className="bg-orange-600 hover:bg-orange-700 text-white flex-1"
-            >
-              <CreditCard className="h-4 w-4 mr-2" />
-              {loading ? 'Opening Stripe...' : 'Go to Stripe to Cancel Subscription'}
-            </Button>
-            <Button
-              onClick={() => setShowDeleteConfirm(false)}
-              variant="outline"
-              className="bg-gray-700/50 border-gray-600 text-gray-300 hover:bg-gray-600/50 flex-1"
-            >
-              Cancel
-            </Button>
-          </div>
-        </div>
-      )}
+      </div>
     </div>
   );
 }
