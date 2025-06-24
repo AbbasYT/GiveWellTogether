@@ -7,6 +7,7 @@ import { PricingPage } from './pages/PricingPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { SettingsPage } from './pages/SettingsPage';
 import { JoinUsPage } from './pages/JoinUsPage';
+import { OrganizationsPage } from './pages/OrganizationsPage';
 
 function App() {
   const { loading } = useAuth();
@@ -28,8 +29,7 @@ function App() {
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="/join" element={<JoinUsPage />} />
-        {/* Placeholder routes for future pages */}
-        <Route path="/organizations" element={<div>Organizations - Coming Soon</div>} />
+        <Route path="/organizations" element={<OrganizationsPage />} />
       </Routes>
     </Router>
   );
