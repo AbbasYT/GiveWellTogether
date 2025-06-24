@@ -8,6 +8,7 @@ import { ContactInfoSection } from '../components/settings/ContactInfoSection';
 import { SubscriptionSection } from '../components/settings/SubscriptionSection';
 import { CommunicationSection } from '../components/settings/CommunicationSection';
 import { SecuritySection } from '../components/settings/SecuritySection';
+import { TaxDocumentsSection } from '../components/settings/TaxDocumentsSection';
 import { DeleteAccountSection } from '../components/settings/DeleteAccountSection';
 
 interface ContactInfo {
@@ -149,6 +150,11 @@ export function SettingsPage() {
             <CommunicationSection
               communicationPrefs={communicationPrefs}
               setCommunicationPrefs={setCommunicationPrefs}
+              onSaveSuccess={handleSaveSuccess}
+              onError={handleError}
+            />
+
+            <TaxDocumentsSection
               onSaveSuccess={handleSaveSuccess}
               onError={handleError}
             />
