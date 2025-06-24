@@ -58,17 +58,17 @@ export function OrganizationsPage() {
 
       if (orgsError) throw orgsError;
 
-      // Fetch ALL subscription data to calculate real funding
+      // Fetch ALL active subscriptions from ALL users (not just current user)
       const { data: subscriptions, error: subsError } = await supabase
-        .from('stripe_user_subscriptions')
-        .select('*')
-        .eq('subscription_status', 'active');
+        .from('stripe_subscriptions')
+        .select('price_id, status')
+        .eq('status', 'active');
 
       if (subsError) throw subsError;
 
-      console.log('Active subscriptions found:', subscriptions);
+      console.log('All active subscriptions found:', subscriptions);
 
-      // Calculate total monthly funding and donor count from REAL data
+      // Calculate total monthly funding and donor count from ALL users
       const activeDonors = subscriptions?.length || 0;
       let totalMonthly = 0;
 
