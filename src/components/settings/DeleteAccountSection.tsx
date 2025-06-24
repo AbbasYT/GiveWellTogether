@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Trash2, Mail } from 'lucide-react';
+import { Trash2, Mail, CreditCard } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { useStripePortal } from '../../hooks/useStripePortal';
 
@@ -14,17 +14,17 @@ export function DeleteAccountSection({ onSaveSuccess, onError }: DeleteAccountSe
   const [loading, setLoading] = useState(false);
   const { openCustomerPortal } = useStripePortal();
 
-  const handleDeleteAccount = async () => {
+  const handleCancelSubscription = async () => {
     setLoading(true);
 
     try {
-      // First cancel subscription via Stripe portal
+      // Open Stripe portal for subscription cancellation
       await openCustomerPortal();
       
-      onSaveSuccess('Please cancel your subscription first, then contact support to delete your account');
+      onSaveSuccess('Redirecting to Stripe to cancel your subscription. After cancellation, contact support for account deletion.');
       setShowDeleteConfirm(false);
     } catch (err) {
-      onError('Failed to initiate account deletion process');
+      onError('Failed to open subscription management portal');
     } finally {
       setLoading(false);
     }
@@ -39,7 +39,7 @@ export function DeleteAccountSection({ onSaveSuccess, onError }: DeleteAccountSe
 
       <div className="mb-4 p-3 bg-red-900/30 rounded-lg border border-red-700/50">
         <p className="text-red-300 text-sm">
-          This action cannot be undone. You must cancel your subscription first before deleting your account.
+          Account deletion is a two-step process: First cancel your subscription in Stripe, then contact support for backend account deletion.
         </p>
       </div>
 
@@ -51,7 +51,7 @@ export function DeleteAccountSection({ onSaveSuccess, onError }: DeleteAccountSe
             className="border-red-600 text-red-400 hover:bg-red-900/50"
           >
             <Trash2 className="h-4 w-4 mr-2" />
-            Delete Account
+            Start Account Deletion Process
           </Button>
 
           <div className="flex items-center">
@@ -90,14 +90,19 @@ export function DeleteAccountSection({ onSaveSuccess, onError }: DeleteAccountSe
         </div>
       ) : (
         <div className="space-y-4">
-          <p className="text-white font-semibold">Are you sure you want to delete your account?</p>
+          <p className="text-white font-semibold">Ready to start the account deletion process?</p>
+          <p className="text-gray-300 text-sm">
+            Step 1: Cancel your subscription in Stripe<br />
+            Step 2: Contact support for backend account deletion
+          </p>
           <div className="flex gap-2 max-w-md">
             <Button
-              onClick={handleDeleteAccount}
+              onClick={handleCancelSubscription}
               disabled={loading}
-              className="bg-red-600 hover:bg-red-700 text-white flex-1"
+              className="bg-orange-600 hover:bg-orange-700 text-white flex-1"
             >
-              {loading ? 'Processing...' : 'Yes, Delete Account'}
+              <CreditCard className="h-4 w-4 mr-2" />
+              {loading ? 'Opening Stripe...' : 'Go to Stripe to Cancel Subscription'}
             </Button>
             <Button
               onClick={() => setShowDeleteConfirm(false)}
