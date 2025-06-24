@@ -30,6 +30,11 @@ interface OrganizationWithStats extends Organization {
     author: string;
     role: string;
   };
+  color_scheme: {
+    bg: string;
+    border: string;
+    accent: string;
+  };
 }
 
 export function OrganizationsPage() {
@@ -95,7 +100,8 @@ export function OrganizationsPage() {
           monthly_funding: fundingPerOrg,
           total_funding: fundingPerOrg * monthsActive,
           months_active: monthsActive,
-          testimonial: getTestimonial(index)
+          testimonial: getTestimonial(index),
+          color_scheme: getColorScheme(index)
         };
       });
 
@@ -130,6 +136,20 @@ export function OrganizationsPage() {
       'https://images.pexels.com/photos/6646920/pexels-photo-6646920.jpeg?auto=compress&cs=tinysrgb&w=200&h=200&fit=crop'
     ];
     return logos[index % logos.length];
+  };
+
+  const getColorScheme = (index: number) => {
+    const schemes = [
+      { bg: 'bg-blue-900/20', border: 'border-blue-700/50', accent: 'text-blue-400' },
+      { bg: 'bg-purple-900/20', border: 'border-purple-700/50', accent: 'text-purple-400' },
+      { bg: 'bg-green-900/20', border: 'border-green-700/50', accent: 'text-green-400' },
+      { bg: 'bg-orange-900/20', border: 'border-orange-700/50', accent: 'text-orange-400' },
+      { bg: 'bg-pink-900/20', border: 'border-pink-700/50', accent: 'text-pink-400' },
+      { bg: 'bg-indigo-900/20', border: 'border-indigo-700/50', accent: 'text-indigo-400' },
+      { bg: 'bg-teal-900/20', border: 'border-teal-700/50', accent: 'text-teal-400' },
+      { bg: 'bg-red-900/20', border: 'border-red-700/50', accent: 'text-red-400' }
+    ];
+    return schemes[index % schemes.length];
   };
 
   const getTestimonial = (index: number) => {
@@ -190,8 +210,8 @@ export function OrganizationsPage() {
           <div className="absolute bottom-20 right-10 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
         </div>
         
-        <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
-          <div className="max-w-6xl mx-auto text-center">
+        <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-20">
+          <div className="text-center">
             <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
               Where Your <span className="text-blue-400">Money Goes</span>
             </h1>
@@ -221,150 +241,154 @@ export function OrganizationsPage() {
 
       {/* Organizations Masonry Layout */}
       <section className="pb-20 relative">
-        <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
-          <div className="max-w-7xl mx-auto">
-            {organizations.length === 0 ? (
-              <div className="text-center py-12">
-                <Users className="h-16 w-16 text-gray-500 mx-auto mb-4" />
-                <p className="text-gray-400 text-lg">No approved organizations found.</p>
-              </div>
-            ) : (
-              <div className="columns-1 md:columns-2 lg:columns-3 gap-8 space-y-8">
-                {organizations.map((org, index) => (
-                  <div
-                    key={org.id}
-                    className="break-inside-avoid bg-gray-800/90 backdrop-blur-sm rounded-3xl overflow-hidden border border-gray-700 hover:shadow-2xl transition-all duration-500 hover:scale-[1.02]"
-                  >
-                    {/* Header with Logo and Basic Info */}
-                    <div className="p-6 border-b border-gray-700">
-                      <div className="flex items-start space-x-4">
-                        <img 
-                          src={org.logo_url} 
-                          alt={`${org.organization_name} logo`}
-                          className="w-16 h-16 rounded-2xl object-cover ring-2 ring-gray-600"
-                        />
-                        <div className="flex-1">
-                          <h3 className="text-xl font-bold text-white mb-2">{org.organization_name}</h3>
-                          <div className="flex items-center text-gray-300 text-sm mb-2">
-                            <MapPin className="h-4 w-4 mr-2" />
-                            {org.country_registration}
-                          </div>
-                          <div className="inline-block bg-blue-900/50 text-blue-300 px-3 py-1 rounded-full text-sm font-medium">
-                            {org.primary_category}
-                          </div>
+        <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-20">
+          {organizations.length === 0 ? (
+            <div className="text-center py-12">
+              <Users className="h-16 w-16 text-gray-500 mx-auto mb-4" />
+              <p className="text-gray-400 text-lg">No approved organizations found.</p>
+            </div>
+          ) : (
+            <div 
+              className="grid gap-8"
+              style={{
+                gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
+                gridAutoRows: 'auto'
+              }}
+            >
+              {organizations.map((org, index) => (
+                <div
+                  key={org.id}
+                  className={`${org.color_scheme.bg} backdrop-blur-sm rounded-3xl overflow-hidden border ${org.color_scheme.border} hover:shadow-2xl transition-all duration-500 hover:scale-[1.02]`}
+                >
+                  {/* Header with Logo and Basic Info */}
+                  <div className="p-6 border-b border-gray-700/50">
+                    <div className="flex items-start space-x-4">
+                      <img 
+                        src={org.logo_url} 
+                        alt={`${org.organization_name} logo`}
+                        className="w-16 h-16 rounded-2xl object-cover ring-2 ring-gray-600"
+                      />
+                      <div className="flex-1">
+                        <h3 className="text-xl font-bold text-white mb-2">{org.organization_name}</h3>
+                        <div className="flex items-center text-gray-300 text-sm mb-2">
+                          <MapPin className="h-4 w-4 mr-2" />
+                          {org.country_registration}
                         </div>
-                      </div>
-                    </div>
-
-                    {/* Mission Statement */}
-                    <div className="p-6 border-b border-gray-700">
-                      <h4 className="text-lg font-semibold text-white mb-3">Mission</h4>
-                      <p className="text-gray-300 leading-relaxed">{org.mission_statement}</p>
-                    </div>
-
-                    {/* Programs & Services */}
-                    <div className="p-6 border-b border-gray-700">
-                      <h4 className="text-lg font-semibold text-white mb-3">What We Do</h4>
-                      <p className="text-gray-300 leading-relaxed mb-4">{org.programs_services}</p>
-                      
-                      <div className="bg-gray-700/50 rounded-2xl p-4">
-                        <h5 className="text-white font-medium mb-2">Geographic Focus</h5>
-                        <p className="text-gray-300 text-sm">{org.geographic_focus}</p>
-                      </div>
-                    </div>
-
-                    {/* Beneficiaries */}
-                    <div className="p-6 border-b border-gray-700">
-                      <h4 className="text-lg font-semibold text-white mb-3 flex items-center">
-                        <Users className="h-5 w-5 mr-2" />
-                        Who We Serve
-                      </h4>
-                      <p className="text-gray-300 leading-relaxed">{org.beneficiaries}</p>
-                    </div>
-
-                    {/* Achievements */}
-                    {org.achievements && (
-                      <div className="p-6 border-b border-gray-700">
-                        <h4 className="text-lg font-semibold text-white mb-3 flex items-center">
-                          <Award className="h-5 w-5 mr-2" />
-                          Key Achievements
-                        </h4>
-                        <p className="text-gray-300 leading-relaxed">{org.achievements}</p>
-                      </div>
-                    )}
-
-                    {/* Funding Stats */}
-                    <div className="p-6 border-b border-gray-700">
-                      <h4 className="text-lg font-semibold text-white mb-4 flex items-center">
-                        <DollarSign className="h-5 w-5 mr-2" />
-                        Funding from GiveWellTogether
-                      </h4>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="bg-green-900/30 rounded-2xl p-4 text-center">
-                          <div className="text-2xl font-bold text-green-400 mb-1">
-                            {formatPrice(org.monthly_funding * 100)}
-                          </div>
-                          <div className="text-green-300 text-sm">Monthly</div>
+                        <div className={`inline-block ${org.color_scheme.bg} ${org.color_scheme.accent} px-3 py-1 rounded-full text-sm font-medium border ${org.color_scheme.border}`}>
+                          {org.primary_category}
                         </div>
-                        <div className="bg-blue-900/30 rounded-2xl p-4 text-center">
-                          <div className="text-2xl font-bold text-blue-400 mb-1">
-                            {formatPrice(org.total_funding * 100)}
-                          </div>
-                          <div className="text-blue-300 text-sm">Total Raised</div>
-                        </div>
-                      </div>
-                      <div className="mt-4 flex items-center text-gray-300 text-sm">
-                        <Calendar className="h-4 w-4 mr-2" />
-                        Active for {org.months_active} month{org.months_active !== 1 ? 's' : ''}
-                      </div>
-                    </div>
-
-                    {/* Testimonial */}
-                    <div className="p-6 border-b border-gray-700">
-                      <h4 className="text-lg font-semibold text-white mb-4 flex items-center">
-                        <Quote className="h-5 w-5 mr-2" />
-                        Community Impact
-                      </h4>
-                      <div className="bg-gray-700/50 rounded-2xl p-4">
-                        <p className="text-gray-300 italic mb-3">"{org.testimonial.text}"</p>
-                        <div className="text-right">
-                          <div className="text-white font-medium">{org.testimonial.author}</div>
-                          <div className="text-gray-400 text-sm">{org.testimonial.role}</div>
-                        </div>
-                      </div>
-                      <p className="text-gray-500 text-xs mt-2 italic">
-                        *Testimonial shared with us personally by community members
-                      </p>
-                    </div>
-
-                    {/* Links */}
-                    <div className="p-6">
-                      <h4 className="text-lg font-semibold text-white mb-4">Connect</h4>
-                      <div className="space-y-3">
-                        <a 
-                          href={org.website} 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className="flex items-center text-blue-400 hover:text-blue-300 transition-colors"
-                        >
-                          <Globe className="h-4 w-4 mr-2" />
-                          Official Website
-                          <ExternalLink className="h-3 w-3 ml-1" />
-                        </a>
-                        <a 
-                          href={`mailto:${org.organization_email}`}
-                          className="flex items-center text-blue-400 hover:text-blue-300 transition-colors"
-                        >
-                          <ExternalLink className="h-4 w-4 mr-2" />
-                          Contact Organization
-                        </a>
                       </div>
                     </div>
                   </div>
-                ))}
-              </div>
-            )}
-          </div>
+
+                  {/* Mission Statement */}
+                  <div className="p-6 border-b border-gray-700/50">
+                    <h4 className={`text-lg font-semibold ${org.color_scheme.accent} mb-3`}>Mission</h4>
+                    <p className="text-gray-300 leading-relaxed">{org.mission_statement}</p>
+                  </div>
+
+                  {/* Programs & Services */}
+                  <div className="p-6 border-b border-gray-700/50">
+                    <h4 className={`text-lg font-semibold ${org.color_scheme.accent} mb-3`}>What We Do</h4>
+                    <p className="text-gray-300 leading-relaxed mb-4">{org.programs_services}</p>
+                    
+                    <div className="bg-gray-700/30 rounded-2xl p-4 border border-gray-600/50">
+                      <h5 className="text-white font-medium mb-2">Geographic Focus</h5>
+                      <p className="text-gray-300 text-sm">{org.geographic_focus}</p>
+                    </div>
+                  </div>
+
+                  {/* Beneficiaries */}
+                  <div className="p-6 border-b border-gray-700/50">
+                    <h4 className={`text-lg font-semibold ${org.color_scheme.accent} mb-3 flex items-center`}>
+                      <Users className="h-5 w-5 mr-2" />
+                      Who We Serve
+                    </h4>
+                    <p className="text-gray-300 leading-relaxed">{org.beneficiaries}</p>
+                  </div>
+
+                  {/* Achievements */}
+                  {org.achievements && (
+                    <div className="p-6 border-b border-gray-700/50">
+                      <h4 className={`text-lg font-semibold ${org.color_scheme.accent} mb-3 flex items-center`}>
+                        <Award className="h-5 w-5 mr-2" />
+                        Key Achievements
+                      </h4>
+                      <p className="text-gray-300 leading-relaxed">{org.achievements}</p>
+                    </div>
+                  )}
+
+                  {/* Funding Stats */}
+                  <div className="p-6 border-b border-gray-700/50">
+                    <h4 className={`text-lg font-semibold ${org.color_scheme.accent} mb-4 flex items-center`}>
+                      <DollarSign className="h-5 w-5 mr-2" />
+                      Funding from GiveWellTogether
+                    </h4>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="bg-green-900/30 rounded-2xl p-4 text-center border border-green-700/50">
+                        <div className="text-2xl font-bold text-green-400 mb-1">
+                          {formatPrice(org.monthly_funding * 100)}
+                        </div>
+                        <div className="text-green-300 text-sm">Monthly</div>
+                      </div>
+                      <div className="bg-blue-900/30 rounded-2xl p-4 text-center border border-blue-700/50">
+                        <div className="text-2xl font-bold text-blue-400 mb-1">
+                          {formatPrice(org.total_funding * 100)}
+                        </div>
+                        <div className="text-blue-300 text-sm">Total Raised</div>
+                      </div>
+                    </div>
+                    <div className="mt-4 flex items-center text-gray-300 text-sm">
+                      <Calendar className="h-4 w-4 mr-2" />
+                      Active for {org.months_active} month{org.months_active !== 1 ? 's' : ''}
+                    </div>
+                  </div>
+
+                  {/* Testimonial */}
+                  <div className="p-6 border-b border-gray-700/50">
+                    <h4 className={`text-lg font-semibold ${org.color_scheme.accent} mb-4 flex items-center`}>
+                      <Quote className="h-5 w-5 mr-2" />
+                      Community Impact
+                    </h4>
+                    <div className="bg-gray-700/30 rounded-2xl p-4 border border-gray-600/50">
+                      <p className="text-gray-300 italic mb-3">"{org.testimonial.text}"</p>
+                      <div className="text-right">
+                        <div className="text-white font-medium">{org.testimonial.author}</div>
+                        <div className="text-gray-400 text-sm">{org.testimonial.role}</div>
+                      </div>
+                    </div>
+                    <p className="text-gray-500 text-xs mt-2 italic">
+                      *Testimonial shared with us personally by community members
+                    </p>
+                  </div>
+
+                  {/* Links */}
+                  <div className="p-6">
+                    <h4 className={`text-lg font-semibold ${org.color_scheme.accent} mb-4`}>Connect</h4>
+                    <div className="space-y-3">
+                      <a 
+                        href={org.website} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className={`flex items-center ${org.color_scheme.accent} hover:text-white transition-colors`}
+                      >
+                        <Globe className="h-4 w-4 mr-2" />
+                        Official Website
+                        <ExternalLink className="h-3 w-3 ml-1" />
+                      </a>
+                      <a 
+                        href={`mailto:${org.organization_email}`}
+                        className={`flex items-center ${org.color_scheme.accent} hover:text-white transition-colors`}
+                      >
+                        <ExternalLink className="h-4 w-4 mr-2" />
+                        Contact Organization
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
