@@ -216,13 +216,13 @@ export function JoinUsPage() {
       <Header />
       
       {/* Hero Section */}
-      <section className="pt-32 pb-20 relative overflow-hidden">
+      <section className="pt-32 pb-12 relative overflow-hidden">
         <div className="absolute inset-0">
           <div className="absolute top-20 left-10 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
           <div className="absolute bottom-20 right-10 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
         </div>
         
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
               Join Our <span className="text-blue-400">Mission</span>
@@ -233,7 +233,7 @@ export function JoinUsPage() {
             </p>
             
             {/* Simple text instead of boxes */}
-            <div className="text-lg text-gray-300 space-y-2 mb-12">
+            <div className="text-lg text-gray-300 space-y-2 mb-8">
               <p><strong className="text-blue-400">Transparent Funding:</strong> Equal distribution ensures fair support for all verified partners</p>
               <p><strong className="text-green-400">Growing Community:</strong> Connect with a network of dedicated donors and fellow organizations</p>
               <p><strong className="text-purple-400">Global Reach:</strong> Expand your impact beyond traditional fundraising boundaries</p>
@@ -244,7 +244,7 @@ export function JoinUsPage() {
 
       {/* Success Message */}
       {submitSuccess && (
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
           <div className="p-6 bg-green-900/50 border border-green-700 rounded-2xl text-green-300">
             <div className="flex items-center">
               <CheckCircle className="h-6 w-6 mr-3" />
@@ -259,7 +259,7 @@ export function JoinUsPage() {
 
       {/* Error Message */}
       {error && (
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
           <div className="p-6 bg-red-900/50 border border-red-700 rounded-2xl text-red-300">
             <div className="flex items-center">
               <AlertCircle className="h-6 w-6 mr-3" />
@@ -273,8 +273,8 @@ export function JoinUsPage() {
       )}
 
       {/* Application Form */}
-      <section className="py-20 relative">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-12 relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-gray-800/80 backdrop-blur-sm rounded-3xl p-8 border border-gray-700">
             <h2 className="text-3xl font-bold text-white mb-6 text-center">Organization Application</h2>
             <p className="text-gray-300 mb-8 text-center">
@@ -608,8 +608,8 @@ export function JoinUsPage() {
       </section>
 
       {/* Organization Applications */}
-      <section className="py-20 relative bg-gradient-to-r from-gray-900/50 to-slate-900/50">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-12 relative bg-gradient-to-r from-gray-900/50 to-slate-900/50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-white mb-6">Organization Applications</h2>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto">
