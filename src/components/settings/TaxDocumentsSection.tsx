@@ -87,8 +87,8 @@ export function TaxDocumentsSection({ onSaveSuccess, onError }: TaxDocumentsSect
       // Calculate totals
       const totalAmount = filteredOrders.reduce((sum, order) => sum + (order.amount_total || 0), 0);
 
-      // Generate PDF content
-      const pdfContent = generatePDFContent({
+      // Generate HTML content for the invoice
+      const htmlContent = generateInvoiceHTML({
         user,
         orders: filteredOrders,
         totalAmount,
@@ -96,10 +96,10 @@ export function TaxDocumentsSection({ onSaveSuccess, onError }: TaxDocumentsSect
         currentPlan
       });
 
-      // Create and download PDF
-      downloadPDF(pdfContent, `GiveWellTogether_Invoice_${periodLabel.replace(' ', '_')}.pdf`);
+      // Create and download HTML file instead of trying to generate PDF
+      downloadHTMLAsFile(htmlContent, `GiveWellTogether_Invoice_${periodLabel.replace(' ', '_')}.html`);
       
-      onSaveSuccess(`Tax invoice for ${periodLabel} downloaded successfully`);
+      onSaveSuccess(`Tax invoice for ${periodLabel} downloaded successfully. You can print this HTML file as a PDF from your browser.`);
     } catch (err) {
       onError('Failed to generate tax invoice');
       console.error('Invoice generation error:', err);
@@ -108,33 +108,112 @@ export function TaxDocumentsSection({ onSaveSuccess, onError }: TaxDocumentsSect
     }
   };
 
-  const generatePDFContent = ({ user, orders, totalAmount, period, currentPlan }: any) => {
+  const generateInvoiceHTML = ({ user, orders, totalAmount, period, currentPlan }: any) => {
     const currentDate = new Date().toLocaleDateString();
     
-    return `
-<!DOCTYPE html>
+    return `<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
     <title>GiveWellTogether Tax Invoice - ${period}</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 40px; color: #333; }
-        .header { text-align: center; margin-bottom: 40px; border-bottom: 2px solid #2563eb; padding-bottom: 20px; }
-        .company-name { font-size: 28px; font-weight: bold; color: #2563eb; margin-bottom: 10px; }
-        .invoice-title { font-size: 24px; color: #1f2937; margin-bottom: 5px; }
-        .period { font-size: 16px; color: #6b7280; }
-        .details { display: flex; justify-content: space-between; margin: 30px 0; }
-        .details-section { flex: 1; }
-        .details-section h3 { color: #1f2937; border-bottom: 1px solid #e5e7eb; padding-bottom: 5px; }
-        .table { width: 100%; border-collapse: collapse; margin: 30px 0; }
-        .table th, .table td { border: 1px solid #e5e7eb; padding: 12px; text-align: left; }
-        .table th { background-color: #f9fafb; font-weight: bold; }
-        .total-row { background-color: #f3f4f6; font-weight: bold; }
-        .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #e5e7eb; font-size: 12px; color: #6b7280; }
-        .tax-note { background-color: #fef3c7; padding: 15px; border-radius: 8px; margin: 20px 0; }
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 40px; 
+            color: #333; 
+            line-height: 1.6;
+        }
+        .header { 
+            text-align: center; 
+            margin-bottom: 40px; 
+            border-bottom: 2px solid #2563eb; 
+            padding-bottom: 20px; 
+        }
+        .company-name { 
+            font-size: 28px; 
+            font-weight: bold; 
+            color: #2563eb; 
+            margin-bottom: 10px; 
+        }
+        .invoice-title { 
+            font-size: 24px; 
+            color: #1f2937; 
+            margin-bottom: 5px; 
+        }
+        .period { 
+            font-size: 16px; 
+            color: #6b7280; 
+        }
+        .details { 
+            display: flex; 
+            justify-content: space-between; 
+            margin: 30px 0; 
+            flex-wrap: wrap;
+        }
+        .details-section { 
+            flex: 1; 
+            min-width: 250px;
+            margin-bottom: 20px;
+        }
+        .details-section h3 { 
+            color: #1f2937; 
+            border-bottom: 1px solid #e5e7eb; 
+            padding-bottom: 5px; 
+            margin-bottom: 10px;
+        }
+        .table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin: 30px 0; 
+        }
+        .table th, .table td { 
+            border: 1px solid #e5e7eb; 
+            padding: 12px; 
+            text-align: left; 
+        }
+        .table th { 
+            background-color: #f9fafb; 
+            font-weight: bold; 
+        }
+        .total-row { 
+            background-color: #f3f4f6; 
+            font-weight: bold; 
+        }
+        .footer { 
+            margin-top: 40px; 
+            padding-top: 20px; 
+            border-top: 1px solid #e5e7eb; 
+            font-size: 12px; 
+            color: #6b7280; 
+        }
+        .tax-note { 
+            background-color: #fef3c7; 
+            padding: 15px; 
+            border-radius: 8px; 
+            margin: 20px 0; 
+            border: 1px solid #f59e0b;
+        }
+        .print-note {
+            background-color: #dbeafe;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border: 1px solid #3b82f6;
+            text-align: center;
+        }
+        @media print {
+            .print-note { display: none; }
+            body { margin: 20px; }
+        }
     </style>
 </head>
 <body>
+    <div class="print-note">
+        <p style="margin: 0; color: #1e40af; font-weight: bold;">
+            📄 To save as PDF: Press Ctrl+P (or Cmd+P on Mac) → Select "Save as PDF" → Click Save
+        </p>
+    </div>
+
     <div class="header">
         <div class="company-name">GiveWellTogether</div>
         <div class="invoice-title">Tax Invoice</div>
@@ -145,14 +224,14 @@ export function TaxDocumentsSection({ onSaveSuccess, onError }: TaxDocumentsSect
         <div class="details-section">
             <h3>Bill To:</h3>
             <p><strong>${user?.email}</strong></p>
-            <p>Customer ID: ${user?.id}</p>
+            <p>Customer ID: ${user?.id?.substring(0, 8)}...</p>
             <p>Invoice Date: ${currentDate}</p>
         </div>
         <div class="details-section">
             <h3>Service Provider:</h3>
             <p><strong>GiveWellTogether</strong></p>
             <p>Charitable Giving Platform</p>
-            <p>Tax ID: [Tax ID Number]</p>
+            <p>Email: support@givewelltogether.com</p>
         </div>
     </div>
 
@@ -205,29 +284,29 @@ export function TaxDocumentsSection({ onSaveSuccess, onError }: TaxDocumentsSect
         <p>GiveWellTogether - One Subscription. Countless Lives Changed.</p>
     </div>
 </body>
-</html>
-    `;
+</html>`;
   };
 
-  const downloadPDF = (htmlContent: string, filename: string) => {
-    // Create a new window for printing
-    const printWindow = window.open('', '_blank');
-    if (!printWindow) {
-      onError('Please allow popups to download the invoice');
-      return;
-    }
-
-    printWindow.document.write(htmlContent);
-    printWindow.document.close();
-
-    // Wait for content to load, then trigger print dialog
-    printWindow.onload = () => {
-      setTimeout(() => {
-        printWindow.print();
-        // Note: In a real implementation, you'd want to use a proper PDF generation library
-        // like jsPDF or Puppeteer on the backend for better PDF quality
-      }, 500);
-    };
+  const downloadHTMLAsFile = (htmlContent: string, filename: string) => {
+    // Create a blob with the HTML content
+    const blob = new Blob([htmlContent], { type: 'text/html' });
+    
+    // Create a temporary URL for the blob
+    const url = URL.createObjectURL(blob);
+    
+    // Create a temporary anchor element and trigger download
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.style.display = 'none';
+    
+    // Add to DOM, click, and remove
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    
+    // Clean up the URL
+    URL.revokeObjectURL(url);
   };
 
   return (
@@ -267,20 +346,34 @@ export function TaxDocumentsSection({ onSaveSuccess, onError }: TaxDocumentsSect
         <div className="p-4 bg-gray-700/50 rounded-lg">
           <h3 className="text-white font-semibold mb-2 flex items-center">
             <Download className="h-4 w-4 mr-2" />
+            How to Save as PDF
+          </h3>
+          <ul className="text-gray-300 text-sm space-y-1">
+            <li>• Click the invoice button to download an HTML file</li>
+            <li>• Open the downloaded file in your browser</li>
+            <li>• Press <kbd className="bg-gray-600 px-1 rounded">Ctrl+P</kbd> (or <kbd className="bg-gray-600 px-1 rounded">Cmd+P</kbd> on Mac)</li>
+            <li>• Select "Save as PDF" as the destination</li>
+            <li>• Click "Save" to create your PDF invoice</li>
+          </ul>
+        </div>
+
+        <div className="p-4 bg-gray-700/50 rounded-lg">
+          <h3 className="text-white font-semibold mb-2 flex items-center">
+            <AlertCircle className="h-4 w-4 mr-2" />
             Invoice Information
           </h3>
           <ul className="text-gray-300 text-sm space-y-1">
             <li>• Current Month: Invoice for payments made this month</li>
             <li>• Current Year: Comprehensive invoice for all payments this year</li>
             <li>• All invoices include payment details and tax deductibility information</li>
-            <li>• Invoices are generated in PDF format for easy printing and filing</li>
+            <li>• Keep these invoices for your tax records</li>
           </ul>
         </div>
 
         <div className="p-3 bg-yellow-900/30 rounded-lg border border-yellow-700/50">
           <p className="text-yellow-300 text-sm">
             <strong>Note:</strong> Please consult with your tax advisor for specific guidance on charitable deductions. 
-            Keep these invoices for your tax records.
+            These invoices serve as official receipts for tax purposes.
           </p>
         </div>
       </div>
