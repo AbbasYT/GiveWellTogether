@@ -46,6 +46,8 @@ export function ApplicationsList({ applications }: ApplicationsListProps) {
     }
   };
 
+  console.log('ApplicationsList received applications:', applications);
+
   return (
     <section className="py-12 relative bg-gradient-to-r from-gray-900/50 to-slate-900/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -54,12 +56,16 @@ export function ApplicationsList({ applications }: ApplicationsListProps) {
           <p className="text-xl text-gray-300 max-w-3xl mx-auto">
             View submitted applications from organizations. These may be approved, rejected, or under review. Click on any card to learn more.
           </p>
+          <p className="text-sm text-gray-400 mt-2">
+            Total applications found: {applications.length}
+          </p>
         </div>
 
         {applications.length === 0 ? (
           <div className="text-center py-12">
             <Building className="h-16 w-16 text-gray-500 mx-auto mb-4" />
-            <p className="text-gray-400 text-lg">No applications submitted yet. Be the first to join our mission!</p>
+            <p className="text-gray-400 text-lg">No applications found. This could be due to database permissions or all applications are still pending approval.</p>
+            <p className="text-gray-500 text-sm mt-2">Check the browser console for debugging information.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
