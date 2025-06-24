@@ -697,6 +697,8 @@ export function SettingsPage() {
                       onClick={() => setShowDeleteConfirm(false)}
                       variant="outline"
                       className="bg-gray-700/50 border-gray-600 text-gray-300 hover:bg-gray-600/50 flex-1"
+                    >
+                      Cancel
                     </Button>
                   </div>
                 </div>
