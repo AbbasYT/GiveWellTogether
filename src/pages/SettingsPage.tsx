@@ -61,7 +61,7 @@ export function SettingsPage() {
 
       if (profile) {
         setContactInfo({
-          email: profile.email || '',
+          email: profile.email || user?.email || '',
           phone: profile.phone || '',
           twitter: profile.twitter_handle || '',
           facebook: profile.facebook_profile || '',

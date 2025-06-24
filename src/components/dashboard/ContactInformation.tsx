@@ -35,6 +35,16 @@ export function ContactInformation({ contactInfo, setContactInfo }: ContactInfor
     }
   }, [user]);
 
+  // Initialize email from auth user if contactInfo email is empty
+  useEffect(() => {
+    if (user?.email && !contactInfo.email) {
+      setContactInfo({
+        ...contactInfo,
+        email: user.email
+      });
+    }
+  }, [user, contactInfo, setContactInfo]);
+
   const loadContactInfo = async () => {
     try {
       const { data, error } = await supabase
@@ -50,9 +60,16 @@ export function ContactInformation({ contactInfo, setContactInfo }: ContactInfor
 
       if (data) {
         setContactInfo({
-          email: data.email || '',
+          email: data.email || user?.email || '',
           twitter: data.twitter_handle || '',
           facebook: data.facebook_profile || ''
+        });
+      } else {
+        // If no profile exists, pre-fill with user's auth email
+        setContactInfo({
+          email: user?.email || '',
+          twitter: '',
+          facebook: ''
         });
       }
     } catch (error) {

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { User, Edit3, Mail, Phone, Twitter, Facebook, Eye, EyeOff, AlertCircle, CheckCircle } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { User, Edit3, Mail, Phone, Twitter, Facebook, Eye, EyeOff } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../hooks/useAuth';
@@ -23,6 +23,16 @@ export function ContactInfoSection({ contactInfo, setContactInfo, onSaveSuccess,
   const { user } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  // Initialize email from auth user if contactInfo email is empty
+  useEffect(() => {
+    if (user?.email && !contactInfo.email) {
+      setContactInfo({
+        ...contactInfo,
+        email: user.email
+      });
+    }
+  }, [user, contactInfo, setContactInfo]);
 
   const handleSave = async () => {
     setLoading(true);
@@ -52,9 +62,38 @@ export function ContactInfoSection({ contactInfo, setContactInfo, onSaveSuccess,
     }
   };
 
-  const handleCancel = () => {
+  const handleCancel = async () => {
     setIsEditing(false);
-    // Reset to original values if needed
+    
+    // Reload data from database to reset any unsaved changes
+    try {
+      const { data: profile } = await supabase
+        .from('user_profiles')
+        .select('*')
+        .eq('user_id', user?.id)
+        .maybeSingle();
+
+      if (profile) {
+        setContactInfo({
+          email: profile.email || user?.email || '',
+          phone: profile.phone || '',
+          twitter: profile.twitter_handle || '',
+          facebook: profile.facebook_profile || '',
+          is_private: profile.is_private ?? true
+        });
+      } else {
+        // If no profile exists, reset to auth email
+        setContactInfo({
+          email: user?.email || '',
+          phone: '',
+          twitter: '',
+          facebook: '',
+          is_private: true
+        });
+      }
+    } catch (err) {
+      console.error('Error reloading contact info:', err);
+    }
   };
 
   return (
