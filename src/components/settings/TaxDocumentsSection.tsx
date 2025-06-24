@@ -28,13 +28,22 @@ export function TaxDocumentsSection({ onSaveSuccess, onError }: TaxDocumentsSect
 
       if (ordersError) throw ordersError;
 
+      console.log('All orders fetched:', orders);
+
       // Get current subscription plan details
       const currentPlan = subscription?.price_id ? getProductByPriceId(subscription.price_id) : null;
 
       // Filter orders based on period
       const now = new Date();
       const currentYear = now.getFullYear();
-      const currentMonth = now.getMonth();
+      const currentMonth = now.getMonth(); // 0-based (June = 5)
+
+      console.log('Current date info:', {
+        now: now.toISOString(),
+        currentYear,
+        currentMonth,
+        monthName: now.toLocaleString('default', { month: 'long' })
+      });
 
       let filteredOrders = orders || [];
       let periodLabel = '';
@@ -42,19 +51,48 @@ export function TaxDocumentsSection({ onSaveSuccess, onError }: TaxDocumentsSect
       if (period === 'current_month') {
         filteredOrders = orders?.filter(order => {
           const orderDate = new Date(order.order_date);
-          return orderDate.getFullYear() === currentYear && orderDate.getMonth() === currentMonth;
+          const orderYear = orderDate.getFullYear();
+          const orderMonth = orderDate.getMonth();
+          
+          console.log('Order date comparison:', {
+            orderDate: orderDate.toISOString(),
+            orderYear,
+            orderMonth,
+            orderMonthName: orderDate.toLocaleString('default', { month: 'long' }),
+            matches: orderYear === currentYear && orderMonth === currentMonth
+          });
+          
+          return orderYear === currentYear && orderMonth === currentMonth;
         }) || [];
         periodLabel = `${now.toLocaleString('default', { month: 'long' })} ${currentYear}`;
       } else {
         filteredOrders = orders?.filter(order => {
           const orderDate = new Date(order.order_date);
-          return orderDate.getFullYear() === currentYear;
+          const orderYear = orderDate.getFullYear();
+          
+          console.log('Year comparison:', {
+            orderDate: orderDate.toISOString(),
+            orderYear,
+            currentYear,
+            matches: orderYear === currentYear
+          });
+          
+          return orderYear === currentYear;
         }) || [];
         periodLabel = `${currentYear}`;
       }
 
+      console.log('Filtered orders:', filteredOrders);
+      console.log('Period label:', periodLabel);
+
       if (filteredOrders.length === 0) {
-        onError(`No payments found for ${periodLabel}`);
+        // Provide more detailed error message
+        const totalOrdersCount = orders?.length || 0;
+        if (totalOrdersCount === 0) {
+          onError(`No payment history found. You may not have any completed payments yet.`);
+        } else {
+          onError(`No payments found for ${periodLabel}. You have ${totalOrdersCount} total payment(s) in your history, but none match the selected period.`);
+        }
         return;
       }
 
