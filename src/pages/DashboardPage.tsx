@@ -9,7 +9,7 @@ import { DonationSummary } from '../components/dashboard/DonationSummary';
 import { DistributionBreakdown } from '../components/dashboard/DistributionBreakdown';
 import { DonationTimeline } from '../components/dashboard/DonationTimeline';
 import { DashboardSidebar } from '../components/dashboard/DashboardSidebar';
-import { CheckCircle, AlertCircle } from 'lucide-react';
+import { CheckCircle, AlertCircle, RefreshCw } from 'lucide-react';
 import { getProductByPriceId } from '../stripe-config';
 
 interface DonationHistory {
@@ -49,6 +49,7 @@ export function DashboardPage() {
     facebook: ''
   });
   const [loading, setLoading] = useState(true);
+  const [syncingPayments, setSyncingPayments] = useState(false);
 
   // Check for payment success/failure from URL params
   const paymentStatus = searchParams.get('payment');
@@ -63,54 +64,52 @@ export function DashboardPage() {
     try {
       setLoading(true);
       
-      // Fetch actual donation history from database
+      // **ONLY** fetch real payment data from database - NO MOCK DATA
       const { data: orders, error: ordersError } = await supabase
         .from('stripe_user_orders')
         .select('*')
         .order('order_date', { ascending: false });
 
-      if (ordersError) throw ordersError;
-
-      if (orders && orders.length > 0) {
-        // Use actual donation history if available
-        setDonationHistory(orders);
-        
-        // Calculate total donated
-        const total = orders.reduce((sum, order) => sum + (order.amount_total || 0), 0);
-        setTotalDonated(total);
-        
-        // Calculate current cycle amount (this month's donations)
-        const currentMonth = new Date().getMonth();
-        const currentYear = new Date().getFullYear();
-        const currentCycleTotal = orders
-          .filter(order => {
-            const orderDate = new Date(order.order_date);
-            return orderDate.getMonth() === currentMonth && orderDate.getFullYear() === currentYear;
-          })
-          .reduce((sum, order) => sum + (order.amount_total || 0), 0);
-        
-        setCurrentCycleAmount(currentCycleTotal);
-      } else {
-        // Generate mock donation history only if no actual history exists
-        const mockDonationHistory = generateMockDonationHistory();
-        setDonationHistory(mockDonationHistory);
-        
-        // Calculate total donated
-        const total = mockDonationHistory.reduce((sum, order) => sum + (order.amount_total || 0), 0);
-        setTotalDonated(total);
-        
-        // Calculate current cycle amount (this month's donations)
-        const currentMonth = new Date().getMonth();
-        const currentYear = new Date().getFullYear();
-        const currentCycleTotal = mockDonationHistory
-          .filter(order => {
-            const orderDate = new Date(order.order_date);
-            return orderDate.getMonth() === currentMonth && orderDate.getFullYear() === currentYear;
-          })
-          .reduce((sum, order) => sum + (order.amount_total || 0), 0);
-        
-        setCurrentCycleAmount(currentCycleTotal);
+      if (ordersError) {
+        console.error('Error fetching orders:', ordersError);
+        throw ordersError;
       }
+
+      console.log('Raw orders from database:', orders);
+
+      // Filter out invalid dates (1970 dates indicate corrupted data)
+      const validOrders = orders?.filter(order => {
+        const orderDate = new Date(order.order_date);
+        const orderYear = orderDate.getFullYear();
+        const isValid = orderYear > 1990; // Filter out obviously wrong dates
+        
+        if (!isValid) {
+          console.warn('Filtered out invalid order date:', order.order_date, 'from order:', order.id);
+        }
+        
+        return isValid;
+      }) || [];
+
+      console.log('Valid orders after filtering:', validOrders);
+
+      // Set donation history to ONLY valid orders
+      setDonationHistory(validOrders);
+      
+      // Calculate totals from valid orders only
+      const total = validOrders.reduce((sum, order) => sum + (order.amount_total || 0), 0);
+      setTotalDonated(total);
+      
+      // Calculate current cycle amount (this month's donations)
+      const currentMonth = new Date().getMonth();
+      const currentYear = new Date().getFullYear();
+      const currentCycleTotal = validOrders
+        .filter(order => {
+          const orderDate = new Date(order.order_date);
+          return orderDate.getMonth() === currentMonth && orderDate.getFullYear() === currentYear;
+        })
+        .reduce((sum, order) => sum + (order.amount_total || 0), 0);
+      
+      setCurrentCycleAmount(currentCycleTotal);
 
       // Set next billing date from subscription
       if (subscription?.current_period_end) {
@@ -143,51 +142,49 @@ export function DashboardPage() {
     }
   };
 
-  const generateMockDonationHistory = () => {
-    const history = [];
+  const syncPaymentsFromStripe = async () => {
+    setSyncingPayments(true);
     
-    // Get subscription plan to determine monthly amount
-    const subscriptionPlan = subscription?.price_id ? getProductByPriceId(subscription.price_id) : null;
-    const monthlyAmount = subscriptionPlan 
-      ? (subscriptionPlan.interval === 'year' ? subscriptionPlan.price / 12 : subscriptionPlan.price)
-      : 1500; // Default to $15 if no plan found
-
-    // Start from subscription start date or current date if no subscription
-    const startDate = subscription?.current_period_start 
-      ? new Date(subscription.current_period_start * 1000)
-      : new Date();
-    
-    const currentDate = new Date();
-    let currentMonth = new Date(startDate);
-    let id = 1;
-
-    // Only generate history if subscription started before current month
-    while (currentMonth < currentDate) {
-      // Move to the 28th of the month for billing
-      const billingDate = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 28);
+    try {
+      // Call a function to manually sync payments from Stripe
+      // This would typically be a Supabase Edge Function
+      const { data: { session } } = await supabase.auth.getSession();
       
-      // Only add if billing date has passed
-      if (billingDate <= currentDate) {
-        history.push({
-          id: id++,
-          amount_total: monthlyAmount,
-          currency: 'usd',
-          order_date: billingDate.toISOString(),
-          order_status: 'completed'
-        });
+      if (!session?.access_token) {
+        throw new Error('Not authenticated');
       }
-      
-      // Move to next month
-      currentMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1);
-    }
 
-    return history.reverse(); // Most recent first
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/sync-stripe-payments`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${session.access_token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error('Failed to sync payments');
+      }
+
+      // Refresh the dashboard data after sync
+      await fetchDashboardData();
+      
+    } catch (error) {
+      console.error('Error syncing payments:', error);
+    } finally {
+      setSyncingPayments(false);
+    }
   };
 
   const getSubscriptionPlan = () => {
     if (!subscription?.price_id) return null;
     return getProductByPriceId(subscription.price_id);
   };
+
+  const currentPlan = getSubscriptionPlan();
 
   if (authLoading || subLoading) {
     return (
@@ -234,8 +231,6 @@ export function DashboardPage() {
     );
   }
 
-  const subscriptionPlan = getSubscriptionPlan();
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-black">
       <Header />
@@ -267,6 +262,29 @@ export function DashboardPage() {
             </div>
           )}
 
+          {/* Debug Info for Payment Sync Issues */}
+          {donationHistory.length === 0 && isActive() && (
+            <div className="mb-8 p-4 bg-yellow-900/50 border border-yellow-700 rounded-2xl text-yellow-300 max-w-4xl mx-auto">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <AlertCircle className="h-6 w-6 mr-3" />
+                  <div>
+                    <h3 className="font-bold">No Payment History Found</h3>
+                    <p className="text-sm">Your Stripe payments may not be syncing properly. Try refreshing the data.</p>
+                  </div>
+                </div>
+                <Button
+                  onClick={syncPaymentsFromStripe}
+                  disabled={syncingPayments}
+                  className="bg-yellow-600 hover:bg-yellow-700 text-white"
+                >
+                  <RefreshCw className={`h-4 w-4 mr-2 ${syncingPayments ? 'animate-spin' : ''}`} />
+                  {syncingPayments ? 'Syncing...' : 'Sync Payments'}
+                </Button>
+              </div>
+            </div>
+          )}
+
           {/* Header */}
           <div className="mb-8">
             <h1 className="text-4xl font-bold text-white mb-2">Your Impact Dashboard</h1>
@@ -285,7 +303,7 @@ export function DashboardPage() {
                   totalDonated={totalDonated}
                   currentCycleAmount={currentCycleAmount}
                   nextBillingDate={nextBillingDate}
-                  subscriptionPlan={subscriptionPlan}
+                  subscriptionPlan={currentPlan}
                   subscription={subscription}
                 />
 
