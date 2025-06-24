@@ -25,6 +25,7 @@ import {
   EyeOff,
   Lock
 } from 'lucide-react';
+import { getProductByPriceId, formatPrice } from '../stripe-config';
 
 interface ContactInfo {
   email: string;
@@ -81,7 +82,7 @@ export function SettingsPage() {
 
   const loadUserData = async () => {
     try {
-      // Load contact info
+      // Load contact info from user_profiles table
       const { data: profile } = await supabase
         .from('user_profiles')
         .select('*')
@@ -96,14 +97,30 @@ export function SettingsPage() {
           facebook: profile.facebook_profile || '',
           is_private: profile.is_private ?? true
         });
+      } else {
+        // If no profile exists, pre-fill with user's auth email
+        setContactInfo(prev => ({
+          ...prev,
+          email: user?.email || ''
+        }));
       }
 
-      // Load communication preferences (mock data for now)
-      setCommunicationPrefs({
-        email_newsletters: true,
-        impact_updates: true,
-        organization_updates: true
-      });
+      // Load communication preferences from a preferences table (create if needed)
+      // For now, we'll store these in user_profiles table as well
+      // You might want to create a separate preferences table later
+      const { data: prefs } = await supabase
+        .from('user_profiles')
+        .select('email_newsletters, impact_updates, organization_updates')
+        .eq('user_id', user?.id)
+        .maybeSingle();
+
+      if (prefs) {
+        setCommunicationPrefs({
+          email_newsletters: prefs.email_newsletters ?? true,
+          impact_updates: prefs.impact_updates ?? true,
+          organization_updates: prefs.organization_updates ?? true
+        });
+      }
     } catch (err) {
       console.error('Error loading user data:', err);
     }
@@ -144,7 +161,20 @@ export function SettingsPage() {
     setError('');
     
     try {
-      // In a real app, you'd save these to a preferences table
+      // Save communication preferences to user_profiles table
+      const { error: saveError } = await supabase
+        .from('user_profiles')
+        .upsert({
+          user_id: user?.id,
+          email_newsletters: communicationPrefs.email_newsletters,
+          impact_updates: communicationPrefs.impact_updates,
+          organization_updates: communicationPrefs.organization_updates
+        }, {
+          onConflict: 'user_id'
+        });
+
+      if (saveError) throw saveError;
+      
       setSaveSuccess('Communication preferences updated successfully');
       setIsEditingComm(false);
       setTimeout(() => setSaveSuccess(''), 3000);
@@ -207,6 +237,14 @@ export function SettingsPage() {
       setLoading(false);
     }
   };
+
+  // Get current subscription plan details
+  const getCurrentPlan = () => {
+    if (!subscription?.price_id) return null;
+    return getProductByPriceId(subscription.price_id);
+  };
+
+  const currentPlan = getCurrentPlan();
 
   if (authLoading || subLoading) {
     return (
@@ -396,9 +434,16 @@ export function SettingsPage() {
               </div>
 
               <div className="space-y-4">
-                {subscription ? (
+                {subscription && currentPlan ? (
                   <div className="p-4 bg-gray-700/50 rounded-lg">
                     <div className="text-white font-semibold mb-2">Current Plan</div>
+                    <div className="text-gray-300 mb-2">
+                      <span className="text-blue-400 font-semibold">{currentPlan.name}</span>
+                    </div>
+                    <div className="text-gray-300 mb-2">
+                      <span className="text-green-400">{formatPrice(currentPlan.price)}</span>
+                      <span className="text-gray-400">/{currentPlan.interval}</span>
+                    </div>
                     <div className="text-gray-300">
                       Status: <span className="text-green-400 capitalize">{subscription?.subscription_status}</span>
                     </div>
@@ -652,8 +697,6 @@ export function SettingsPage() {
                       onClick={() => setShowDeleteConfirm(false)}
                       variant="outline"
                       className="bg-gray-700/50 border-gray-600 text-gray-300 hover:bg-gray-600/50 flex-1"
-                    >
-                      Cancel
                     </Button>
                   </div>
                 </div>
