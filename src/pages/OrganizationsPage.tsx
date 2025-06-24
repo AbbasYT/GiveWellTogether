@@ -249,16 +249,15 @@ export function OrganizationsPage() {
             </div>
           ) : (
             <div 
-              className="grid gap-8"
+              className="columns-1 md:columns-2 lg:columns-3 xl:columns-4 gap-8 space-y-8"
               style={{
-                gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
-                gridAutoRows: 'auto'
+                columnWidth: '400px'
               }}
             >
               {organizations.map((org, index) => (
                 <div
                   key={org.id}
-                  className={`${org.color_scheme.bg} backdrop-blur-sm rounded-3xl overflow-hidden border ${org.color_scheme.border} hover:shadow-2xl transition-all duration-500 hover:scale-[1.02]`}
+                  className={`${org.color_scheme.bg} backdrop-blur-sm rounded-3xl overflow-hidden border ${org.color_scheme.border} hover:shadow-2xl transition-all duration-500 hover:scale-[1.02] break-inside-avoid mb-8`}
                 >
                   {/* Header with Logo and Basic Info */}
                   <div className="p-6 border-b border-gray-700/50">
