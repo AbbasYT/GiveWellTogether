@@ -28,8 +28,6 @@ export function TaxDocumentsSection({ onSaveSuccess, onError }: TaxDocumentsSect
 
       if (ordersError) throw ordersError;
 
-      console.log('All orders fetched:', orders);
-
       // Get current subscription plan details
       const currentPlan = subscription?.price_id ? getProductByPriceId(subscription.price_id) : null;
 
@@ -37,13 +35,6 @@ export function TaxDocumentsSection({ onSaveSuccess, onError }: TaxDocumentsSect
       const now = new Date();
       const currentYear = now.getFullYear();
       const currentMonth = now.getMonth(); // 0-based (June = 5)
-
-      console.log('Current date info:', {
-        now: now.toISOString(),
-        currentYear,
-        currentMonth,
-        monthName: now.toLocaleString('default', { month: 'long' })
-      });
 
       let filteredOrders = orders || [];
       let periodLabel = '';
@@ -55,22 +46,11 @@ export function TaxDocumentsSection({ onSaveSuccess, onError }: TaxDocumentsSect
         return orderYear > 1990; // Filter out obviously wrong dates
       }) || [];
 
-      console.log('Valid orders (not from 1970):', validOrders);
-
       if (period === 'current_month') {
         filteredOrders = validOrders.filter(order => {
           const orderDate = new Date(order.order_date);
           const orderYear = orderDate.getFullYear();
           const orderMonth = orderDate.getMonth();
-          
-          console.log('Order date comparison:', {
-            orderDate: orderDate.toISOString(),
-            orderYear,
-            orderMonth,
-            orderMonthName: orderDate.toLocaleString('default', { month: 'long' }),
-            matches: orderYear === currentYear && orderMonth === currentMonth
-          });
-          
           return orderYear === currentYear && orderMonth === currentMonth;
         });
         periodLabel = `${now.toLocaleString('default', { month: 'long' })} ${currentYear}`;
@@ -78,21 +58,10 @@ export function TaxDocumentsSection({ onSaveSuccess, onError }: TaxDocumentsSect
         filteredOrders = validOrders.filter(order => {
           const orderDate = new Date(order.order_date);
           const orderYear = orderDate.getFullYear();
-          
-          console.log('Year comparison:', {
-            orderDate: orderDate.toISOString(),
-            orderYear,
-            currentYear,
-            matches: orderYear === currentYear
-          });
-          
           return orderYear === currentYear;
         });
         periodLabel = `${currentYear}`;
       }
-
-      console.log('Filtered orders:', filteredOrders);
-      console.log('Period label:', periodLabel);
 
       if (filteredOrders.length === 0) {
         // Provide more detailed error message
@@ -102,7 +71,7 @@ export function TaxDocumentsSection({ onSaveSuccess, onError }: TaxDocumentsSect
         if (totalOrdersCount === 0) {
           onError(`No payment history found. You may not have any completed payments yet.`);
         } else if (validOrdersCount === 0) {
-          onError(`Found ${totalOrdersCount} order(s) but they have invalid dates (from 1970). This suggests the payment data needs to be resynced from Stripe.`);
+          onError(`Payment data appears to be corrupted (showing dates from 1970). Please contact support to resolve this issue.`);
         } else {
           // Show available dates to help user understand
           const availableDates = validOrders.map(order => {
@@ -272,17 +241,6 @@ export function TaxDocumentsSection({ onSaveSuccess, onError }: TaxDocumentsSect
         <p className="text-green-300 text-sm">
           Download tax invoices for your charitable donations. All donations are tax-deductible to the extent allowed by law.
         </p>
-      </div>
-
-      {/* Data Status Warning */}
-      <div className="mb-4 p-3 bg-yellow-900/30 rounded-lg border border-yellow-700/50">
-        <div className="flex items-center">
-          <AlertCircle className="h-4 w-4 text-yellow-400 mr-2" />
-          <p className="text-yellow-300 text-sm">
-            <strong>Note:</strong> If you see "no payments found" but have made payments, your payment data may need to be resynced from Stripe. 
-            This can happen with test payments or if webhooks weren't properly processed.
-          </p>
-        </div>
       </div>
 
       <div className="space-y-4">
