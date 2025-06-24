@@ -220,15 +220,12 @@ export function SettingsPage() {
     return <Navigate to="/pricing" replace />;
   }
 
-  // Remove the subscription check - allow access to settings even without active subscription
-  // Users should be able to manage their account settings regardless of subscription status
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-black">
       <Header />
       
       <div className="pt-24 pb-12">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
           {/* Header */}
           <div className="mb-8">
             <h1 className="text-4xl font-bold text-white mb-2">Account Settings</h1>
@@ -250,7 +247,7 @@ export function SettingsPage() {
             </div>
           )}
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
             {/* Contact Information */}
             <div className="bg-gray-800/80 backdrop-blur-sm rounded-3xl p-8 border border-gray-700">
               <div className="flex items-center justify-between mb-6">
@@ -619,7 +616,7 @@ export function SettingsPage() {
             </div>
 
             {/* Delete Account */}
-            <div className="bg-gray-800/80 backdrop-blur-sm rounded-3xl p-8 border border-red-700/50">
+            <div className="bg-gray-800/80 backdrop-blur-sm rounded-3xl p-8 border border-red-700/50 xl:col-span-2">
               <div className="flex items-center mb-6">
                 <Trash2 className="h-6 w-6 text-red-400 mr-3" />
                 <h2 className="text-2xl font-bold text-white">Delete Account</h2>
@@ -635,7 +632,7 @@ export function SettingsPage() {
                 <Button
                   onClick={() => setShowDeleteConfirm(true)}
                   variant="outline"
-                  className="w-full border-red-600 text-red-400 hover:bg-red-900/50"
+                  className="border-red-600 text-red-400 hover:bg-red-900/50"
                 >
                   <Trash2 className="h-4 w-4 mr-2" />
                   Delete Account
@@ -643,7 +640,7 @@ export function SettingsPage() {
               ) : (
                 <div className="space-y-4">
                   <p className="text-white font-semibold">Are you sure you want to delete your account?</p>
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 max-w-md">
                     <Button
                       onClick={handleDeleteAccount}
                       disabled={loading}
